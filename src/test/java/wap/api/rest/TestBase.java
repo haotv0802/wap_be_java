@@ -1,4 +1,4 @@
-package crwlr.api.rest;
+package wap.api.rest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

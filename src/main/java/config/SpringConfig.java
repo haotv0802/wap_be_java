@@ -32,7 +32,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Configuration
-@ComponentScan({"crwlr"})
+@ComponentScan({"wap"})
 @EnableWebMvc
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class SpringConfig extends WebMvcConfigurerAdapter {

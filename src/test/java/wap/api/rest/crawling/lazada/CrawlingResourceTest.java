@@ -1,6 +1,6 @@
-package crwlr.api.rest.crawling.lazada;
+package wap.api.rest.crawling.lazada;
 
-import crwlr.api.rest.TestBase;
+import wap.api.rest.TestBase;
 import org.testng.annotations.Test;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

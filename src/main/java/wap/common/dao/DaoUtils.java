@@ -1,4 +1,4 @@
-package crwlr.common.dao;
+package wap.common.dao;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Logger;

@@ -1,6 +1,6 @@
-package crwlr.api.rest.crawling.lazada.interfaces;
+package wap.api.rest.crawling.lazada.interfaces;
 
-import crwlr.api.rest.crawling.lazada.beans.Vendor;
+import wap.api.rest.crawling.lazada.beans.Vendor;
 
 import java.util.List;
 import java.util.Map;

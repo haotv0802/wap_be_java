@@ -1,0 +1,19 @@
+https://www.lazada.sg/value-market/
+https://www.lazada.sg/empire-13/
+            VENDOR Information
+    - For some vendors (above): crawling works fine with seller_id (18464: value-market, 10978: empire-13) with REST API:
+https://seller-transparency-api.lazada.sg/v1/seller/transparency?platform=desktop&lang=en&seller_id=10978
+
+    - For other vendors like : http://www.lazada.sg/shop/the-bro-store?sort=popularity&category=1438
+There's another way of crawling such vendor. Since this vendor doesn't have seller_id, so we have to use seller_key
+which is its name "the-bro-store" by using this REST API:
+https://seller-transparency-api.lazada.sg/v1/seller/transparency?platform=desktop&lang=en&seller_key=the-bro-store
+
+            PRODUCT Information
+
+https://catalog-rendering-api.lazada.sg/v1/seller/catalog?sort=popularity&offset=0&platform=desktop&view_type=gridView&with_filters=1&seller_key=the-bro-store&lang=en&limit=100
+https://catalog-rendering-api.lazada.sg/v1/seller/catalog?sort=popularity&category_id=1438&offset=0&platform=desktop&view_type=gridView&with_filters=1&seller_key=the-bro-store&lang=en&limit=100
+
+Also, it can be found with this REST API:
+http://seller-transparency-api.lazada.sg/v1/seller/transparency?platform=desktop&lang=en&seller_center_id=SG117EJ
+http://shop-decoration-api.lazada.sg/v1/seller/SG117EJ/products?lang=en&limit=10&sort=creation_time

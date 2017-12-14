@@ -28,7 +28,7 @@ public class LoginResource {
   private final ILoginService loginService;
 
   @Autowired
-  public LoginResource(@Qualifier("loginDao") ILoginService loginService) {
+  public LoginResource(@Qualifier("loginService") ILoginService loginService) {
     Assert.notNull(loginService);
 
     this.loginService = loginService;

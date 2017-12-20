@@ -9,4 +9,5 @@ import wap.api.rest.auth.beans.User;
  */
 public interface IUserService {
   void signup(User user);
+  Boolean isUserExisting(String username);
 }

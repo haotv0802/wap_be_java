@@ -35,7 +35,10 @@ public class UserResource {
   public ResponseEntity signup(
       @RequestBody User user
   ) {
+    if (userService.isUserExisting(user.getUsername())) {
+      return new ResponseEntity(HttpStatus.FORBIDDEN);
+    }
     userService.signup(user);
-    return new ResponseEntity(HttpStatus.OK);
+    return new ResponseEntity(HttpStatus.CREATED);
   }
 }

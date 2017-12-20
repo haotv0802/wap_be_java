@@ -31,10 +31,15 @@ public class UserService implements IUserService {
 
   @Override
   public void signup(User user) {
-    if (userDao.isUserExisting(user.getUsername())) {
-      throw new RuntimeException("User name is existing");
+    userDao.signup(user);
+  }
+
+  @Override
+  public Boolean isUserExisting(String username) {
+    if (userDao.isUserExisting(username)) {
+      return true;
     } else {
-      userDao.signup(user);
+      return false;
     }
   }
 }

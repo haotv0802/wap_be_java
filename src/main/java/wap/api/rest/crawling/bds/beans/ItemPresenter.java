@@ -2,10 +2,10 @@ package wap.api.rest.crawling.bds.beans;
 
 /**
  * Date: 10/20/2017 Time: 10:56 AM
- * This Vendor Product is to be presented on Front-end.
+ * This Category Product is to be presented on Front-end.
  * @author haho
  */
-public class VendorProductPresenter {
+public class ItemPresenter {
   private String name;
   private String category;
   private String vendorName;

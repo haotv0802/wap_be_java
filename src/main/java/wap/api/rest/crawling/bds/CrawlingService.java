@@ -15,9 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import wap.api.rest.crawling.bds.beans.Vendor;
+import wap.api.rest.crawling.bds.beans.Category;
 import wap.api.rest.crawling.bds.interfaces.ICrawlingDao;
-import wap.api.rest.crawling.bds.beans.VendorProduct;
+import wap.api.rest.crawling.bds.beans.Item;
 import wap.api.rest.crawling.bds.interfaces.ICrawlingService;
 
 import java.io.IOException;
@@ -27,7 +27,7 @@ import java.nio.charset.Charset;
 import java.util.*;
 
 /**
- * Date: 10/19/2017 Time: 4:56 PM
+ * Date: 12/21/2017
  *
  * @author haho
  */
@@ -46,52 +46,52 @@ public class CrawlingService implements ICrawlingService {
   }
 
   @Override
-  public Map<String, Vendor> saveCrawledData(List<String> pages) {
+  public Map<String, Category> saveCrawledData(List<String> pages) {
 
-    Map<String, Vendor> vendorMap = new HashMap<>();
+    Map<String, Category> vendorMap = new HashMap<>();
     for (String page : pages) {
       getVendorProduct(page, vendorMap);
     }
 
     Set<String> keys = vendorMap.keySet();
     for (String key : keys) {
-      Vendor vendor = vendorMap.get(key);
+      Category category = vendorMap.get(key);
 
-      // Saving vendor
-      if (crawlingDao.isVendorExisting(vendor.getName())) {
-        crawlingDao.updateVendor(vendor);
+      // Saving category
+      if (crawlingDao.isVendorExisting(category.getName())) {
+        crawlingDao.updateVendor(category);
       } else {
-        crawlingDao.addVendor(vendor);
+        crawlingDao.addVendor(category);
       }
 
-      Set<VendorProduct> products = vendor.getProducts();
-      for (VendorProduct product: products) {
+      Set<Item> products = category.getProducts();
+      for (Item product: products) {
 
         // Saving Product
         // link of product contains accessing time.
-//        if (crawlingDao.isProductExisting(product.getName(), vendor.getName(), product.getLink())) {
-//          crawlingDao.updateVendorProduct(product, vendor.getName());
+//        if (crawlingDao.isProductExisting(product.getName(), category.getName(), product.getLink())) {
+//          crawlingDao.updateVendorProduct(product, category.getName());
 //        } else {
-//          crawlingDao.addVendorProduct(product, vendor.getName());
+//          crawlingDao.addVendorProduct(product, category.getName());
 //        }
 
         // Saving Product -- products can display more than 1 time.
-          crawlingDao.addVendorProduct(product, vendor.getName());
+          crawlingDao.addVendorProduct(product, category.getName());
       }
     }
     return vendorMap;
   }
 
   /**
-   * Get list of products from given Vendor.
+   * Get list of products from given Category.
    * @param vendorLink
    */
-  private void getVendorProduct(String vendorLink, Map<String, Vendor> vendorMap) {
+  private void getVendorProduct(String vendorLink, Map<String, Category> vendorMap) {
     try {
       Document document = Jsoup.connect(vendorLink).get();
 
 
-      // ********** Get Vendor info.
+      // ********** Get Category info.
 //      String sellerId = document.select("body").attr("data-spm");
 //      JSONObject jsonObject = new JSONObject(document.select("div.c-header-search").attr("data-js-component-params").toString());
 //      jsonObject.getJSONObject("searchContext");
@@ -100,25 +100,25 @@ public class CrawlingService implements ICrawlingService {
 
       String sellerKey = vendorLink.substring(vendorLink.lastIndexOf("/") + 1);
 
-      LOGGER.info(">>> Crawling vendor data: " + vendorLink);
-      Vendor vendor = getVendorDetails(sellerKey, vendorLink, vendorMap);
+      LOGGER.info(">>> Crawling category data: " + vendorLink);
+      Category category = getVendorDetails(sellerKey, vendorLink, vendorMap);
 
       // ********** Get list of products info
       Elements content = document.select(".c-product-list");
 
-      // Vendor like "value-market" has ".c-product-list", but the other like the-bro-store uses REST API to get products list.
+      // Category like "value-market" has ".c-product-list", but the other like the-bro-store uses REST API to get products list.
       if (content.size() != 0) {
         //document.select("div.c-paging").select("div.c-paging__wrapper").select("a.c-paging__link:not(.c-paging__link-current)") // get links of pages 2, 3 and so on
         //document.select("div.c-paging").select("div.c-paging__wrapper").select("a.c-paging__link") // get links of pages 1, 2, 3 and so on
-        this.readVendorContent(content, vendor, vendorMap);
+        this.readVendorContent(content, category, vendorMap);
 
-        //in case Vendor has more pages (from 2nd page)
+        //in case Category has more pages (from 2nd page)
         Elements pages = document.select("div.c-paging").select("div.c-paging__wrapper").select("a.c-paging__link:not(.c-paging__link-current)");
         for (Element page : pages) {
           Document nextPage = Jsoup.connect(page.attr("abs:href")).get();
           Elements contentOfNextPage = nextPage.select(".c-product-list");
 
-          this.readVendorContent(contentOfNextPage, vendor, vendorMap);
+          this.readVendorContent(contentOfNextPage, category, vendorMap);
         }
 
       } else {
@@ -133,10 +133,10 @@ public class CrawlingService implements ICrawlingService {
           for (int j = 0; j < productsInRow.length(); j++) {
             JSONObject product = productsInRow.getJSONObject(j);
             String productLink = product.getJSONObject("settings").getString("productLink");
-            if (null == vendor) {
+            if (null == category) {
               getProductDetails(productLink, vendorMap);
             } else {
-              getProductDetails(productLink, vendor);
+              getProductDetails(productLink, category);
             }
           }
         }
@@ -151,15 +151,15 @@ public class CrawlingService implements ICrawlingService {
     }
   }
 
-  private void readVendorContent(Elements content, Vendor vendor, Map<String, Vendor> vendorMap) {
+  private void readVendorContent(Elements content, Category category, Map<String, Category> vendorMap) {
     Elements productLinks = content.select("a[href].c-product-card__img-placeholder-inner");  // current page
 
     for (Element link : productLinks) {
       String productLink = link.attr("abs:href");
-      if (null == vendor) {
+      if (null == category) {
         getProductDetails(productLink, vendorMap);
       } else {
-        getProductDetails(productLink, vendor);
+        getProductDetails(productLink, category);
       }
     }
   }
@@ -171,12 +171,12 @@ public class CrawlingService implements ICrawlingService {
    * @param vendorMap
    * @return
    */
-  private Vendor getVendorDetails(String sellerKey, String vendorLink, Map<String, Vendor> vendorMap) {
-    Vendor vendor = null;
+  private Category getVendorDetails(String sellerKey, String vendorLink, Map<String, Category> vendorMap) {
+    Category category = null;
     if (!StringUtils.isEmpty(sellerKey)) {
 //      sellerKey = sellerKey.substring(sellerKey.indexOf("-") + 1);
       try {
-        // get vendor info by seller_id, sometimes getting error because some vendors do not have ID.
+        // get category info by seller_id, sometimes getting error because some vendors do not have ID.
 //        JSONObject json = new JSONObject(
 //            IOUtils.toString(new URL("https://seller-transparency-api.lazada.sg/v1/seller/transparency?platform=desktop&lang=en&seller_id=" + sellerId),
 //                Charset.forName("UTF-8")));
@@ -186,10 +186,10 @@ public class CrawlingService implements ICrawlingService {
         Charset.forName("UTF-8")));
         JSONObject seller = (JSONObject) json.get("seller");
         String name = seller.getString("name");
-        vendor = vendorMap.get(name);
-        if (null == vendor) {
-          vendor = new Vendor();
-          vendorMap.put(name, vendor);
+        category = vendorMap.get(name);
+        if (null == category) {
+          category = new Category();
+          vendorMap.put(name, category);
         }
         String location = seller.getString("location");
         String shipOnTime = seller.getJSONObject("shipped_on_time").getString("average_rate");
@@ -201,51 +201,41 @@ public class CrawlingService implements ICrawlingService {
         String sellerSize = seller.getString("size");
         String rating = seller.getString("rate");
 
-        vendor.setName(name);
-        vendor.setLocation(location);
-        vendor.setShipOnTime(Double.valueOf(shipOnTime));
-        vendor.setPositive(StringUtils.isEmpty(positive) ? null : Integer.valueOf(positive));
-        vendor.setNegative(StringUtils.isEmpty(negative) ? null : Integer.valueOf(negative));
-        vendor.setNeutral(StringUtils.isEmpty(neutral) ? null : Integer.valueOf(neutral));
-        vendor.setTimeOnLazada(StringUtils.isEmpty(timeOnLazada) ? null : Integer.valueOf(timeOnLazada));
-        vendor.setSize(StringUtils.isEmpty(sellerSize) ? null : Integer.valueOf(sellerSize));
-        vendor.setRating(StringUtils.isEmpty(rating) ? null : Double.valueOf(rating));
-        vendor.setLink(vendorLink);
-        vendor.setMainCategory(mainCategory);
+        category.setName(name);
       } catch (JSONException | IOException e) {
         e.printStackTrace();
         return null;
       }
     }
-    return vendor;
+    return category;
   }
 
-  private void getProductDetails(String productLink, Map<String, Vendor> vendorMap) {
+  private void getProductDetails(String productLink, Map<String, Category> vendorMap) {
     try {
       Document document = Jsoup.connect(productLink).get();
 
 
       String vendorName = document.select(".basic-info__name").get(0).text();
 
-      Vendor vendor = vendorMap.get(vendorName);
+      Category vendor = vendorMap.get(vendorName);
       if (null == vendor) {
-        vendor = new Vendor();
+        vendor = new Category();
         vendor.setName(vendorName);
 
         String rating = document.select("div.seller-rating").attr("data-tooltip-header");
         rating = rating.substring(0, rating.indexOf("/"));
-        vendor.setRating(StringUtils.isEmpty(rating) ? null : Double.valueOf(rating));
+//        vendor.setRating(StringUtils.isEmpty(rating) ? null : Double.valueOf(rating));
 
         Elements timeOnLazada = document.select(".time-on-lazada__value");
-        vendor.setTimeOnLazada(timeOnLazada.size() > 0 ? Integer.valueOf(timeOnLazada.get(0).text()) : null);
+//        vendor.setTimeOnLazada(timeOnLazada.size() > 0 ? Integer.valueOf(timeOnLazada.get(0).text()) : null);
 
         String size = document.select(".seller-size__content").select(".seller-size-icon").attr("data-level");
-        vendor.setSize(StringUtils.isEmpty(size) ? null : Integer.valueOf(size));
+//        vendor.setSize(StringUtils.isEmpty(size) ? null : Integer.valueOf(size));
 
         vendorMap.put(vendorName, vendor);
       }
 
-      VendorProduct vendorProduct = new VendorProduct();
+      Item item = new Item();
       String productName = document.select("#prod_title").text();
       Elements categories = document.select(".breadcrumb__list").select(".breadcrumb__item-text").select("a[title]");
       String category = null;
@@ -253,27 +243,27 @@ public class CrawlingService implements ICrawlingService {
         category = categories.get(0).select("span").text();
       }
 
-      vendorProduct.setName(productName);
-      vendorProduct.setCategory(category);
-      vendorProduct.setLink(productLink);
+      item.setName(productName);
+//      item.setCategory(category);
+//      item.setLink(productLink);
 
-      Set<VendorProduct> products = vendor.getProducts();
+      Set<Item> products = vendor.getProducts();
       if (null == products) {
         products = new HashSet<>();
         vendor.setProducts(products);
       }
-      products.add(vendorProduct);
+      products.add(item);
 
     } catch (IOException e) {
       System.err.println("For '" + productLink + "': " + e.getMessage());
     }
   }
 
-  private void getProductDetails(String productLink, Vendor vendor) {
+  private void getProductDetails(String productLink, Category vendor) {
     try {
       Document document = Jsoup.connect(productLink).get();
 
-      VendorProduct vendorProduct = new VendorProduct();
+      Item item = new Item();
       String productName = document.select("#prod_title").text();
       Elements categories = document.select(".breadcrumb__list").select(".breadcrumb__item-text").select("a[title]");
       String category = null;
@@ -299,24 +289,17 @@ public class CrawlingService implements ICrawlingService {
 
       String imageURL = document.select("div#productZoom").attr("data-zoom-image").toString();
 
-      vendorProduct.setName(productName);
-      vendorProduct.setCategory(category);
-      vendorProduct.setLink(productLink);
-      vendorProduct.setPrice(new BigDecimal(originalPriceStr));
-      vendorProduct.setDiscountPercent(discountPercent);
-      vendorProduct.setDiscountPrice(new BigDecimal(priceStr));
-      vendorProduct.setCurrency(currency);
-      vendorProduct.setImageURL(imageURL);
+      item.setName(productName);
 
-      Set<VendorProduct> products = vendor.getProducts();
+      Set<Item> products = vendor.getProducts();
       if (null == products) {
         products = new HashSet<>();
         vendor.setProducts(products);
       }
-      if (products.contains(vendorProduct)) {
-        LOGGER.info(vendorProduct.getName() + " is already stored");
+      if (products.contains(item)) {
+        LOGGER.info(item.getName() + " is already stored");
       }
-      products.add(vendorProduct);
+      products.add(item);
 
     } catch (IOException e) {
       System.err.println("For '" + productLink + "': " + e.getMessage());

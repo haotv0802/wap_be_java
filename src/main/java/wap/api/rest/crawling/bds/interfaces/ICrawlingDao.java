@@ -1,7 +1,7 @@
 package wap.api.rest.crawling.bds.interfaces;
 
-import wap.api.rest.crawling.bds.beans.Vendor;
-import wap.api.rest.crawling.bds.beans.VendorProduct;
+import wap.api.rest.crawling.bds.beans.Category;
+import wap.api.rest.crawling.bds.beans.Item;
 
 /**
  * Date: 10/19/2017 Time: 4:56 PM
@@ -11,13 +11,13 @@ import wap.api.rest.crawling.bds.beans.VendorProduct;
 public interface ICrawlingDao {
   boolean isVendorExisting(String name);
 
-  void addVendor(Vendor vendor);
+  void addVendor(Category category);
 
-  void updateVendor(Vendor vendor);
+  void updateVendor(Category category);
 
   boolean isProductExisting(String name, String vendorName, String link);
 
-  void addVendorProduct(VendorProduct product, String vendorName);
+  void addVendorProduct(Item product, String vendorName);
 
-  void updateVendorProduct(VendorProduct product, String vendorName);
+  void updateVendorProduct(Item product, String vendorName);
 }

@@ -1,7 +1,7 @@
 package wap.api.rest.crawling.bds.interfaces;
 
-import wap.api.rest.crawling.bds.beans.VendorPresenter;
-import wap.api.rest.crawling.bds.beans.VendorProductPresenter;
+import wap.api.rest.crawling.bds.beans.CategoryPresenter;
+import wap.api.rest.crawling.bds.beans.ItemPresenter;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import java.util.List;
  * @author haho
  */
 public interface ICrawledDataDao {
-  List<VendorProductPresenter> getAllVendorProducts();
+  List<ItemPresenter> getAllVendorProducts();
 
-  List<VendorPresenter> getAllVendors();
+  List<CategoryPresenter> getAllVendors();
 }

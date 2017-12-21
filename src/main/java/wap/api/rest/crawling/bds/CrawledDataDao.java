@@ -7,10 +7,10 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
-import wap.api.rest.crawling.bds.beans.VendorPresenter;
+import wap.api.rest.crawling.bds.beans.CategoryPresenter;
 import wap.api.rest.crawling.bds.interfaces.ICrawledDataDao;
 import wap.common.dao.DaoUtils;
-import wap.api.rest.crawling.bds.beans.VendorProductPresenter;
+import wap.api.rest.crawling.bds.beans.ItemPresenter;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ import java.util.List;
  *
  * @author haho
  */
-@Repository("crawledDataDao")
+@Repository("bdsCrawledDataDao")
 public class CrawledDataDao implements ICrawledDataDao {
   private static final Logger LOGGER = LogManager.getLogger(CrawledDataDao.class);
 
@@ -34,7 +34,7 @@ public class CrawledDataDao implements ICrawledDataDao {
   }
 
   @Override
-  public List<VendorProductPresenter> getAllVendorProducts() {
+  public List<ItemPresenter> getAllVendorProducts() {
     final String sql =
               "SELECT                                    "
             + "	p.name,                                  "
@@ -60,7 +60,7 @@ public class CrawledDataDao implements ICrawledDataDao {
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
     return namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
-      VendorProductPresenter presenter = new VendorProductPresenter();
+      ItemPresenter presenter = new ItemPresenter();
       presenter.setVendorLink(rs.getString("link"));
       presenter.setVendorLocation(rs.getString("location"));
       presenter.setVendorName(rs.getString("vendorName"));
@@ -78,7 +78,7 @@ public class CrawledDataDao implements ICrawledDataDao {
   }
 
   @Override
-  public List<VendorPresenter> getAllVendors() {
+  public List<CategoryPresenter> getAllVendors() {
     final String sql =
               "SELECT                                 "
             + "	name, timeOnLazada, shipOnTime, size  "
@@ -90,7 +90,7 @@ public class CrawledDataDao implements ICrawledDataDao {
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
     return namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
-      VendorPresenter presenter = new VendorPresenter();
+      CategoryPresenter presenter = new CategoryPresenter();
       presenter.setName(rs.getString("name"));
       presenter.setTimeOnLazada(rs.getInt("timeOnLazada"));
       presenter.setShipOnTime(rs.getDouble("shipOnTime"));

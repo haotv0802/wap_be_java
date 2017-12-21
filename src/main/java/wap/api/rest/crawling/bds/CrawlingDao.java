@@ -7,15 +7,15 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
-import wap.api.rest.crawling.bds.beans.Vendor;
+import wap.api.rest.crawling.bds.beans.Category;
+import wap.api.rest.crawling.bds.beans.Item;
 import wap.api.rest.crawling.bds.interfaces.ICrawlingDao;
 import wap.common.dao.DaoUtils;
-import wap.api.rest.crawling.bds.beans.VendorProduct;
 
 import java.util.Date;
 
 /**
- * Date: 10/19/2017 Time: 4:56 PM
+ * Date: 12/21/2017
  * The DAO is responsible for saving (ADD & UPDATE) crawled data from given pages.
  * @author haho
  */
@@ -47,32 +47,21 @@ public class CrawlingDao implements ICrawlingDao {
   }
 
   @Override
-  public void addVendor(Vendor vendor) {
+  public void addVendor(Category category) {
     final String sql =
         "INSERT INTO crwlr_vendors (name, location, positive, neutral, negative, link, timeOnLazada, rating, size, mainCategory, shipOnTime)"
       + "VALUE (:name, :location, :positive, :neutral, :negative, :link, :timeOnLazada, :rating, :size, :mainCategory, :shipOnTime)         "
         ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-    paramsMap.addValue("name", vendor.getName());
-    paramsMap.addValue("link", vendor.getLink());
-    paramsMap.addValue("location", vendor.getLocation());
-    paramsMap.addValue("positive", vendor.getPositive());
-    paramsMap.addValue("neutral", vendor.getNeutral());
-    paramsMap.addValue("negative", vendor.getNegative());
-    paramsMap.addValue("timeOnLazada", vendor.getTimeOnLazada());
-    paramsMap.addValue("rating", vendor.getRating());
-    paramsMap.addValue("size", vendor.getSize());
-    paramsMap.addValue("mainCategory", vendor.getMainCategory());
-    paramsMap.addValue("shipOnTime", vendor.getShipOnTime());
-
+    paramsMap.addValue("name", category.getName());
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
     namedTemplate.update(sql, paramsMap);
   }
 
   @Override
-  public void updateVendor(Vendor vendor) {
+  public void updateVendor(Category category) {
     final String sql =
       " UPDATE crwlr_vendors                                                                                         "
     + "   SET location   = :location, positive = :positive, neutral = :neutral, negative = :negative, link = :link,  "
@@ -82,17 +71,7 @@ public class CrawlingDao implements ICrawlingDao {
     ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-    paramsMap.addValue("name", vendor.getName());
-    paramsMap.addValue("link", vendor.getLink());
-    paramsMap.addValue("location", vendor.getLocation());
-    paramsMap.addValue("positive", vendor.getPositive());
-    paramsMap.addValue("neutral", vendor.getNeutral());
-    paramsMap.addValue("negative", vendor.getNegative());
-    paramsMap.addValue("timeOnLazada", vendor.getTimeOnLazada());
-    paramsMap.addValue("rating", vendor.getRating());
-    paramsMap.addValue("size", vendor.getSize());
-    paramsMap.addValue("mainCategory", vendor.getMainCategory());
-    paramsMap.addValue("shipOnTime", vendor.getShipOnTime());
+    paramsMap.addValue("name", category.getName());
     paramsMap.addValue("updated", new Date());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
@@ -116,21 +95,13 @@ public class CrawlingDao implements ICrawlingDao {
   }
 
   @Override
-  public void addVendorProduct(VendorProduct product, String vendorName) {
+  public void addVendorProduct(Item product, String vendorName) {
     final String sql =
               "INSERT INTO crwlr_products (name, category, vendor_name, link, price, discountPrice, currency, discountPercent, imageURL)"
             + "  VALUE (:name, :category, :vendor_name, :link, :price, :discountPrice, :currency, :discountPercent, :imageURL)           "
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("name", product.getName());
-    paramsMap.addValue("category", product.getCategory());
-    paramsMap.addValue("vendor_name", vendorName);
-    paramsMap.addValue("link", product.getLink());
-    paramsMap.addValue("price", product.getPrice());
-    paramsMap.addValue("discountPrice", product.getDiscountPrice());
-    paramsMap.addValue("discountPercent", product.getDiscountPercent());
-    paramsMap.addValue("currency", product.getCurrency());
-    paramsMap.addValue("imageURL", product.getImageURL());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
@@ -138,7 +109,7 @@ public class CrawlingDao implements ICrawlingDao {
   }
 
   @Override
-  public void updateVendorProduct(VendorProduct product, String vendorName) {
+  public void updateVendorProduct(Item product, String vendorName) {
     final String sql =
         "UPDATE crwlr_products SET category = :category, updated = :updated, link = :link, imageURL = :imageURL,   "
       + " price = :price, discountPrice = :discountPrice, currency = :currency, discountPercent = :discountPercent "
@@ -146,15 +117,8 @@ public class CrawlingDao implements ICrawlingDao {
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("name", product.getName());
-    paramsMap.addValue("category", product.getCategory());
     paramsMap.addValue("vendor_name", vendorName);
     paramsMap.addValue("updated", new Date());
-    paramsMap.addValue("link", product.getLink());
-    paramsMap.addValue("price", product.getPrice());
-    paramsMap.addValue("discountPrice", product.getDiscountPrice());
-    paramsMap.addValue("discountPercent", product.getDiscountPercent());
-    paramsMap.addValue("currency", product.getCurrency());
-    paramsMap.addValue("imageURL", product.getImageURL());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 

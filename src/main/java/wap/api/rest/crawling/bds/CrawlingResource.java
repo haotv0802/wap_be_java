@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import wap.api.rest.crawling.bds.beans.VendorPresenter;
-import wap.api.rest.crawling.bds.beans.Vendor;
-import wap.api.rest.crawling.bds.beans.VendorProductPresenter;
+import wap.api.rest.crawling.bds.beans.Category;
+import wap.api.rest.crawling.bds.beans.CategoryPresenter;
+import wap.api.rest.crawling.bds.beans.ItemPresenter;
 import wap.api.rest.crawling.bds.interfaces.ICrawledDataService;
 import wap.api.rest.crawling.bds.interfaces.ICrawlingService;
 
@@ -21,12 +21,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Date: 10/19/2017 Time: 4:56 PM
+ * Date: 12/21/2017
  *
  * @author haho
  */
-@RestController("crawlingResource")
-@RequestMapping(path = "/svc")
+@RestController("bdsCrawlingResource")
+@RequestMapping(path = "/svc/bds")
 public class CrawlingResource {
 
   private final Logger LOGGER = LogManager.getLogger(getClass());
@@ -48,13 +48,13 @@ public class CrawlingResource {
   }
 
   @GetMapping("/crawler/crawledData")
-  public List<VendorProductPresenter> getCrawledData(
+  public List<ItemPresenter> getCrawledData(
   ) {
     return crawledDataService.getAllVendorProducts();
   }
 
   @GetMapping("/crawler/crawlingData")
-  public Map<String, Vendor> crawlingData(
+  public Map<String, Category> crawlingData(
       @RequestParam(value = "link", required = false) String link
   ) {
     List<String> pages = new ArrayList<>();
@@ -76,7 +76,7 @@ public class CrawlingResource {
   }
 
   @GetMapping("/crawler/vendors")
-  public List<VendorPresenter> getAllVendors(
+  public List<CategoryPresenter> getAllVendors(
   ) {
     return this.crawledDataService.getAllVendors();
   }

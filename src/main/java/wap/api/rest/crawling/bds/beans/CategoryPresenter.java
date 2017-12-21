@@ -2,11 +2,11 @@ package wap.api.rest.crawling.bds.beans;
 
 /**
  * Date: 10/21/2017 Time: 5:00 PM
- * This Vendor is to be presented on Front-end.
+ * This Category is to be presented on Front-end.
  *
  * @author haho
  */
-public class VendorPresenter {
+public class CategoryPresenter {
   private String name;
   private Double shipOnTime;
   private Integer timeOnLazada;

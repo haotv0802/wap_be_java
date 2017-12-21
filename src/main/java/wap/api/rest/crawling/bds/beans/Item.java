@@ -18,6 +18,19 @@ public class Item {
   private Date endDate;
   private String url;
 
+  @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof Item)) {
+      return false;
+    }
+    Item comparedItem = (Item) obj;
+    if (comparedItem.getUrl().equals(this.getUrl())) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   public String getName() {
     return name;
   }

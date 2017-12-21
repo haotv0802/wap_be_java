@@ -1,5 +1,6 @@
 package wap.api.rest.crawling.bds.beans;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -27,7 +28,7 @@ public class Category {
       return false;
     }
     Category comparedCategory = (Category) obj;
-    if (comparedCategory.getName().equals(this.getName())) {
+    if (comparedCategory.getUrl().equals(this.getUrl())) {
       return true;
     } else {
       return false;
@@ -38,6 +39,12 @@ public class Category {
     return items;
   }
 
+  public void addItems(Set<Item> items) {
+    if (null == this.items) {
+      this.items = new HashSet<>();
+    }
+    this.items.addAll(items);
+  }
   public String getUrl() {
     return url;
   }

@@ -16,6 +16,8 @@ import wap.api.rest.crawling.bds.interfaces.ICrawlingDao;
 import wap.api.rest.crawling.bds.interfaces.ICrawlingService;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -115,27 +117,51 @@ public class CrawlingService implements ICrawlingService {
     }
     try {
       Document document = Jsoup.connect(itemLink).get();
+      String description = document.select("div.pm-desc").get(0).text();
+      String title = document.select("div.pm-title").get(0).select("h1").get(0).text();
+
       Element itemDescription = document.select("div.div-table").get(0);
       String type = itemDescription.select("div.table-detail").get(0).select("div.row").get(0).select("div.right").get(0).text();
       String address = itemDescription.select("div.table-detail").get(0).select("div.row").get(1).select("div.right").get(0).text();
-      String contactName = itemDescription.select("div.div-table-cell.table2").get(0).select("div.table-detail").select("div#LeftMainContent__productDetail_contactName").get(0).select("div.right").get(0).text();
+      String contactName = "";
+      Elements contactInfo = itemDescription.select("div.div-table-cell.table2").get(0).select("div.table-detail");
+      contactName = contactInfo.select("div#LeftMainContent__productDetail_contactName").size() > 0 ? contactInfo.select("div#LeftMainContent__productDetail_contactName").get(0).select("div.right").get(0).text() : "";
 //      String contactPhone = itemDescription.select("div.div-table-cell.table2").get(0).select("div.table-detail").select("div#LeftMainContent__productDetail_contactPhone").get(0).select("div.right").get(0).text();
       String contactMobile = itemDescription.select("div.div-table-cell.table2").get(0).select("div.table-detail").select("div#LeftMainContent__productDetail_contactMobile").get(0).select("div.right").get(0).text();
 
-      itemDescription.select("div.div-table-cell.table2").get(0).select("div.table-detail").select("div#contactEmail").get(0).select("script").first();
-      String unprocessedEmail = itemDescription.getElementsByTag("script").get(0).dataNodes().get(0).getWholeData();
-      unprocessedEmail = unprocessedEmail.substring(unprocessedEmail.indexOf("mailto:") + 7, unprocessedEmail.lastIndexOf("'>&#"));
-      String[] characters = unprocessedEmail.split(";");
-      String email = getEmailFromCharaters(characters);
+//      itemDescription.select("div.div-table-cell.table2").get(0).select("div.table-detail").select("div#contactEmail").get(0).select("script").first();
+      Elements unprocessedEmail_elements = itemDescription.getElementsByTag("script");
+      String email = "";
+      if (unprocessedEmail_elements.size() > 0) {
+        String unprocessedEmail = unprocessedEmail_elements.get(0).dataNodes().get(0).getWholeData();
+        unprocessedEmail = unprocessedEmail.substring(unprocessedEmail.indexOf("mailto:") + 7, unprocessedEmail.lastIndexOf("'>&#"));
+        String[] characters = unprocessedEmail.split(";");
+        email = getEmailFromCharaters(characters);
+      }
 
       Element moreInfo = document.select("div.prd-more-info").get(0);
-      moreInfo.select("div").get(2).select("span").get(0).text();
+      String publishDate = moreInfo.select("div").get(4).text();
+      publishDate = publishDate.substring(publishDate.lastIndexOf(": ") + 2);
+      String endDate = moreInfo.select("div").get(5).text();
+      endDate = endDate.substring(endDate.lastIndexOf(": ") + 2);
+
+      SimpleDateFormat spd = new SimpleDateFormat("dd-MM-yyyy");
       Item item = new Item();
+      item.setName(title);
+      item.setDescription(description);
       item.setAddress(address);
       item.setContactName(contactName);
       item.setContactNumber(contactMobile);
       item.setContactEmail(email);
+      item.setPublishDate(spd.parse(publishDate));
+      item.setEndDate(spd.parse(endDate));
+      item.setUrl(itemLink);
+      items.add(item);
+
+      category.addItems(items);
     } catch (IOException e) {
+      e.printStackTrace();
+    } catch (ParseException e) {
       e.printStackTrace();
     }
   }

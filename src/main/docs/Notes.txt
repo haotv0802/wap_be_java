@@ -16,4 +16,4 @@ https://catalog-rendering-api.lazada.sg/v1/seller/catalog?sort=popularity&catego
 
 Also, it can be found with this REST API:
 http://seller-transparency-api.lazada.sg/v1/seller/transparency?platform=desktop&lang=en&seller_center_id=SG117EJ
-http://shop-decoration-api.lazada.sg/v1/seller/SG117EJ/products?lang=en&limit=10&sort=creation_time
+http://shop-decoration-api.lazada.sg/v1/seller/SG117EJ/items?lang=en&limit=10&sort=creation_time

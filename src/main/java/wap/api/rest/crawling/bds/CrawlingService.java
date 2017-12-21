@@ -1,6 +1,5 @@
 package wap.api.rest.crawling.bds;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
@@ -57,7 +56,7 @@ public class CrawlingService implements ICrawlingService {
         crawlingDao.addVendor(category);
       }
 
-      Set<Item> products = category.getProducts();
+      Set<Item> products = category.getItems();
       for (Item product: products) {
 
         // Saving Product
@@ -97,164 +96,57 @@ public class CrawlingService implements ICrawlingService {
 
       Elements elements = document.select("div.Main");
       Elements itemsList = elements.get(0).select("div.search-productItem");
-      List<String> itemsLinks = new ArrayList<>();
       for (Element element : itemsList) {
         Elements titleOfProduct = element.select("div.p-title");
         String link = titleOfProduct.get(0).select("a").attr("abs:href");
-        itemsLinks.add(link);
+
+        getItemDetails(link, category);
       }
-
-
-      // ********** Get list of items info
-      Elements content = document.select(".c-product-list");
-
-      // Category like "value-market" has ".c-product-list", but the other like the-bro-store uses REST API to get products list.
-//      if (content.size() != 0) {
-//        //document.select("div.c-paging").select("div.c-paging__wrapper").select("a.c-paging__link:not(.c-paging__link-current)") // get links of pages 2, 3 and so on
-//        //document.select("div.c-paging").select("div.c-paging__wrapper").select("a.c-paging__link") // get links of pages 1, 2, 3 and so on
-//        this.readVendorContent(content, category, categoryMap);
-//
-//        //in case Category has more pages (from 2nd page)
-//        Elements pages = document.select("div.c-paging").select("div.c-paging__wrapper").select("a.c-paging__link:not(.c-paging__link-current)");
-//        for (Element page : pages) {
-//          Document nextPage = Jsoup.connect(page.attr("abs:href")).get();
-//          Elements contentOfNextPage = nextPage.select(".c-product-list");
-//
-//          this.readVendorContent(contentOfNextPage, category, categoryMap);
-//        }
-//
-//      } else {
-//        JSONObject json = new JSONObject(
-//                IOUtils.toString(new URL(String.format("https://catalog-rendering-api.lazada.sg/v1/seller/catalog?sort=popularity&offset=0&platform=desktop&view_type=gridView&with_filters=1&seller_key=%s&lang=en&limit=100",sellerKey)),
-//                        Charset.forName("UTF-8")));
-//        JSONObject catalog = json.getJSONObject("catalog");
-//        JSONArray items = catalog.getJSONArray("items");
-//        for (int i = 0; i < items.length(); i++) {
-//          JSONObject item = items.getJSONObject(i);
-//          JSONArray productsInRow = item.getJSONArray("items");
-//          for (int j = 0; j < productsInRow.length(); j++) {
-//            JSONObject product = productsInRow.getJSONObject(j);
-//            String productLink = product.getJSONObject("settings").getString("productLink");
-//            if (null == category) {
-//              getProductDetails(productLink, categoryMap);
-//            } else {
-//              getProductDetails(productLink, category);
-//            }
-//          }
-//        }
-//
-//      }
 
     } catch (IOException e) {
       System.err.println("For '" + categoryLink + "': " + e.getMessage());
     }
   }
 
-  private void readVendorContent(Elements content, Category category, Map<String, Category> vendorMap) {
-    Elements productLinks = content.select("a[href].c-product-card__img-placeholder-inner");  // current page
+  private void getItemDetails(String itemLink, Category category) {
+    Set<Item> items = category.getItems();
+    if (null == items) {
+      items = new HashSet<>();
+    }
+    try {
+      Document document = Jsoup.connect(itemLink).get();
+      Element itemDescription = document.select("div.div-table").get(0);
+      String type = itemDescription.select("div.table-detail").get(0).select("div.row").get(0).select("div.right").get(0).text();
+      String address = itemDescription.select("div.table-detail").get(0).select("div.row").get(1).select("div.right").get(0).text();
+      String contactName = itemDescription.select("div.div-table-cell.table2").get(0).select("div.table-detail").select("div#LeftMainContent__productDetail_contactName").get(0).select("div.right").get(0).text();
+//      String contactPhone = itemDescription.select("div.div-table-cell.table2").get(0).select("div.table-detail").select("div#LeftMainContent__productDetail_contactPhone").get(0).select("div.right").get(0).text();
+      String contactMobile = itemDescription.select("div.div-table-cell.table2").get(0).select("div.table-detail").select("div#LeftMainContent__productDetail_contactMobile").get(0).select("div.right").get(0).text();
 
-    for (Element link : productLinks) {
-      String productLink = link.attr("abs:href");
-      if (null == category) {
-        getProductDetails(productLink, vendorMap);
-      } else {
-        getProductDetails(productLink, category);
-      }
+      itemDescription.select("div.div-table-cell.table2").get(0).select("div.table-detail").select("div#contactEmail").get(0).select("script").first();
+      String unprocessedEmail = itemDescription.getElementsByTag("script").get(0).dataNodes().get(0).getWholeData();
+      unprocessedEmail = unprocessedEmail.substring(unprocessedEmail.indexOf("mailto:") + 7, unprocessedEmail.lastIndexOf("'>&#"));
+      String[] characters = unprocessedEmail.split(";");
+      String email = getEmailFromCharaters(characters);
+
+      Element moreInfo = document.select("div.prd-more-info").get(0);
+      moreInfo.select("div").get(2).select("span").get(0).text();
+      Item item = new Item();
+      item.setAddress(address);
+      item.setContactName(contactName);
+      item.setContactNumber(contactMobile);
+      item.setContactEmail(email);
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
-
-  private void getProductDetails(String productLink, Map<String, Category> vendorMap) {
-    try {
-      Document document = Jsoup.connect(productLink).get();
-
-      String vendorName = document.select(".basic-info__name").get(0).text();
-
-      Category vendor = vendorMap.get(vendorName);
-      if (null == vendor) {
-        vendor = new Category();
-        vendor.setName(vendorName);
-
-        String rating = document.select("div.seller-rating").attr("data-tooltip-header");
-        rating = rating.substring(0, rating.indexOf("/"));
-//        vendor.setRating(StringUtils.isEmpty(rating) ? null : Double.valueOf(rating));
-
-        Elements timeOnLazada = document.select(".time-on-lazada__value");
-//        vendor.setTimeOnLazada(timeOnLazada.size() > 0 ? Integer.valueOf(timeOnLazada.get(0).text()) : null);
-
-        String size = document.select(".seller-size__content").select(".seller-size-icon").attr("data-level");
-//        vendor.setSize(StringUtils.isEmpty(size) ? null : Integer.valueOf(size));
-
-        vendorMap.put(vendorName, vendor);
-      }
-
-      Item item = new Item();
-      String productName = document.select("#prod_title").text();
-      Elements categories = document.select(".breadcrumb__list").select(".breadcrumb__item-text").select("a[title]");
-      String category = null;
-      if (null != categories && categories.size() > 0) {
-        category = categories.get(0).select("span").text();
-      }
-
-      item.setName(productName);
-//      item.setCategory(category);
-//      item.setLink(productLink);
-
-      Set<Item> products = vendor.getProducts();
-      if (null == products) {
-        products = new HashSet<>();
-        vendor.setProducts(products);
-      }
-      products.add(item);
-
-    } catch (IOException e) {
-      System.err.println("For '" + productLink + "': " + e.getMessage());
+  
+  private String getEmailFromCharaters(String[] charaters) {
+    String email = "";
+    for (String character : charaters) {
+      character = character.substring(character.indexOf("$#") + 3);
+      char c = (char) Integer.valueOf(character).intValue();
+      email += c;
     }
-  }
-
-  private void getProductDetails(String productLink, Category vendor) {
-    try {
-      Document document = Jsoup.connect(productLink).get();
-
-      Item item = new Item();
-      String productName = document.select("#prod_title").text();
-      Elements categories = document.select(".breadcrumb__list").select(".breadcrumb__item-text").select("a[title]");
-      String category = null;
-      if (null != categories && categories.size() > 0) {
-        category = categories.get(0).select("span").text();
-      }
-
-      Elements currencyElements = document.select("div.prod_pricebox_price_final").select("span#special_currency_box");
-      String currency = currencyElements.size() > 0 ? currencyElements.get(0).text() : "";
-
-      Elements priceElements = document.select("span#special_price_box");
-      String priceStr = priceElements.size() > 0 ? priceElements.get(0).text() : "";
-      priceStr = priceStr.replace(",", "");
-
-      Elements originalPriceElements = document.select("span.price_erase").select("span#price_box");
-      String originalPriceStr = originalPriceElements.size() > 0 ? originalPriceElements.get(0).text() : "";
-      originalPriceStr = originalPriceStr.substring(originalPriceStr.lastIndexOf(currency) + currency.length() + 1, originalPriceStr.length() - 1);
-      originalPriceStr = originalPriceStr.replace(",", "");
-
-      Elements discountPercentElements = document.select("div.prod_saving").select("span#product_saving_percentage");
-      String discountPercentStr = discountPercentElements.size() > 0 ? discountPercentElements.get(0).text() : "";
-      Double discountPercent = StringUtils.isEmpty(discountPercentStr) ? null : new Double(discountPercentStr.substring(0, discountPercentStr.length() - 1));
-
-      String imageURL = document.select("div#productZoom").attr("data-zoom-image").toString();
-
-      item.setName(productName);
-
-      Set<Item> products = vendor.getProducts();
-      if (null == products) {
-        products = new HashSet<>();
-        vendor.setProducts(products);
-      }
-      if (products.contains(item)) {
-        LOGGER.info(item.getName() + " is already stored");
-      }
-      products.add(item);
-
-    } catch (IOException e) {
-      System.err.println("For '" + productLink + "': " + e.getMessage());
-    }
+    return email;
   }
 }

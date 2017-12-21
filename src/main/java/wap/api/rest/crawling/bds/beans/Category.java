@@ -10,6 +10,7 @@ import java.util.Set;
  * @author haho
  */
 public class Category {
+  private Long id;
   private String name;
   private String url;
   private Set<Item> items;
@@ -51,5 +52,13 @@ public class Category {
 
   public void setUrl(String url) {
     this.url = url;
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 }

@@ -34,12 +34,12 @@ CREATE TABLE `crwlr_items` (
   `publish_date`  DATE          NULL,
   `end_date`      DATE          NULL,
   `url`           TEXT          NULL,
-  `category_url`  NVARCHAR(200) NOT NULL,
+  `category_id`   BIGINT        NOT NULL,
   `created`       DATETIME DEFAULT NOW(),
   `updated`       DATETIME      NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `crwlr_items` (`id`),
-  CONSTRAINT `crwlr_items_category_url` FOREIGN KEY (`category_url`) REFERENCES `crwlr_categories` (`url`)
+  CONSTRAINT `crwlr_items_category_url` FOREIGN KEY (`category_id`) REFERENCES `crwlr_categories` (`id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;

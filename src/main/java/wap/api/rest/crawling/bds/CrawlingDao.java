@@ -5,6 +5,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 import wap.api.rest.crawling.bds.beans.Category;
@@ -59,7 +61,10 @@ public class CrawlingDao implements ICrawlingDao {
     paramsMap.addValue("url", category.getUrl());
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
-    namedTemplate.update(sql, paramsMap);
+    KeyHolder keyHolder = new GeneratedKeyHolder();
+    namedTemplate.update(sql, paramsMap, keyHolder);
+    final Long id = keyHolder.getKey().longValue();
+    category.setId(id);
   }
 
   @Override
@@ -83,7 +88,7 @@ public class CrawlingDao implements ICrawlingDao {
   @Override
   public boolean isItemExisting(String url, String categoryUrl) {
     final String sql =
-    "SELECT COUNT(*) FROM crwlr_items i inner join crwlr_categories c on i.category_url = c.url where c.url = :url and i.url = :categoryUrl";
+    "SELECT COUNT(*) FROM crwlr_items i inner join crwlr_categories c on i.category_id = c.id where c.url = :url and i.url = :categoryUrl";
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("url", url);
@@ -97,8 +102,8 @@ public class CrawlingDao implements ICrawlingDao {
   @Override
   public void addItem(Item item, String vendorName) {
     final String sql =
-    "INSERT INTO crwlr_items (name, address, description, contactName, contactNumber, contactEmail, publish_date, end_date, url, category_url)"
-  + " VALUE (:name, :address, :description, :contactName, :contactNumber, :contactEmail, :publishDate, :endDate, :url, :category_url)          ";
+    "INSERT INTO crwlr_items (name, address, description, contactName, contactNumber, contactEmail, publish_date, end_date, url, category_id)"
+  + " VALUE (:name, :address, :description, :contactName, :contactNumber, :contactEmail, :publishDate, :endDate, :url, :category_id)          ";
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("name", item.getTitle());
@@ -110,7 +115,7 @@ public class CrawlingDao implements ICrawlingDao {
     paramsMap.addValue("publishDate", JdbcUtils.toSQLDate(item.getPublishDate()));
     paramsMap.addValue("endDate", JdbcUtils.toSQLDate(item.getEndDate()));
     paramsMap.addValue("url", item.getUrl());
-    paramsMap.addValue("category_url", item.getCategoryUrl());
+    paramsMap.addValue("category_id", item.getCategoryId());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 

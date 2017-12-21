@@ -61,6 +61,7 @@ public class CrawlingService implements ICrawlingService {
       Set<Item> items = category.getItems();
       for (Item item: items) {
         // Saving Product
+        item.setCategoryId(category.getId());
         if (crawlingDao.isItemExisting(item.getUrl(), category.getUrl())) {
           crawlingDao.updateItem(item, category.getName());
         } else {
@@ -151,7 +152,6 @@ public class CrawlingService implements ICrawlingService {
       item.setPublishDate(spd.parse(publishDate));
       item.setEndDate(spd.parse(endDate));
       item.setUrl(itemLink);
-      item.setCategoryUrl(category.getUrl());
       items.add(item);
 
       category.addItems(items);

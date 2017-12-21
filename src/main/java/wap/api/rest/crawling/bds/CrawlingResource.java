@@ -37,8 +37,8 @@ public class CrawlingResource {
 
   @Autowired
   public CrawlingResource(
-      @Qualifier("crawlingService") ICrawlingService crawlingService,
-      @Qualifier("crawledDataService") ICrawledDataService crawledDataService
+      @Qualifier("bdsCrawlingService") ICrawlingService crawlingService,
+      @Qualifier("bdsCrawledDataService") ICrawledDataService crawledDataService
   ) {
     Assert.notNull(crawlingService);
     Assert.notNull(crawledDataService);
@@ -59,7 +59,7 @@ public class CrawlingResource {
   ) {
     List<String> pages = new ArrayList<>();
     if (StringUtils.isEmpty(link)) {
-      pages.add("https://www.lazada.sg/value-market");
+      pages.add("https://batdongsan.com.vn/ban-nha-rieng-tp-hcm");
 //      pages.add("https://www.lazada.sg/empire-13");
 //      pages.add("https://www.lazada.sg/boom_");
 //      pages.add("https://www.lazada.sg/the-bro-store");

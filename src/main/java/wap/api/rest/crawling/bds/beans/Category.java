@@ -10,6 +10,7 @@ import java.util.Set;
  */
 public class Category {
   private String name;
+  private String url;
   private Set<Item> products;
 
   public String getName() {
@@ -39,5 +40,13 @@ public class Category {
 
   public void setProducts(Set<Item> products) {
     this.products = products;
+  }
+
+  public String getUrl() {
+    return url;
+  }
+
+  public void setUrl(String url) {
+    this.url = url;
   }
 }

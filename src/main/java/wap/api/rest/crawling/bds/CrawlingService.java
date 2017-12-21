@@ -1,12 +1,8 @@
 package wap.api.rest.crawling.bds;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -16,14 +12,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import wap.api.rest.crawling.bds.beans.Category;
-import wap.api.rest.crawling.bds.interfaces.ICrawlingDao;
 import wap.api.rest.crawling.bds.beans.Item;
+import wap.api.rest.crawling.bds.interfaces.ICrawlingDao;
 import wap.api.rest.crawling.bds.interfaces.ICrawlingService;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.*;
 
 /**
@@ -31,7 +24,7 @@ import java.util.*;
  *
  * @author haho
  */
-@Service("crawlingService")
+@Service("bdsCrawlingService")
 public class CrawlingService implements ICrawlingService {
 
   private final ICrawlingDao crawlingDao;
@@ -39,7 +32,7 @@ public class CrawlingService implements ICrawlingService {
   private final Logger LOGGER = LogManager.getLogger(getClass());
 
   @Autowired
-  public CrawlingService(@Qualifier("crawlingDao") ICrawlingDao crawlingDao) {
+  public CrawlingService(@Qualifier("bdsCrawlingDao") ICrawlingDao crawlingDao) {
     Assert.notNull(crawlingDao);
 
     this.crawlingDao = crawlingDao;
@@ -48,14 +41,14 @@ public class CrawlingService implements ICrawlingService {
   @Override
   public Map<String, Category> saveCrawledData(List<String> pages) {
 
-    Map<String, Category> vendorMap = new HashMap<>();
+    Map<String, Category> categoryMap = new HashMap<>();
     for (String page : pages) {
-      getVendorProduct(page, vendorMap);
+      getCategoriesAndItems(page, categoryMap);
     }
 
-    Set<String> keys = vendorMap.keySet();
+    Set<String> keys = categoryMap.keySet();
     for (String key : keys) {
-      Category category = vendorMap.get(key);
+      Category category = categoryMap.get(key);
 
       // Saving category
       if (crawlingDao.isVendorExisting(category.getName())) {
@@ -79,75 +72,81 @@ public class CrawlingService implements ICrawlingService {
           crawlingDao.addVendorProduct(product, category.getName());
       }
     }
-    return vendorMap;
+    return categoryMap;
   }
 
   /**
    * Get list of products from given Category.
-   * @param vendorLink
+   * @param categoryLink
    */
-  private void getVendorProduct(String vendorLink, Map<String, Category> vendorMap) {
+  private void getCategoriesAndItems(String categoryLink, Map<String, Category> categoryMap) {
     try {
-      Document document = Jsoup.connect(vendorLink).get();
+      Document document = Jsoup.connect(categoryLink).get();
+      String categoryName = document.select("div.product-list-page").get(0).select("div.Title").select("h1").get(0).text();
+
+      Category category = categoryMap.get(categoryLink);
+      if (null == category) {
+        category = new Category();
+        category.setName(categoryName);
+        category.setUrl(categoryLink);
+        categoryMap.put(categoryLink, category);
+      }
+
+      LOGGER.info(">>> Crawling category data: " + categoryLink);
+//      Category category = getCategoryDetails(categoryLink, categoryMap);
+
+      Elements elements = document.select("div.Main");
+      Elements itemsList = elements.get(0).select("div.search-productItem");
+      List<String> itemsLinks = new ArrayList<>();
+      for (Element element : itemsList) {
+        Elements titleOfProduct = element.select("div.p-title");
+        String link = titleOfProduct.get(0).select("a").attr("abs:href");
+        itemsLinks.add(link);
+      }
 
 
-      // ********** Get Category info.
-//      String sellerId = document.select("body").attr("data-spm");
-//      JSONObject jsonObject = new JSONObject(document.select("div.c-header-search").attr("data-js-component-params").toString());
-//      jsonObject.getJSONObject("searchContext");
-//      String sellerId = jsonObject.getJSONObject("searchContext").get("EntityID").toString();
-
-
-      String sellerKey = vendorLink.substring(vendorLink.lastIndexOf("/") + 1);
-
-      LOGGER.info(">>> Crawling category data: " + vendorLink);
-      Category category = getVendorDetails(sellerKey, vendorLink, vendorMap);
-
-      // ********** Get list of products info
+      // ********** Get list of items info
       Elements content = document.select(".c-product-list");
 
       // Category like "value-market" has ".c-product-list", but the other like the-bro-store uses REST API to get products list.
-      if (content.size() != 0) {
-        //document.select("div.c-paging").select("div.c-paging__wrapper").select("a.c-paging__link:not(.c-paging__link-current)") // get links of pages 2, 3 and so on
-        //document.select("div.c-paging").select("div.c-paging__wrapper").select("a.c-paging__link") // get links of pages 1, 2, 3 and so on
-        this.readVendorContent(content, category, vendorMap);
-
-        //in case Category has more pages (from 2nd page)
-        Elements pages = document.select("div.c-paging").select("div.c-paging__wrapper").select("a.c-paging__link:not(.c-paging__link-current)");
-        for (Element page : pages) {
-          Document nextPage = Jsoup.connect(page.attr("abs:href")).get();
-          Elements contentOfNextPage = nextPage.select(".c-product-list");
-
-          this.readVendorContent(contentOfNextPage, category, vendorMap);
-        }
-
-      } else {
-        JSONObject json = new JSONObject(
-                IOUtils.toString(new URL(String.format("https://catalog-rendering-api.lazada.sg/v1/seller/catalog?sort=popularity&offset=0&platform=desktop&view_type=gridView&with_filters=1&seller_key=%s&lang=en&limit=100",sellerKey)),
-                        Charset.forName("UTF-8")));
-        JSONObject catalog = json.getJSONObject("catalog");
-        JSONArray items = catalog.getJSONArray("items");
-        for (int i = 0; i < items.length(); i++) {
-          JSONObject item = items.getJSONObject(i);
-          JSONArray productsInRow = item.getJSONArray("items");
-          for (int j = 0; j < productsInRow.length(); j++) {
-            JSONObject product = productsInRow.getJSONObject(j);
-            String productLink = product.getJSONObject("settings").getString("productLink");
-            if (null == category) {
-              getProductDetails(productLink, vendorMap);
-            } else {
-              getProductDetails(productLink, category);
-            }
-          }
-        }
-
-      }
+//      if (content.size() != 0) {
+//        //document.select("div.c-paging").select("div.c-paging__wrapper").select("a.c-paging__link:not(.c-paging__link-current)") // get links of pages 2, 3 and so on
+//        //document.select("div.c-paging").select("div.c-paging__wrapper").select("a.c-paging__link") // get links of pages 1, 2, 3 and so on
+//        this.readVendorContent(content, category, categoryMap);
+//
+//        //in case Category has more pages (from 2nd page)
+//        Elements pages = document.select("div.c-paging").select("div.c-paging__wrapper").select("a.c-paging__link:not(.c-paging__link-current)");
+//        for (Element page : pages) {
+//          Document nextPage = Jsoup.connect(page.attr("abs:href")).get();
+//          Elements contentOfNextPage = nextPage.select(".c-product-list");
+//
+//          this.readVendorContent(contentOfNextPage, category, categoryMap);
+//        }
+//
+//      } else {
+//        JSONObject json = new JSONObject(
+//                IOUtils.toString(new URL(String.format("https://catalog-rendering-api.lazada.sg/v1/seller/catalog?sort=popularity&offset=0&platform=desktop&view_type=gridView&with_filters=1&seller_key=%s&lang=en&limit=100",sellerKey)),
+//                        Charset.forName("UTF-8")));
+//        JSONObject catalog = json.getJSONObject("catalog");
+//        JSONArray items = catalog.getJSONArray("items");
+//        for (int i = 0; i < items.length(); i++) {
+//          JSONObject item = items.getJSONObject(i);
+//          JSONArray productsInRow = item.getJSONArray("items");
+//          for (int j = 0; j < productsInRow.length(); j++) {
+//            JSONObject product = productsInRow.getJSONObject(j);
+//            String productLink = product.getJSONObject("settings").getString("productLink");
+//            if (null == category) {
+//              getProductDetails(productLink, categoryMap);
+//            } else {
+//              getProductDetails(productLink, category);
+//            }
+//          }
+//        }
+//
+//      }
 
     } catch (IOException e) {
-      System.err.println("For '" + vendorLink + "': " + e.getMessage());
-    }
-    catch (JSONException e) {
-      e.printStackTrace();
+      System.err.println("For '" + categoryLink + "': " + e.getMessage());
     }
   }
 
@@ -164,56 +163,9 @@ public class CrawlingService implements ICrawlingService {
     }
   }
 
-  /**
-   *
-   * @param sellerKey
-   * @param vendorLink
-   * @param vendorMap
-   * @return
-   */
-  private Category getVendorDetails(String sellerKey, String vendorLink, Map<String, Category> vendorMap) {
-    Category category = null;
-    if (!StringUtils.isEmpty(sellerKey)) {
-//      sellerKey = sellerKey.substring(sellerKey.indexOf("-") + 1);
-      try {
-        // get category info by seller_id, sometimes getting error because some vendors do not have ID.
-//        JSONObject json = new JSONObject(
-//            IOUtils.toString(new URL("https://seller-transparency-api.lazada.sg/v1/seller/transparency?platform=desktop&lang=en&seller_id=" + sellerId),
-//                Charset.forName("UTF-8")));
-
-        JSONObject json = new JSONObject(
-        IOUtils.toString(new URL("https://seller-transparency-api.lazada.sg/v1/seller/transparency?platform=desktop&lang=en&seller_key=" + sellerKey),
-        Charset.forName("UTF-8")));
-        JSONObject seller = (JSONObject) json.get("seller");
-        String name = seller.getString("name");
-        category = vendorMap.get(name);
-        if (null == category) {
-          category = new Category();
-          vendorMap.put(name, category);
-        }
-        String location = seller.getString("location");
-        String shipOnTime = seller.getJSONObject("shipped_on_time").getString("average_rate");
-        String positive = seller.getJSONObject("seller_reviews").getJSONObject("positive").getString("total");
-        String negative = seller.getJSONObject("seller_reviews").getJSONObject("negative").getString("total");
-        String neutral = seller.getJSONObject("seller_reviews").getJSONObject("neutral").getString("total");
-        String timeOnLazada = seller.getJSONObject("time_on_lazada").getString("months");
-        String mainCategory = seller.getJSONObject("category").getString("name");
-        String sellerSize = seller.getString("size");
-        String rating = seller.getString("rate");
-
-        category.setName(name);
-      } catch (JSONException | IOException e) {
-        e.printStackTrace();
-        return null;
-      }
-    }
-    return category;
-  }
-
   private void getProductDetails(String productLink, Map<String, Category> vendorMap) {
     try {
       Document document = Jsoup.connect(productLink).get();
-
 
       String vendorName = document.select(".basic-info__name").get(0).text();
 

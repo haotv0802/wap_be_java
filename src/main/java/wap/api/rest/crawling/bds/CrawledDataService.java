@@ -26,7 +26,7 @@ public class CrawledDataService implements ICrawledDataService {
   private final Logger LOGGER = LogManager.getLogger(getClass());
 
   @Autowired
-  public CrawledDataService(@Qualifier("crawledDataDao") ICrawledDataDao crawledDataDao) {
+  public CrawledDataService(@Qualifier("bdsCrawledDataDao") ICrawledDataDao crawledDataDao) {
     Assert.notNull(crawledDataDao);
 
     this.crawledDataDao = crawledDataDao;

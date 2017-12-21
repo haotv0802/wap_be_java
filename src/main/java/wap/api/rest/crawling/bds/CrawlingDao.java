@@ -19,7 +19,7 @@ import java.util.Date;
  * The DAO is responsible for saving (ADD & UPDATE) crawled data from given pages.
  * @author haho
  */
-@Repository("crawlingDao")
+@Repository("bdsCrawlingDao")
 public class CrawlingDao implements ICrawlingDao {
 
   private static final Logger LOGGER = LogManager.getLogger(CrawlingDao.class);

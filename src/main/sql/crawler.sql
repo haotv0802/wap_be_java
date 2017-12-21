@@ -52,7 +52,6 @@ CREATE TABLE `crwlr_products` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-
 --
 -- Table structure for table `crwlr_categories`
 --
@@ -60,6 +59,7 @@ DROP TABLE IF EXISTS `crwlr_categories`;
 CREATE TABLE `crwlr_categories` (
   `id`      BIGINT   AUTO_INCREMENT,
   `name`    VARCHAR(200) NULL,
+  `url`     TEXT         NULL,
   `created` DATETIME DEFAULT NOW(),
   `updated` DATETIME     NULL,
   PRIMARY KEY (`id`),

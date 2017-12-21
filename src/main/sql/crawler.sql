@@ -53,3 +53,44 @@ CREATE TABLE `crwlr_products` (
   DEFAULT CHARSET = utf8;
 
 
+--
+-- Table structure for table `crwlr_categories`
+--
+DROP TABLE IF EXISTS `crwlr_categories`;
+CREATE TABLE `crwlr_categories` (
+  `id`      BIGINT   AUTO_INCREMENT,
+  `name`    VARCHAR(200) NULL,
+  `created` DATETIME DEFAULT NOW(),
+  `updated` DATETIME     NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `crwlr_categories_id` (`id`),
+  UNIQUE KEY `crwlr_categories_name` (`name`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+--
+-- Table structure for table `crwlr_items`
+--
+DROP TABLE IF EXISTS `crwlr_items`;
+CREATE TABLE `crwlr_items` (
+  `id`            BIGINT   AUTO_INCREMENT,
+  `address`       VARCHAR(300) NULL,
+  `description`   TEXT         NOT NULL,
+  `contactName`   VARCHAR(45)  NULL,
+  `contactNumber` VARCHAR(45)  NULL,
+  `contactEmail`  VARCHAR(45)  NULL,
+  `publish_date`  DATE         NULL,
+  `end_date`      DATE         NULL,
+  `url`           TEXT         NULL,
+  `category_id`   BIGINT       NOT NULL,
+  `created`       DATETIME DEFAULT NOW(),
+  `updated`       DATETIME     NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `crwlr_items` (`id`),
+  CONSTRAINT `crwlr_items_category_id` FOREIGN KEY (`vendor_name`) REFERENCES `crwlr_vendors` (`name`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+

@@ -8,7 +8,7 @@ import java.util.Date;
  * @author haho
  */
 public class Item {
-  private String name;
+  private String title;
   private String address;
   private String description;
   private String contactName;
@@ -31,12 +31,12 @@ public class Item {
     }
   }
 
-  public String getName() {
-    return name;
+  public String getTitle() {
+    return title;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setTitle(String title) {
+    this.title = title;
   }
 
   public String getAddress() {

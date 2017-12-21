@@ -101,7 +101,7 @@ public class CrawlingDao implements ICrawlingDao {
             + "  VALUE (:name, :category, :vendor_name, :link, :price, :discountPrice, :currency, :discountPercent, :imageURL)           "
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-    paramsMap.addValue("name", product.getName());
+    paramsMap.addValue("name", product.getTitle());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
@@ -116,7 +116,7 @@ public class CrawlingDao implements ICrawlingDao {
       + " WHERE name = :name AND vendor_name = :vendor_name                                                        "
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-    paramsMap.addValue("name", product.getName());
+    paramsMap.addValue("name", product.getTitle());
     paramsMap.addValue("vendor_name", vendorName);
     paramsMap.addValue("updated", new Date());
 

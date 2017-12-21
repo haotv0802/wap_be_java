@@ -54,6 +54,7 @@ public class CrawlingService implements ICrawlingService {
       // Saving category
       if (crawlingDao.isCategoryExisting(category.getUrl())) {
         crawlingDao.updateCategory(category);
+        category.setId(crawlingDao.getCategoryId(category.getUrl()));
       } else {
         crawlingDao.addCategory(category);
       }
@@ -63,9 +64,9 @@ public class CrawlingService implements ICrawlingService {
         // Saving Product
         item.setCategoryId(category.getId());
         if (crawlingDao.isItemExisting(item.getUrl(), category.getUrl())) {
-          crawlingDao.updateItem(item, category.getName());
+          crawlingDao.updateItem(item);
         } else {
-          crawlingDao.addItem(item, category.getName());
+          crawlingDao.addItem(item);
         }
       }
     }

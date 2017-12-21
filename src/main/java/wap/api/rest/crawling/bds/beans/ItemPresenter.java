@@ -1,117 +1,111 @@
 package wap.api.rest.crawling.bds.beans;
 
+import java.util.Date;
+
 /**
  * Date: 10/20/2017 Time: 10:56 AM
  * This Category Product is to be presented on Front-end.
+ *
  * @author haho
  */
 public class ItemPresenter {
-  private String name;
-  private String category;
-  private String vendorName;
-  private String vendorLocation;
-  private Integer vendorShipOnTime;
-  private Integer vendorPositive;
-  private Integer vendorNeutral;
-  private Integer vendorNegative;
-  private String vendorLink;
-  private Integer vendorTimeOnLazada;
-  private Float vendorRating;
-  private Integer vendorSize;
+  private String title;
+  private String address;
+  private String description;
+  private String contactName;
+  private String contactNumber;
+  private String contactEmail;
+  private Date publishDate;
+  private Date endDate;
+  private String url;
+  private String categoryName;
+  private String categoryUrl;
 
-  public String getName() {
-    return name;
+  public String getTitle() {
+    return title;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setTitle(String title) {
+    this.title = title;
   }
 
-  public String getCategory() {
-    return category;
+  public String getAddress() {
+    return address;
   }
 
-  public void setCategory(String category) {
-    this.category = category;
+  public void setAddress(String address) {
+    this.address = address;
   }
 
-  public String getVendorName() {
-    return vendorName;
+  public String getDescription() {
+    return description;
   }
 
-  public void setVendorName(String vendorName) {
-    this.vendorName = vendorName;
+  public void setDescription(String description) {
+    this.description = description;
   }
 
-  public String getVendorLocation() {
-    return vendorLocation;
+  public String getContactName() {
+    return contactName;
   }
 
-  public void setVendorLocation(String vendorLocation) {
-    this.vendorLocation = vendorLocation;
+  public void setContactName(String contactName) {
+    this.contactName = contactName;
   }
 
-  public Integer getVendorShipOnTime() {
-    return vendorShipOnTime;
+  public String getContactNumber() {
+    return contactNumber;
   }
 
-  public void setVendorShipOnTime(Integer vendorShipOnTime) {
-    this.vendorShipOnTime = vendorShipOnTime;
+  public void setContactNumber(String contactNumber) {
+    this.contactNumber = contactNumber;
   }
 
-  public Integer getVendorPositive() {
-    return vendorPositive;
+  public String getContactEmail() {
+    return contactEmail;
   }
 
-  public void setVendorPositive(Integer vendorPositive) {
-    this.vendorPositive = vendorPositive;
+  public void setContactEmail(String contactEmail) {
+    this.contactEmail = contactEmail;
   }
 
-  public Integer getVendorNeutral() {
-    return vendorNeutral;
+  public Date getPublishDate() {
+    return publishDate;
   }
 
-  public void setVendorNeutral(Integer vendorNeutral) {
-    this.vendorNeutral = vendorNeutral;
+  public void setPublishDate(Date publishDate) {
+    this.publishDate = publishDate;
   }
 
-  public Integer getVendorNegative() {
-    return vendorNegative;
+  public Date getEndDate() {
+    return endDate;
   }
 
-  public void setVendorNegative(Integer vendorNegative) {
-    this.vendorNegative = vendorNegative;
+  public void setEndDate(Date endDate) {
+    this.endDate = endDate;
   }
 
-  public String getVendorLink() {
-    return vendorLink;
+  public String getUrl() {
+    return url;
   }
 
-  public void setVendorLink(String vendorLink) {
-    this.vendorLink = vendorLink;
+  public void setUrl(String url) {
+    this.url = url;
   }
 
-  public Integer getVendorTimeOnLazada() {
-    return vendorTimeOnLazada;
+  public String getCategoryName() {
+    return categoryName;
   }
 
-  public void setVendorTimeOnLazada(Integer vendorTimeOnLazada) {
-    this.vendorTimeOnLazada = vendorTimeOnLazada;
+  public void setCategoryName(String categoryName) {
+    this.categoryName = categoryName;
   }
 
-  public Float getVendorRating() {
-    return vendorRating;
+  public String getCategoryUrl() {
+    return categoryUrl;
   }
 
-  public void setVendorRating(Float vendorRating) {
-    this.vendorRating = vendorRating;
-  }
-
-  public Integer getVendorSize() {
-    return vendorSize;
-  }
-
-  public void setVendorSize(Integer vendorSize) {
-    this.vendorSize = vendorSize;
+  public void setCategoryUrl(String categoryUrl) {
+    this.categoryUrl = categoryUrl;
   }
 }

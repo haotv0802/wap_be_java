@@ -11,7 +11,6 @@ import java.util.List;
  * @author haho
  */
 public interface ICrawledDataDao {
-  List<ItemPresenter> getAllVendorProducts();
+  List<ItemPresenter> getAllItems();
 
-  List<CategoryPresenter> getAllVendors();
 }

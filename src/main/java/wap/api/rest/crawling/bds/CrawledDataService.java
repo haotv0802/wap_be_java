@@ -6,9 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
-import wap.api.rest.crawling.bds.beans.CategoryPresenter;
-import wap.api.rest.crawling.bds.interfaces.ICrawledDataDao;
 import wap.api.rest.crawling.bds.beans.ItemPresenter;
+import wap.api.rest.crawling.bds.interfaces.ICrawledDataDao;
 import wap.api.rest.crawling.bds.interfaces.ICrawledDataService;
 
 import java.util.List;
@@ -33,12 +32,8 @@ public class CrawledDataService implements ICrawledDataService {
   }
 
   @Override
-  public List<ItemPresenter> getAllVendorProducts() {
-    return this.crawledDataDao.getAllVendorProducts();
+  public List<ItemPresenter> getAllItems() {
+    return this.crawledDataDao.getAllItems();
   }
 
-  @Override
-  public List<CategoryPresenter> getAllVendors() {
-    return crawledDataDao.getAllVendors();
-  }
 }

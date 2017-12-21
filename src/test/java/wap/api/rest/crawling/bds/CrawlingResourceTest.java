@@ -20,4 +20,14 @@ public class CrawlingResourceTest extends TestBase {
         .andExpect(status().is(200))
     ;
   }
+
+
+  @Test
+  public void testGetCrawledData() throws Exception {
+    mockMvc
+        .perform(get("/svc/bds/crawler/crawledData")
+        )
+        .andExpect(status().is(200))
+    ;
+  }
 }

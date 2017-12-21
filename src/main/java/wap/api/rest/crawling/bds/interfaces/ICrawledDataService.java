@@ -1,6 +1,5 @@
 package wap.api.rest.crawling.bds.interfaces;
 
-import wap.api.rest.crawling.bds.beans.CategoryPresenter;
 import wap.api.rest.crawling.bds.beans.ItemPresenter;
 
 import java.util.List;
@@ -12,7 +11,6 @@ import java.util.List;
  * @author haho
  */
 public interface ICrawledDataService {
-  List<ItemPresenter> getAllVendorProducts();
+  List<ItemPresenter> getAllItems();
 
-  List<CategoryPresenter> getAllVendors();
 }

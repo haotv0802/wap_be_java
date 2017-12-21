@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import wap.api.rest.crawling.bds.beans.Category;
-import wap.api.rest.crawling.bds.beans.CategoryPresenter;
 import wap.api.rest.crawling.bds.beans.ItemPresenter;
 import wap.api.rest.crawling.bds.interfaces.ICrawledDataService;
 import wap.api.rest.crawling.bds.interfaces.ICrawlingService;
@@ -50,7 +49,7 @@ public class CrawlingResource {
   @GetMapping("/crawler/crawledData")
   public List<ItemPresenter> getCrawledData(
   ) {
-    return crawledDataService.getAllVendorProducts();
+    return crawledDataService.getAllItems();
   }
 
   @GetMapping("/crawler/crawlingData")
@@ -75,9 +74,4 @@ public class CrawlingResource {
     return this.crawlingService.saveCrawledData(pages);
   }
 
-  @GetMapping("/crawler/vendors")
-  public List<CategoryPresenter> getAllVendors(
-  ) {
-    return this.crawledDataService.getAllVendors();
-  }
 }

@@ -7,10 +7,10 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
-import wap.api.rest.crawling.bds.beans.CategoryPresenter;
-import wap.api.rest.crawling.bds.interfaces.ICrawledDataDao;
-import wap.common.dao.DaoUtils;
 import wap.api.rest.crawling.bds.beans.ItemPresenter;
+import wap.api.rest.crawling.bds.interfaces.ICrawledDataDao;
+import wap.common.JdbcUtils;
+import wap.common.dao.DaoUtils;
 
 import java.util.List;
 
@@ -34,26 +34,24 @@ public class CrawledDataDao implements ICrawledDataDao {
   }
 
   @Override
-  public List<ItemPresenter> getAllVendorProducts() {
+  public List<ItemPresenter> getAllItems() {
     final String sql =
-              "SELECT                                    "
-            + "	p.name,                                  "
-            + "	p.category,                              "
-            + "	v.name vendorName,                       "
-            + "	v.location,                              "
-            + "	v.positive,                              "
-            + "	v.negative,                              "
-            + "	v.neutral,                               "
-            + "	v.link,                                  "
-            + "	v.rating,                                "
-            + "	v.shipOnTime,                            "
-            + "	v.size,                                  "
-            + "	v.timeOnLazada                           "
-            + "FROM                                      "
-            + "	crwlr_products p                         "
-            + "		INNER JOIN                             "
-            + "	crwlr_vendors v ON p.vendor_name = v.name"
-            + "	ORDER BY p.name ASC                      "
+                    "SELECT                                        "
+                  + "    i.name,                                   "
+                  + "    i.address,                                "
+                  + "    i.description,                            "
+                  + "    i.contactName,                            "
+                  + "    i.contactNumber,                          "
+                  + "    i.contactEmail,                           "
+                  + "    i.publish_date,                           "
+                  + "    i.end_date,                               "
+                  + "    i.url,                                    "
+                  + "    c.name categoryName,                      "
+                  + "    c.url categoryUrl                         "
+                  + "FROM                                          "
+                  + "    crwlr_items i                             "
+                  + "        INNER JOIN                            "
+                  + "    crwlr_categories c ON i.category_id = c.id"
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
 
@@ -61,41 +59,19 @@ public class CrawledDataDao implements ICrawledDataDao {
 
     return namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
       ItemPresenter presenter = new ItemPresenter();
-      presenter.setVendorLink(rs.getString("link"));
-      presenter.setVendorLocation(rs.getString("location"));
-      presenter.setVendorName(rs.getString("vendorName"));
-      presenter.setVendorPositive(rs.getInt("positive"));
-      presenter.setVendorNeutral(rs.getInt("neutral"));
-      presenter.setVendorNegative(rs.getInt("negative"));
-      presenter.setVendorTimeOnLazada(rs.getInt("timeOnLazada"));
-      presenter.setVendorRating(rs.getFloat("rating"));
-      presenter.setVendorSize(rs.getInt("size"));
-      presenter.setVendorShipOnTime(rs.getInt("shipOnTime"));
-      presenter.setName(rs.getString("name"));
-      presenter.setCategory(rs.getString("category"));
+      presenter.setTitle(rs.getString("name"));
+      presenter.setAddress(rs.getString("address"));
+      presenter.setDescription(rs.getString("description"));
+      presenter.setContactName(rs.getString("contactName"));
+      presenter.setContactEmail(rs.getString("contactEmail"));
+      presenter.setContactNumber(rs.getString("contactNumber"));
+      presenter.setPublishDate(JdbcUtils.toUtilDate(rs.getDate("publish_date")));
+      presenter.setEndDate(JdbcUtils.toUtilDate(rs.getDate("end_date")));
+      presenter.setUrl(rs.getString("url"));
+      presenter.setCategoryName(rs.getString("categoryName"));
+      presenter.setCategoryUrl(rs.getString("categoryUrl"));
       return presenter;
     });
   }
 
-  @Override
-  public List<CategoryPresenter> getAllVendors() {
-    final String sql =
-              "SELECT                                 "
-            + "	name, timeOnLazada, shipOnTime, size  "
-            + "FROM                                   "
-            + "	crwlr_vendors                         "
-        ;
-    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-
-    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
-
-    return namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
-      CategoryPresenter presenter = new CategoryPresenter();
-      presenter.setName(rs.getString("name"));
-      presenter.setTimeOnLazada(rs.getInt("timeOnLazada"));
-      presenter.setShipOnTime(rs.getDouble("shipOnTime"));
-      presenter.setSize(rs.getInt("size"));
-      return presenter;
-    });
-  }
 }

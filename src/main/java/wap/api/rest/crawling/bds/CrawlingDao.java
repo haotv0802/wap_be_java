@@ -34,12 +34,12 @@ public class CrawlingDao implements ICrawlingDao {
   }
 
   @Override
-  public boolean isVendorExisting(String name) {
+  public boolean isCategoryExisting(String url) {
     final String sql =
-        "SELECT COUNT(*) from crwlr_vendors WHERE name = :name"
+        "SELECT COUNT(*) FROM crwlr_categories where url = :url";
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-    paramsMap.addValue("name", name);
+    paramsMap.addValue("url", url);
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
@@ -47,31 +47,31 @@ public class CrawlingDao implements ICrawlingDao {
   }
 
   @Override
-  public void addVendor(Category category) {
+  public void addCategory(Category category) {
     final String sql =
-        "INSERT INTO crwlr_vendors (name, location, positive, neutral, negative, link, timeOnLazada, rating, size, mainCategory, shipOnTime)"
-      + "VALUE (:name, :location, :positive, :neutral, :negative, :link, :timeOnLazada, :rating, :size, :mainCategory, :shipOnTime)         "
+             "INSERT INTO crwlr_categories (name, url)  "
+           + "VALUE (:name, :url)                       "
         ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("name", category.getName());
+    paramsMap.addValue("url", category.getUrl());
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
     namedTemplate.update(sql, paramsMap);
   }
 
   @Override
-  public void updateVendor(Category category) {
+  public void updateCategory(Category category) {
     final String sql =
-      " UPDATE crwlr_vendors                                                                                         "
-    + "   SET location   = :location, positive = :positive, neutral = :neutral, negative = :negative, link = :link,  "
-    + "    timeOnLazada = :timeOnLazada, rating = :rating, size = :size, mainCategory = :mainCategory,               "
-    + "    shipOnTime = :shipOnTime, updated = :updated                                                              "
-    + " WHERE name = :name                                                                                           "
+      "UPDATE crwlr_categories                  "
+    + "   SET name  = :name, updated = :updated "
+    + " WHERE url = :url                        "
     ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("name", category.getName());
+    paramsMap.addValue("url", category.getUrl());
     paramsMap.addValue("updated", new Date());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());

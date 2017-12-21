@@ -9,11 +9,11 @@ import wap.api.rest.crawling.bds.beans.Item;
  * @author haho
  */
 public interface ICrawlingDao {
-  boolean isVendorExisting(String name);
+  boolean isCategoryExisting(String url);
 
-  void addVendor(Category category);
+  void addCategory(Category category);
 
-  void updateVendor(Category category);
+  void updateCategory(Category category);
 
   boolean isProductExisting(String name, String vendorName, String link);
 

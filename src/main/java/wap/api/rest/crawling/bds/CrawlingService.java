@@ -52,14 +52,14 @@ public class CrawlingService implements ICrawlingService {
       Category category = categoryMap.get(key);
 
       // Saving category
-      if (crawlingDao.isVendorExisting(category.getName())) {
-        crawlingDao.updateVendor(category);
+      if (crawlingDao.isCategoryExisting(category.getUrl())) {
+        crawlingDao.updateCategory(category);
       } else {
-        crawlingDao.addVendor(category);
+        crawlingDao.addCategory(category);
       }
 
       Set<Item> products = category.getItems();
-      for (Item product: products) {
+//      for (Item product: products) {
 
         // Saving Product
         // link of product contains accessing time.
@@ -70,8 +70,8 @@ public class CrawlingService implements ICrawlingService {
 //        }
 
         // Saving Product -- products can display more than 1 time.
-          crawlingDao.addVendorProduct(product, category.getName());
-      }
+//          crawlingDao.addVendorProduct(product, category.getName());
+//      }
     }
     return categoryMap;
   }

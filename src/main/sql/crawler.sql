@@ -88,7 +88,7 @@ CREATE TABLE `crwlr_items` (
   `updated`       DATETIME     NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `crwlr_items` (`id`),
-  CONSTRAINT `crwlr_items_category_id` FOREIGN KEY (`vendor_name`) REFERENCES `crwlr_vendors` (`name`)
+  CONSTRAINT `crwlr_items_category_id` FOREIGN KEY (`category_id`) REFERENCES `crwlr_categories` (`id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;

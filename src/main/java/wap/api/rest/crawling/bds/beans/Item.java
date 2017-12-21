@@ -17,6 +17,7 @@ public class Item {
   private Date publishDate;
   private Date endDate;
   private String url;
+  private String categoryUrl;
 
   @Override
   public boolean equals(Object obj) {
@@ -101,5 +102,13 @@ public class Item {
 
   public void setUrl(String url) {
     this.url = url;
+  }
+
+  public String getCategoryUrl() {
+    return categoryUrl;
+  }
+
+  public void setCategoryUrl(String categoryUrl) {
+    this.categoryUrl = categoryUrl;
   }
 }

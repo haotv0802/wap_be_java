@@ -10,6 +10,7 @@ import org.springframework.util.Assert;
 import wap.api.rest.crawling.bds.beans.Category;
 import wap.api.rest.crawling.bds.beans.Item;
 import wap.api.rest.crawling.bds.interfaces.ICrawlingDao;
+import wap.common.JdbcUtils;
 import wap.common.dao.DaoUtils;
 
 import java.util.Date;
@@ -49,8 +50,8 @@ public class CrawlingDao implements ICrawlingDao {
   @Override
   public void addCategory(Category category) {
     final String sql =
-             "INSERT INTO crwlr_categories (name, url)  "
-           + "VALUE (:name, :url)                       "
+             "INSERT INTO crwlr_categories (name, url)"
+           + "VALUE (:name, :url)                     "
         ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
@@ -80,14 +81,13 @@ public class CrawlingDao implements ICrawlingDao {
   }
 
   @Override
-  public boolean isProductExisting(String name, String vendorName, String link) {
+  public boolean isItemExisting(String url, String categoryUrl) {
     final String sql =
-        "SELECT COUNT(*) from crwlr_products WHERE name = :name AND vendor_name = :vendor_name AND link = :link"
-        ;
+    "SELECT COUNT(*) FROM crwlr_items i inner join crwlr_categories c on i.category_url = c.url where c.url = :url and i.url = :categoryUrl";
+
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-    paramsMap.addValue("name", name);
-    paramsMap.addValue("vendor_name", vendorName);
-    paramsMap.addValue("link", link);
+    paramsMap.addValue("url", url);
+    paramsMap.addValue("categoryUrl", categoryUrl);
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
@@ -95,13 +95,22 @@ public class CrawlingDao implements ICrawlingDao {
   }
 
   @Override
-  public void addVendorProduct(Item product, String vendorName) {
+  public void addItem(Item item, String vendorName) {
     final String sql =
-              "INSERT INTO crwlr_products (name, category, vendor_name, link, price, discountPrice, currency, discountPercent, imageURL)"
-            + "  VALUE (:name, :category, :vendor_name, :link, :price, :discountPrice, :currency, :discountPercent, :imageURL)           "
-        ;
+    "INSERT INTO crwlr_items (name, address, description, contactName, contactNumber, contactEmail, publish_date, end_date, url, category_url)"
+  + " VALUE (:name, :address, :description, :contactName, :contactNumber, :contactEmail, :publishDate, :endDate, :url, :category_url)          ";
+
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-    paramsMap.addValue("name", product.getTitle());
+    paramsMap.addValue("name", item.getTitle());
+    paramsMap.addValue("address", item.getAddress());
+    paramsMap.addValue("description", item.getDescription());
+    paramsMap.addValue("contactName", item.getContactName());
+    paramsMap.addValue("contactNumber", item.getContactNumber());
+    paramsMap.addValue("contactEmail", item.getContactEmail());
+    paramsMap.addValue("publishDate", JdbcUtils.toSQLDate(item.getPublishDate()));
+    paramsMap.addValue("endDate", JdbcUtils.toSQLDate(item.getEndDate()));
+    paramsMap.addValue("url", item.getUrl());
+    paramsMap.addValue("category_url", item.getCategoryUrl());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
@@ -109,7 +118,7 @@ public class CrawlingDao implements ICrawlingDao {
   }
 
   @Override
-  public void updateVendorProduct(Item product, String vendorName) {
+  public void updateItem(Item product, String vendorName) {
     final String sql =
         "UPDATE crwlr_products SET category = :category, updated = :updated, link = :link, imageURL = :imageURL,   "
       + " price = :price, discountPrice = :discountPrice, currency = :currency, discountPercent = :discountPercent "

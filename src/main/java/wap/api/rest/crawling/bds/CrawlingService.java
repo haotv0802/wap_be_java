@@ -58,20 +58,15 @@ public class CrawlingService implements ICrawlingService {
         crawlingDao.addCategory(category);
       }
 
-      Set<Item> products = category.getItems();
-//      for (Item product: products) {
-
+      Set<Item> items = category.getItems();
+      for (Item item: items) {
         // Saving Product
-        // link of product contains accessing time.
-//        if (crawlingDao.isProductExisting(product.getName(), category.getName(), product.getLink())) {
-//          crawlingDao.updateVendorProduct(product, category.getName());
-//        } else {
-//          crawlingDao.addVendorProduct(product, category.getName());
-//        }
-
-        // Saving Product -- products can display more than 1 time.
-//          crawlingDao.addVendorProduct(product, category.getName());
-//      }
+        if (crawlingDao.isItemExisting(item.getUrl(), category.getUrl())) {
+          crawlingDao.updateItem(item, category.getName());
+        } else {
+          crawlingDao.addItem(item, category.getName());
+        }
+      }
     }
     return categoryMap;
   }
@@ -156,6 +151,7 @@ public class CrawlingService implements ICrawlingService {
       item.setPublishDate(spd.parse(publishDate));
       item.setEndDate(spd.parse(endDate));
       item.setUrl(itemLink);
+      item.setCategoryUrl(category.getUrl());
       items.add(item);
 
       category.addItems(items);

@@ -16,8 +16,14 @@ public class Item {
   private String contactEmail;
   private Date publishDate;
   private Date endDate;
+  private String location;
+  private Integer acreage;
+  private Double price;
   private String url;
   private Long categoryId;
+  private Date crawlingStart;
+  private Date crawlingEnd;
+  private Long crawlingTime;
 
   @Override
   public boolean equals(Object obj) {
@@ -110,5 +116,53 @@ public class Item {
 
   public void setCategoryId(Long categoryId) {
     this.categoryId = categoryId;
+  }
+
+  public Date getCrawlingStart() {
+    return crawlingStart;
+  }
+
+  public void setCrawlingStart(Date crawlingStart) {
+    this.crawlingStart = crawlingStart;
+  }
+
+  public Date getCrawlingEnd() {
+    return crawlingEnd;
+  }
+
+  public void setCrawlingEnd(Date crawlingEnd) {
+    this.crawlingEnd = crawlingEnd;
+  }
+
+  public String getLocation() {
+    return location;
+  }
+
+  public void setLocation(String location) {
+    this.location = location;
+  }
+
+  public Integer getAcreage() {
+    return acreage;
+  }
+
+  public void setAcreage(Integer acreage) {
+    this.acreage = acreage;
+  }
+
+  public Double getPrice() {
+    return price;
+  }
+
+  public void setPrice(Double price) {
+    this.price = price;
+  }
+
+  public Long getCrawlingTime() {
+    return crawlingTime;
+  }
+
+  public void setCrawlingTime(Long crawlingTime) {
+    this.crawlingTime = crawlingTime;
   }
 }

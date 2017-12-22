@@ -20,23 +20,42 @@ CREATE TABLE `crwlr_categories` (
   DEFAULT CHARSET = utf8;
 
 --
+-- Table structure for table `crwlr_categories`
+--
+DROP TABLE IF EXISTS `crwlr_tracking`;
+CREATE TABLE `crwlr_tracking` (
+  `id`             BIGINT   AUTO_INCREMENT,
+  `category_id`    BIGINT   NOT NULL,
+  `crawling_start` DATETIME NOT NULL,
+  `crawling_end`   DATETIME NOT NULL,
+  `created`        DATETIME DEFAULT NOW(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `crwlr_tracking_id` (`id`),
+  CONSTRAINT `crwlr_tracking_category_id` FOREIGN KEY (`category_id`) REFERENCES `crwlr_categories` (`id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+--
 -- Table structure for table `crwlr_items`
 --
 DROP TABLE IF EXISTS `crwlr_items`;
 CREATE TABLE `crwlr_items` (
-  `id`            BIGINT   AUTO_INCREMENT,
-  `name`          NVARCHAR(200) NULL,
-  `address`       VARCHAR(300)  NULL,
-  `description`   TEXT          NOT NULL,
-  `contactName`   VARCHAR(200)  NULL,
-  `contactNumber` VARCHAR(45)   NULL,
-  `contactEmail`  VARCHAR(100)  NULL,
-  `publish_date`  DATE          NULL,
-  `end_date`      DATE          NULL,
-  `url`           TEXT          NULL,
-  `category_id`   BIGINT        NOT NULL,
-  `created`       DATETIME DEFAULT NOW(),
-  `updated`       DATETIME      NULL,
+  `id`             BIGINT   AUTO_INCREMENT,
+  `name`           NVARCHAR(200) NULL,
+  `address`        VARCHAR(300)  NULL,
+  `description`    TEXT          NOT NULL,
+  `contactName`    VARCHAR(200)  NULL,
+  `contactNumber`  VARCHAR(45)   NULL,
+  `contactEmail`   VARCHAR(100)  NULL,
+  `publish_date`   DATE          NULL,
+  `end_date`       DATE          NULL,
+  `url`            TEXT          NULL,
+  `category_id`    BIGINT        NOT NULL,
+  `crawling_start` DATETIME      NOT NULL,
+  `crawling_end`   DATETIME      NOT NULL,
+  `created`        DATETIME DEFAULT NOW(),
+  `updated`        DATETIME      NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `crwlr_items` (`id`),
   CONSTRAINT `crwlr_items_category_url` FOREIGN KEY (`category_id`) REFERENCES `crwlr_categories` (`id`)

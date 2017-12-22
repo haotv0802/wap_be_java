@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import wap.api.rest.crawling.bds.beans.Category;
+import wap.api.rest.crawling.bds.beans.CrawlingTracking;
 import wap.api.rest.crawling.bds.beans.Item;
 import wap.api.rest.crawling.bds.interfaces.ICrawlingDao;
 import wap.api.rest.crawling.bds.interfaces.ICrawlingService;
@@ -99,7 +100,6 @@ public class CrawlingService implements ICrawlingService {
 
 
         LOGGER.info(">>> Crawling category data: " + currentPage);
-//      Category category = getCategoryDetails(categoryLink, categoryMap);
 
         Elements elements = document.select("div.Main");
         Elements itemsList = elements.get(0).select("div.search-productItem");
@@ -108,10 +108,6 @@ public class CrawlingService implements ICrawlingService {
           String link = titleOfProduct.get(0).select("a").attr("abs:href");
 
           getItemDetails(link, category);
-        }
-
-        if (category.getItems().size() > 220) {
-          break;
         }
 
         for (int i = 0; i < hrefTags.size(); i++) {

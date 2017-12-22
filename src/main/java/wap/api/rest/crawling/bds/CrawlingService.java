@@ -81,7 +81,6 @@ public class CrawlingService implements ICrawlingService {
     try {
       Document document = Jsoup.connect(categoryLink).get();
       String categoryName = document.select("div.product-list-page").get(0).select("div.Title").select("h1").get(0).text();
-
       Category category = categoryMap.get(categoryLink);
       if (null == category) {
         category = new Category();
@@ -90,17 +89,43 @@ public class CrawlingService implements ICrawlingService {
         categoryMap.put(categoryLink, category);
       }
 
-      LOGGER.info(">>> Crawling category data: " + categoryLink);
+//      document.select("div.background-pager-right-controls").get(0);
+//      document.select("div.background-pager-right-controls").get(0).child(1).attr("abs:href");
+      String currentPage = categoryLink;
+      String nextPage = null;
+      do {
+        document = Jsoup.connect(currentPage).get();
+        Elements hrefTags = document.select("div.background-pager-right-controls").get(0).children();
+
+
+        LOGGER.info(">>> Crawling category data: " + currentPage);
 //      Category category = getCategoryDetails(categoryLink, categoryMap);
 
-      Elements elements = document.select("div.Main");
-      Elements itemsList = elements.get(0).select("div.search-productItem");
-      for (Element element : itemsList) {
-        Elements titleOfProduct = element.select("div.p-title");
-        String link = titleOfProduct.get(0).select("a").attr("abs:href");
+        Elements elements = document.select("div.Main");
+        Elements itemsList = elements.get(0).select("div.search-productItem");
+        for (Element element : itemsList) {
+          Elements titleOfProduct = element.select("div.p-title");
+          String link = titleOfProduct.get(0).select("a").attr("abs:href");
 
-        getItemDetails(link, category);
-      }
+          getItemDetails(link, category);
+        }
+
+        if (category.getItems().size() > 220) {
+          break;
+        }
+
+        for (int i = 0; i < hrefTags.size(); i++) {
+          Element href = hrefTags.get(i);
+          String page = href.attr("abs:href");
+          nextPage = null; // for the last page
+          if (page.length() == currentPage.length() && page.lastIndexOf(currentPage) == 0) {
+            nextPage = hrefTags.get(i + 1).attr("abs:href");
+            currentPage = nextPage;
+            break;
+          }
+        }
+
+      } while (nextPage != null);
 
     } catch (IOException e) {
       System.err.println("For '" + categoryLink + "': " + e.getMessage());

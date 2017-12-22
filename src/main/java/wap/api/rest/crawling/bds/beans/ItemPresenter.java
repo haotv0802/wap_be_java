@@ -1,0 +1,111 @@
+package wap.api.rest.crawling.bds.beans;
+
+import java.util.Date;
+
+/**
+ * Date: 10/20/2017 Time: 10:56 AM
+ * This Category Product is to be presented on Front-end.
+ *
+ * @author haho
+ */
+public class ItemPresenter {
+  private String title;
+  private String address;
+  private String description;
+  private String contactName;
+  private String contactNumber;
+  private String contactEmail;
+  private Date publishDate;
+  private Date endDate;
+  private String url;
+  private String categoryName;
+  private String categoryUrl;
+
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  public String getAddress() {
+    return address;
+  }
+
+  public void setAddress(String address) {
+    this.address = address;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public String getContactName() {
+    return contactName;
+  }
+
+  public void setContactName(String contactName) {
+    this.contactName = contactName;
+  }
+
+  public String getContactNumber() {
+    return contactNumber;
+  }
+
+  public void setContactNumber(String contactNumber) {
+    this.contactNumber = contactNumber;
+  }
+
+  public String getContactEmail() {
+    return contactEmail;
+  }
+
+  public void setContactEmail(String contactEmail) {
+    this.contactEmail = contactEmail;
+  }
+
+  public Date getPublishDate() {
+    return publishDate;
+  }
+
+  public void setPublishDate(Date publishDate) {
+    this.publishDate = publishDate;
+  }
+
+  public Date getEndDate() {
+    return endDate;
+  }
+
+  public void setEndDate(Date endDate) {
+    this.endDate = endDate;
+  }
+
+  public String getUrl() {
+    return url;
+  }
+
+  public void setUrl(String url) {
+    this.url = url;
+  }
+
+  public String getCategoryName() {
+    return categoryName;
+  }
+
+  public void setCategoryName(String categoryName) {
+    this.categoryName = categoryName;
+  }
+
+  public String getCategoryUrl() {
+    return categoryUrl;
+  }
+
+  public void setCategoryUrl(String categoryUrl) {
+    this.categoryUrl = categoryUrl;
+  }
+}

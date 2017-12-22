@@ -95,6 +95,7 @@ public class CrawlingService implements ICrawlingService {
       String currentPage = categoryLink;
       String nextPage = null;
       do {
+        LOGGER.info("current page: " + currentPage);
         document = Jsoup.connect(currentPage).get();
         Elements hrefTags = document.select("div.background-pager-right-controls").get(0).children();
 
@@ -121,7 +122,7 @@ public class CrawlingService implements ICrawlingService {
           }
         }
 
-      } while (nextPage != null);
+      } while (nextPage != null && nextPage.length() > 0);
 
     } catch (IOException e) {
       System.err.println("For '" + categoryLink + "': " + e.getMessage());
@@ -134,9 +135,15 @@ public class CrawlingService implements ICrawlingService {
       items = new HashSet<>();
     }
     try {
+      this.LOGGER.info(itemLink);
       Document document = Jsoup.connect(itemLink).get();
+      Date start = new Date();
+
       String description = document.select("div.pm-desc").get(0).text();
       String title = document.select("div.pm-title").get(0).select("h1").get(0).text();
+//      String price = document.select("div.pm-title").get(0).select("span.gia-title.c-paging__link-current").select("strong").get(0).text();
+//      String acreage = document.select("div.kqchitiet").get(0).select("span.gia-title:not(.c-paging__link-current)").select("strong").get(0).text();
+//      String location = document.select("div.kqchitiet").get(0).select("span.diadiem-title.mar-right-15").get(0).text();
 
       Element itemDescription = document.select("div.div-table").get(0);
       String type = itemDescription.select("div.table-detail").get(0).select("div.row").get(0).select("div.right").get(0).text();
@@ -163,6 +170,8 @@ public class CrawlingService implements ICrawlingService {
       String endDate = moreInfo.select("div").get(5).text();
       endDate = endDate.substring(endDate.lastIndexOf(": ") + 2);
 
+      Date end = new Date();
+
       SimpleDateFormat spd = new SimpleDateFormat("dd-MM-yyyy");
       Item item = new Item();
       item.setTitle(title);
@@ -174,6 +183,9 @@ public class CrawlingService implements ICrawlingService {
       item.setPublishDate(spd.parse(publishDate));
       item.setEndDate(spd.parse(endDate));
       item.setUrl(itemLink);
+      item.setCrawlingStart(start);
+      item.setCrawlingEnd(end);
+      item.setCrawlingTime(start.getTime() - end.getTime());
       items.add(item);
 
       category.addItems(items);

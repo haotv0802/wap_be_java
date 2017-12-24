@@ -17,8 +17,8 @@ public class Item {
   private Date publishDate;
   private Date endDate;
   private String location;
-  private Integer acreage;
-  private Double price;
+  private String acreage;
+  private String price;
   private String url;
   private Long categoryId;
   private Date crawlingStart;
@@ -142,27 +142,27 @@ public class Item {
     this.location = location;
   }
 
-  public Integer getAcreage() {
-    return acreage;
-  }
-
-  public void setAcreage(Integer acreage) {
-    this.acreage = acreage;
-  }
-
-  public Double getPrice() {
-    return price;
-  }
-
-  public void setPrice(Double price) {
-    this.price = price;
-  }
-
   public Long getCrawlingTime() {
     return crawlingTime;
   }
 
   public void setCrawlingTime(Long crawlingTime) {
     this.crawlingTime = crawlingTime;
+  }
+
+  public String getAcreage() {
+    return acreage;
+  }
+
+  public void setAcreage(String acreage) {
+    this.acreage = acreage;
+  }
+
+  public String getPrice() {
+    return price;
+  }
+
+  public void setPrice(String price) {
+    this.price = price;
   }
 }

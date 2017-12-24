@@ -135,15 +135,15 @@ public class CrawlingService implements ICrawlingService {
       items = new HashSet<>();
     }
     try {
-      this.LOGGER.info(itemLink);
+//      this.LOGGER.info(itemLink);
       Document document = Jsoup.connect(itemLink).get();
       Date start = new Date();
 
       String description = document.select("div.pm-desc").get(0).text();
       String title = document.select("div.pm-title").get(0).select("h1").get(0).text();
-//      String price = document.select("div.pm-title").get(0).select("span.gia-title.c-paging__link-current").select("strong").get(0).text();
-//      String acreage = document.select("div.kqchitiet").get(0).select("span.gia-title:not(.c-paging__link-current)").select("strong").get(0).text();
-//      String location = document.select("div.kqchitiet").get(0).select("span.diadiem-title.mar-right-15").get(0).text();
+      String price = document.select("div.kqchitiet").get(0).select("span.gia-title.mar-right-15").select("strong").get(0).text();
+      String acreage = document.select("div.kqchitiet").get(0).select("span.gia-title:not(.mar-right-15)").select("strong").get(0).text();
+      String location = document.select("div.kqchitiet").get(0).select("span.diadiem-title.mar-right-15").get(0).textNodes().get(2).text();
 
       Element itemDescription = document.select("div.div-table").get(0);
       String type = itemDescription.select("div.table-detail").get(0).select("div.row").get(0).select("div.right").get(0).text();
@@ -182,6 +182,9 @@ public class CrawlingService implements ICrawlingService {
       item.setContactEmail(email);
       item.setPublishDate(spd.parse(publishDate));
       item.setEndDate(spd.parse(endDate));
+      item.setLocation(location);
+      item.setPrice(price);
+      item.setAcreage(acreage);
       item.setUrl(itemLink);
       item.setCrawlingStart(start);
       item.setCrawlingEnd(end);

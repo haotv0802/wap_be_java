@@ -18,6 +18,7 @@ import wap.api.rest.crawling.bds.interfaces.ICrawlingDao;
 import wap.api.rest.crawling.bds.interfaces.ICrawlingService;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -144,7 +145,26 @@ public class CrawlingService implements ICrawlingService {
       String description = document.select("div.pm-desc").get(0).text();
       String title = document.select("div.pm-title").get(0).select("h1").get(0).text();
       String price = document.select("div.kqchitiet").get(0).select("span.gia-title.mar-right-15").select("strong").get(0).text();
+      BigDecimal priceInBigDecimal = null;
+      String[] priceArray = price.split(" ");
+      if (priceArray.length == 2) {
+        price = priceArray[0];
+        String suffix = priceArray[1];
+        if (suffix.equals("tỷ ")) {
+          priceInBigDecimal = new BigDecimal(price).multiply(new BigDecimal(1000000));
+        } else if (suffix.equals("triệu ")) {
+          priceInBigDecimal = new BigDecimal(price).multiply(new BigDecimal(1000));
+        }
+      }
+
       String acreage = document.select("div.kqchitiet").get(0).select("span.gia-title:not(.mar-right-15)").select("strong").get(0).text();
+      String[] acreageArray = acreage.split("m");
+      BigDecimal acreageInBigDecimal = null;
+      if (acreageArray.length == 2) {
+        acreage = acreageArray[0];
+        acreageInBigDecimal = new BigDecimal(acreage);
+      }
+
       String location = document.select("div.kqchitiet").get(0).select("span.diadiem-title.mar-right-15").get(0).textNodes().get(2).text();
       String[] locationArray = location.split("-");
       String district = null;
@@ -195,8 +215,8 @@ public class CrawlingService implements ICrawlingService {
       item.setEndDate(spd.parse(endDate));
       item.setDistrict(district);
       item.setCity(city);
-      item.setPrice(price);
-      item.setAcreage(acreage);
+      item.setPrice(priceInBigDecimal);
+      item.setAcreage(acreageInBigDecimal);
       item.setUrl(itemLink);
       item.setCrawlingStart(start);
       item.setCrawlingEnd(end);

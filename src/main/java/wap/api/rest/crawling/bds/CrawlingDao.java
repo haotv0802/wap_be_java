@@ -1,8 +1,10 @@
 package wap.api.rest.crawling.bds;
 
+import jdk.internal.org.objectweb.asm.tree.TryCatchBlockNode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -38,31 +40,20 @@ public class CrawlingDao implements ICrawlingDao {
   }
 
   @Override
-  public boolean isCategoryExisting(String url) {
+  public Long isCategoryExisting(String url) {
     final String sql =
-        "SELECT COUNT(*) FROM crwlr_categories where url = :url";
+        "SELECT id FROM crwlr_categories where url = :url";
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("url", url);
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
-
-    return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0;
+    try {
+      return namedTemplate.queryForObject(sql, paramsMap, Long.class);
+    } catch (EmptyResultDataAccessException ex) {
+      return new Long(-1);
+    }
   }
-
-  @Override
-  public Long getCategoryId(String url) {
-    final String sql =
-        "SELECT id FROM crwlr_categories where url = :url";
-    ;
-    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-    paramsMap.addValue("url", url);
-
-    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
-
-    return namedTemplate.queryForObject(sql, paramsMap, Long.class);
-  }
-
 
   @Override
   public void addCategory(Category category) {
@@ -101,17 +92,20 @@ public class CrawlingDao implements ICrawlingDao {
   }
 
   @Override
-  public boolean isItemExisting(String url, String categoryUrl) {
+  public Long isItemExisting(String url, String categoryUrl) {
     final String sql =
-    "SELECT COUNT(*) FROM crwlr_items i inner join crwlr_categories c on i.category_id = c.id where i.url = :url and c.url = :categoryUrl";
+    "SELECT i.id FROM crwlr_items i inner join crwlr_categories c on i.category_id = c.id where i.url = :url and c.url = :categoryUrl";
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("url", url);
     paramsMap.addValue("categoryUrl", categoryUrl);
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
-
-    return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0;
+    try {
+      return namedTemplate.queryForObject(sql, paramsMap, Long.class);
+    } catch (EmptyResultDataAccessException ex) {
+      return new Long(-1);
+    }
   }
 
   @Override

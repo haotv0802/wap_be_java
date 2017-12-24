@@ -53,21 +53,24 @@ public class CrawlingService implements ICrawlingService {
       Category category = categoryMap.get(key);
 
       // Saving category
-      if (crawlingDao.isCategoryExisting(category.getUrl())) {
+      Long categoryId = crawlingDao.isCategoryExisting(category.getUrl());
+      if (categoryId > 0) {
         crawlingDao.updateCategory(category);
-        category.setId(crawlingDao.getCategoryId(category.getUrl()));
+        category.setId(categoryId);
       } else {
         crawlingDao.addCategory(category);
       }
 
       Set<Item> items = category.getItems();
-      for (Item item: items) {
-        // Saving Product
-        item.setCategoryId(category.getId());
-        if (crawlingDao.isItemExisting(item.getUrl(), category.getUrl())) {
-          crawlingDao.updateItem(item);
-        } else {
-          crawlingDao.addItem(item);
+      if (null != items && items.size() > 0) {
+        for (Item item: items) {
+          // Saving Product
+          item.setCategoryId(category.getId());
+          if (crawlingDao.isItemExisting(item.getUrl(), category.getUrl()) > 0) {
+            crawlingDao.updateItem(item);
+          } else {
+            crawlingDao.addItem(item);
+          }
         }
       }
     }
@@ -95,12 +98,9 @@ public class CrawlingService implements ICrawlingService {
       String currentPage = categoryLink;
       String nextPage = null;
       do {
-        LOGGER.info("current page: " + currentPage);
+        LOGGER.info(">>> Crawling category data: " + currentPage);
         document = Jsoup.connect(currentPage).get();
         Elements hrefTags = document.select("div.background-pager-right-controls").get(0).children();
-
-
-        LOGGER.info(">>> Crawling category data: " + currentPage);
 
         Elements elements = document.select("div.Main");
         Elements itemsList = elements.get(0).select("div.search-productItem");

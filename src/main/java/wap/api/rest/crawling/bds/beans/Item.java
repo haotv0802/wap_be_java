@@ -18,6 +18,8 @@ public class Item {
   private Date publishDate;
   private Date endDate;
   private String location;
+  private String district;
+  private String city;
   private String acreage;
   private String price;
   private String url;
@@ -173,5 +175,21 @@ public class Item {
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public String getDistrict() {
+    return district;
+  }
+
+  public void setDistrict(String district) {
+    this.district = district;
+  }
+
+  public String getCity() {
+    return city;
+  }
+
+  public void setCity(String city) {
+    this.city = city;
   }
 }

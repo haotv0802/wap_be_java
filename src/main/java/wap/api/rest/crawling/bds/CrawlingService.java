@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
+import sun.rmi.runtime.Log;
 import wap.api.rest.crawling.bds.beans.Category;
 import wap.api.rest.crawling.bds.beans.Item;
 import wap.api.rest.crawling.bds.interfaces.ICrawlingDao;
@@ -144,7 +146,15 @@ public class CrawlingService implements ICrawlingService {
       String price = document.select("div.kqchitiet").get(0).select("span.gia-title.mar-right-15").select("strong").get(0).text();
       String acreage = document.select("div.kqchitiet").get(0).select("span.gia-title:not(.mar-right-15)").select("strong").get(0).text();
       String location = document.select("div.kqchitiet").get(0).select("span.diadiem-title.mar-right-15").get(0).textNodes().get(2).text();
-
+      String[] locationArray = location.split("-");
+      String district = null;
+      String city = null;
+      if (locationArray.length == 2) {
+        city = locationArray[1].trim();
+      } else if (locationArray.length == 3) {
+        district = locationArray[1].trim();
+        city = locationArray[2].trim();
+      }
       Element itemDescription = document.select("div.div-table").get(0);
       String type = itemDescription.select("div.table-detail").get(0).select("div.row").get(0).select("div.right").get(0).text();
       String address = itemDescription.select("div.table-detail").get(0).select("div.row").get(1).select("div.right").get(0).text();
@@ -183,6 +193,8 @@ public class CrawlingService implements ICrawlingService {
       item.setPublishDate(spd.parse(publishDate));
       item.setEndDate(spd.parse(endDate));
       item.setLocation(location);
+      item.setDistrict(district);
+      item.setCity(city);
       item.setPrice(price);
       item.setAcreage(acreage);
       item.setUrl(itemLink);

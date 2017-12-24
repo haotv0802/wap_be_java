@@ -77,8 +77,8 @@ public class CrawlingDao implements ICrawlingDao {
   @Override
   public void addItem(Item item) {
     final String sql =
-    "INSERT INTO crwlr_items (name, address, contactName, contactNumber, contactEmail, publish_date, end_date, url, category_id)"
-  + " VALUE (:name, :address, :contactName, :contactNumber, :contactEmail, :publishDate, :endDate, :url, :category_id)          ";
+    "INSERT INTO crwlr_items (name, address, contactName, contactNumber, contactEmail, publish_date, end_date, url, acreage, price, location, district, city, category_id)"
+  + " VALUE (:name, :address, :contactName, :contactNumber, :contactEmail, :publishDate, :endDate, :url, :acreage, :price, :location, :district, :city, :category_id)          ";
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("name", item.getTitle());
@@ -90,6 +90,11 @@ public class CrawlingDao implements ICrawlingDao {
     paramsMap.addValue("publishDate", JdbcUtils.toSQLDate(item.getPublishDate()));
     paramsMap.addValue("endDate", JdbcUtils.toSQLDate(item.getEndDate()));
     paramsMap.addValue("url", item.getUrl());
+    paramsMap.addValue("acreage", item.getAcreage());
+    paramsMap.addValue("price", item.getPrice());
+    paramsMap.addValue("location", item.getLocation());
+    paramsMap.addValue("district", item.getDistrict());
+    paramsMap.addValue("city", item.getCity());
     paramsMap.addValue("category_id", item.getCategoryId());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
@@ -103,9 +108,10 @@ public class CrawlingDao implements ICrawlingDao {
   @Override
   public void updateItem(Item item) {
     final String sql =
-        "UPDATE crwlr_items SET name = :name, address = :address, contactNumber = :contactNumber,                                         "
-      + " contactEmail = :contactEmail, publish_date = :publish_date, end_date = :end_date, category_id = :category_id, updated = :updated"
-      + " WHERE url = :url AND category_id = :category_id                                                                                 "
+        "UPDATE crwlr_items SET name = :name, address = :address, contactNumber = :contactNumber, acreage = :acreage,                      "
+      + " price = :price, location = :location, district = :district, city = :city,                                                        "
+      + " contactEmail = :contactEmail, publish_date = :publish_date, end_date = :end_date, category_id = :category_id, updated = :updated "
+      + " WHERE url = :url                                                                                                                 "
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("name", item.getTitle());
@@ -117,6 +123,11 @@ public class CrawlingDao implements ICrawlingDao {
     paramsMap.addValue("publish_date", JdbcUtils.toSQLDate(item.getPublishDate()));
     paramsMap.addValue("end_date", JdbcUtils.toSQLDate(item.getEndDate()));
     paramsMap.addValue("url", item.getUrl());
+    paramsMap.addValue("acreage", item.getAcreage());
+    paramsMap.addValue("price", item.getPrice());
+    paramsMap.addValue("location", item.getLocation());
+    paramsMap.addValue("district", item.getDistrict());
+    paramsMap.addValue("city", item.getCity());
     paramsMap.addValue("category_id", item.getCategoryId());
     paramsMap.addValue("updated", new Date());
 

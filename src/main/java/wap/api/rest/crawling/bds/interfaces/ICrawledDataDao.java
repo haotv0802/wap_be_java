@@ -1,6 +1,7 @@
 package wap.api.rest.crawling.bds.interfaces;
 
 import wap.api.rest.crawling.bds.beans.CategoryPresenter;
+import wap.api.rest.crawling.bds.beans.Criterion;
 import wap.api.rest.crawling.bds.beans.ItemPresenter;
 
 import java.util.List;
@@ -13,4 +14,5 @@ import java.util.List;
 public interface ICrawledDataDao {
   List<ItemPresenter> getAllItems();
 
+  List<ItemPresenter> getAllItemsByCriterion(Criterion criterion);
 }

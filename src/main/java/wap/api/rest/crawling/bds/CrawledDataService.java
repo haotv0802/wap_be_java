@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
+import wap.api.rest.crawling.bds.beans.Criterion;
 import wap.api.rest.crawling.bds.beans.ItemPresenter;
 import wap.api.rest.crawling.bds.interfaces.ICrawledDataDao;
 import wap.api.rest.crawling.bds.interfaces.ICrawledDataService;
@@ -36,4 +37,8 @@ public class CrawledDataService implements ICrawledDataService {
     return this.crawledDataDao.getAllItems();
   }
 
+  @Override
+  public List<ItemPresenter> getAllItemsByCriterion(Criterion criterion) {
+    return null;
+  }
 }

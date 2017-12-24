@@ -8,6 +8,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import wap.api.rest.crawling.bds.beans.Category;
+import wap.api.rest.crawling.bds.beans.Criterion;
 import wap.api.rest.crawling.bds.beans.ItemPresenter;
 import wap.api.rest.crawling.bds.interfaces.ICrawledDataService;
 import wap.api.rest.crawling.bds.interfaces.ICrawlingService;
@@ -46,7 +47,8 @@ public class CrawledDataResource {
 
   @PostMapping("/crawler/crawledData")
   public List<ItemPresenter> getCrawledDataByCriterion(
-  ) {
+      @RequestBody Criterion criterion
+      ) {
     return crawledDataService.getAllItems();
   }
 }

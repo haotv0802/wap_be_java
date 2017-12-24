@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
+import wap.api.rest.crawling.bds.beans.Criterion;
 import wap.api.rest.crawling.bds.beans.ItemPresenter;
 import wap.api.rest.crawling.bds.interfaces.ICrawledDataDao;
 import wap.common.JdbcUtils;
@@ -64,6 +65,24 @@ public class CrawledDataDao implements ICrawledDataDao {
       presenter.setUrl(rs.getString("url"));
       return presenter;
     });
+  }
+
+  @Override
+  public List<ItemPresenter> getAllItemsByCriterion(Criterion criterion) {
+    final String sql =
+              "SELECT                                        "
+            + "    i.name,                                   "
+            + "    i.address,                                "
+            + "    i.contactName,                            "
+            + "    i.contactNumber,                          "
+            + "    i.contactEmail,                           "
+            + "    i.publish_date,                           "
+            + "    i.end_date,                               "
+            + "    i.url                                     "
+            + "FROM                                          "
+            + "    crwlr_items i WHERE 1 = 1                 "
+        ;
+    return null;
   }
 
 }

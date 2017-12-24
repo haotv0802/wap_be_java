@@ -19,9 +19,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Date: 10/20/2017 Time: 10:19 AM
@@ -56,10 +58,16 @@ public class CrawledDataService implements ICrawledDataService {
   public List<ItemPresenter> exportCrawledData(Criterion criterion) throws IOException {
     XSSFWorkbook workbook = new XSSFWorkbook();
     XSSFSheet sheet = workbook.createSheet("Contacts");
-    sheet.autoSizeColumn(0); //adjust width of the first column
-    sheet.autoSizeColumn(1); //adjust width of the second column
+    sheet.autoSizeColumn(0);
+    sheet.setColumnWidth(1, 5000);
+    sheet.setColumnWidth(2, 3000);
+    sheet.setColumnWidth(3, 7000);
+    sheet.setColumnWidth(4, 3000);
+    sheet.setColumnWidth(5, 2000);
+    sheet.setColumnWidth(6, 4000);
+    sheet.setColumnWidth(7, 4000);
     sheet.createFreezePane(0, 1);
-    sheet.setDefaultColumnWidth(20);
+//    sheet.setDefaultColumnWidth(20);
 
     CellStyle headerStyle = workbook.createCellStyle();
     XSSFFont font = workbook.createFont();
@@ -99,6 +107,14 @@ public class CrawledDataService implements ICrawledDataService {
     cell.setCellStyle(headerStyle);
 
     cell = row.createCell(++columnCount);
+    cell.setCellValue("Price (*1000)");
+    cell.setCellStyle(headerStyle);
+
+    cell = row.createCell(++columnCount);
+    cell.setCellValue("Acreage (m2)");
+    cell.setCellStyle(headerStyle);
+
+    cell = row.createCell(++columnCount);
     cell.setCellValue("City");
     cell.setCellStyle(headerStyle);
 
@@ -124,6 +140,17 @@ public class CrawledDataService implements ICrawledDataService {
       cell.setCellValue(item.getContactNumber());
       cell = row.createCell(++columnCount);
       cell.setCellValue(item.getContactEmail());
+
+      cell = row.createCell(++columnCount);
+      NumberFormat usdCostFormat = NumberFormat.getCurrencyInstance(Locale.US);
+      usdCostFormat.setMinimumFractionDigits( 1 );
+      usdCostFormat.setMaximumFractionDigits( 2 );
+
+//      cell.setCellValue(item.getPrice().toString());
+      cell.setCellValue(usdCostFormat.format(item.getPrice()));
+
+      cell = row.createCell(++columnCount);
+      cell.setCellValue(item.getAcreage().toString());
       cell = row.createCell(++columnCount);
       cell.setCellValue(item.getCity());
       cell = row.createCell(++columnCount);

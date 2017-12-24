@@ -1,6 +1,7 @@
 package wap.api.rest.crawling.bds.beans;
 
 public class Criterion {
+  private String personName;
   private String district;
   private String city;
   private String acreageLessThan;
@@ -54,5 +55,13 @@ public class Criterion {
 
   public void setPriceLargerThan(String priceLargerThan) {
     this.priceLargerThan = priceLargerThan;
+  }
+
+  public String getPersonName() {
+    return personName;
+  }
+
+  public void setPersonName(String personName) {
+    this.personName = personName;
   }
 }

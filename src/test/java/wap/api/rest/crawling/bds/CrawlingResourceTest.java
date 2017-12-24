@@ -29,6 +29,7 @@ public class CrawlingResourceTest extends TestBase {
   @Test
   public void testGetCrawledData() throws Exception {
     Criterion criterion = new Criterion();
+    criterion.setPersonName("HaoHo");
     criterion.setCity("Hồ Chí Minh");
 //    criterion.setDistrict("Quận Gò Vấp");
     criterion.setAcreageLessThan("100");
@@ -48,6 +49,7 @@ public class CrawlingResourceTest extends TestBase {
   @Test
   public void testExportCrawledData() throws Exception {
     Criterion criterion = new Criterion();
+    criterion.setPersonName("HaoHo");
     criterion.setCity("Hồ Chí Minh");
 //    criterion.setDistrict("Quận Gò Vấp");
     criterion.setAcreageLessThan("100");

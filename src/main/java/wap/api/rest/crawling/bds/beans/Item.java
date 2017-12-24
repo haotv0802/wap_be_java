@@ -10,14 +10,20 @@ import java.util.Date;
 public class Item {
   private String title;
   private String address;
-  private String description;
+//  private String description;
   private String contactName;
   private String contactNumber;
   private String contactEmail;
   private Date publishDate;
   private Date endDate;
+  private String location;
+  private String acreage;
+  private String price;
   private String url;
   private Long categoryId;
+  private Date crawlingStart;
+  private Date crawlingEnd;
+  private Long crawlingTime;
 
   @Override
   public boolean equals(Object obj) {
@@ -48,13 +54,13 @@ public class Item {
     this.address = address;
   }
 
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
+//  public String getDescription() {
+//    return description;
+//  }
+//
+//  public void setDescription(String description) {
+//    this.description = description;
+//  }
 
   public String getContactName() {
     return contactName;
@@ -110,5 +116,53 @@ public class Item {
 
   public void setCategoryId(Long categoryId) {
     this.categoryId = categoryId;
+  }
+
+  public Date getCrawlingStart() {
+    return crawlingStart;
+  }
+
+  public void setCrawlingStart(Date crawlingStart) {
+    this.crawlingStart = crawlingStart;
+  }
+
+  public Date getCrawlingEnd() {
+    return crawlingEnd;
+  }
+
+  public void setCrawlingEnd(Date crawlingEnd) {
+    this.crawlingEnd = crawlingEnd;
+  }
+
+  public String getLocation() {
+    return location;
+  }
+
+  public void setLocation(String location) {
+    this.location = location;
+  }
+
+  public Long getCrawlingTime() {
+    return crawlingTime;
+  }
+
+  public void setCrawlingTime(Long crawlingTime) {
+    this.crawlingTime = crawlingTime;
+  }
+
+  public String getAcreage() {
+    return acreage;
+  }
+
+  public void setAcreage(String acreage) {
+    this.acreage = acreage;
+  }
+
+  public String getPrice() {
+    return price;
+  }
+
+  public void setPrice(String price) {
+    this.price = price;
   }
 }

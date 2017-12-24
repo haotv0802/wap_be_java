@@ -8,6 +8,7 @@ import java.util.Date;
  * @author haho
  */
 public class Item {
+  private Long id;
   private String title;
   private String address;
 //  private String description;
@@ -164,5 +165,13 @@ public class Item {
 
   public void setPrice(String price) {
     this.price = price;
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 }

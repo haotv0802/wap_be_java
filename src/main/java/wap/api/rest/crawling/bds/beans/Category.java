@@ -13,6 +13,8 @@ public class Category {
   private Long id;
   private String name;
   private String url;
+  private Integer itemsCount = 0;
+  private Integer itemsCrawled = 0;
   private Set<Item> items;
 
   public String getName() {
@@ -60,5 +62,21 @@ public class Category {
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public Integer getItemsCount() {
+    return itemsCount;
+  }
+
+  public void setItemsCount(Integer itemsCount) {
+    this.itemsCount = itemsCount;
+  }
+
+  public Integer getItemsCrawled() {
+    return itemsCrawled;
+  }
+
+  public void setItemsCrawled(Integer itemsCrawled) {
+    this.itemsCrawled = itemsCrawled;
   }
 }

@@ -9,15 +9,13 @@ import wap.api.rest.crawling.bds.beans.Item;
  * @author haho
  */
 public interface ICrawlingDao {
-  Long isCategoryExisting(String url);
-
   void addCategory(Category category);
 
-  void updateCategory(Category category);
-
-  Long isItemExisting(String url, String categoryUrl);
+  Long isItemExisting(String url);
 
   void addItem(Item product);
 
   void updateItem(Item product);
+
+  void connectItemToCategory(Long categoryId, Long itemId);
 }

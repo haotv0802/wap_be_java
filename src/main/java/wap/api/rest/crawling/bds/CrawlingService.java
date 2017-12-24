@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import wap.api.rest.crawling.bds.beans.Category;
-import wap.api.rest.crawling.bds.beans.CrawlingTracking;
 import wap.api.rest.crawling.bds.beans.Item;
 import wap.api.rest.crawling.bds.interfaces.ICrawlingDao;
 import wap.api.rest.crawling.bds.interfaces.ICrawlingService;
@@ -51,28 +50,28 @@ public class CrawlingService implements ICrawlingService {
     Set<String> keys = categoryMap.keySet();
     for (String key : keys) {
       Category category = categoryMap.get(key);
-
-      // Saving category
-      Long categoryId = crawlingDao.isCategoryExisting(category.getUrl());
-      if (categoryId > 0) {
-        crawlingDao.updateCategory(category);
-        category.setId(categoryId);
-      } else {
-        crawlingDao.addCategory(category);
-      }
+      category.setItemsCount(category.getItems().size());
+      // Saving category.
+      crawlingDao.addCategory(category);
 
       Set<Item> items = category.getItems();
       if (null != items && items.size() > 0) {
         for (Item item: items) {
           // Saving Product
           item.setCategoryId(category.getId());
-          if (crawlingDao.isItemExisting(item.getUrl(), category.getUrl()) > 0) {
+          Long itemId = crawlingDao.isItemExisting(item.getUrl());
+          if (itemId > 0) {
             crawlingDao.updateItem(item);
+            item.setId(itemId);
           } else {
             crawlingDao.addItem(item);
           }
+
+          // Saving relationship between category and item.
+          crawlingDao.connectItemToCategory(category.getId(), item.getId());
         }
       }
+
     }
     return categoryMap;
   }
@@ -130,6 +129,7 @@ public class CrawlingService implements ICrawlingService {
   }
 
   private void getItemDetails(String itemLink, Category category) {
+    int itemCrawled = category.getItemsCrawled();
     Set<Item> items = category.getItems();
     if (null == items) {
       items = new HashSet<>();
@@ -192,11 +192,14 @@ public class CrawlingService implements ICrawlingService {
       items.add(item);
 
       category.addItems(items);
+      itemCrawled++;
     } catch (IOException e) {
       e.printStackTrace();
     } catch (ParseException e) {
       e.printStackTrace();
     }
+
+    category.setItemsCrawled(itemCrawled);
   }
   
   private String getEmailFromCharaters(String[] charaters) {

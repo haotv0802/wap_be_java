@@ -32,24 +32,14 @@ public class CrawlingResource {
 
   private final ICrawlingService crawlingService;
 
-  private final ICrawledDataService crawledDataService;
 
   @Autowired
   public CrawlingResource(
-      @Qualifier("bdsCrawlingService") ICrawlingService crawlingService,
-      @Qualifier("bdsCrawledDataService") ICrawledDataService crawledDataService
+      @Qualifier("bdsCrawlingService") ICrawlingService crawlingService
   ) {
     Assert.notNull(crawlingService);
-    Assert.notNull(crawledDataService);
 
     this.crawlingService = crawlingService;
-    this.crawledDataService = crawledDataService;
-  }
-
-  @GetMapping("/crawler/crawledData")
-  public List<ItemPresenter> getCrawledData(
-  ) {
-    return crawledDataService.getAllItems();
   }
 
   @GetMapping("/crawler/crawlingData")
@@ -58,7 +48,7 @@ public class CrawlingResource {
   ) {
     List<String> pages = new ArrayList<>();
     if (StringUtils.isEmpty(link)) {
-      pages.add("https://batdongsan.com.vn/ban-nha-rieng-tp-hcm/p896");
+      pages.add("https://batdongsan.com.vn/ban-nha-rieng-tp-hcm/p890");
 //      pages.add("https://www.lazada.sg/empire-13");
 //      pages.add("https://www.lazada.sg/boom_");
 //      pages.add("https://www.lazada.sg/the-bro-store");

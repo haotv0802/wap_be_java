@@ -39,19 +39,14 @@ public class CrawledDataDao implements ICrawledDataDao {
                     "SELECT                                        "
                   + "    i.name,                                   "
                   + "    i.address,                                "
-                  + "    i.description,                            "
                   + "    i.contactName,                            "
                   + "    i.contactNumber,                          "
                   + "    i.contactEmail,                           "
                   + "    i.publish_date,                           "
                   + "    i.end_date,                               "
-                  + "    i.url,                                    "
-                  + "    c.name categoryName,                      "
-                  + "    c.url categoryUrl                         "
+                  + "    i.url                                     "
                   + "FROM                                          "
                   + "    crwlr_items i                             "
-                  + "        INNER JOIN                            "
-                  + "    crwlr_categories c ON i.category_id = c.id"
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
 
@@ -61,15 +56,12 @@ public class CrawledDataDao implements ICrawledDataDao {
       ItemPresenter presenter = new ItemPresenter();
       presenter.setTitle(rs.getString("name"));
       presenter.setAddress(rs.getString("address"));
-      presenter.setDescription(rs.getString("description"));
       presenter.setContactName(rs.getString("contactName"));
       presenter.setContactEmail(rs.getString("contactEmail"));
       presenter.setContactNumber(rs.getString("contactNumber"));
       presenter.setPublishDate(JdbcUtils.toUtilDate(rs.getDate("publish_date")));
       presenter.setEndDate(JdbcUtils.toUtilDate(rs.getDate("end_date")));
       presenter.setUrl(rs.getString("url"));
-      presenter.setCategoryName(rs.getString("categoryName"));
-      presenter.setCategoryUrl(rs.getString("categoryUrl"));
       return presenter;
     });
   }

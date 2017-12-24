@@ -4,6 +4,7 @@ import org.testng.annotations.Test;
 import wap.api.rest.TestBase;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -25,7 +26,7 @@ public class CrawlingResourceTest extends TestBase {
   @Test
   public void testGetCrawledData() throws Exception {
     mockMvc
-        .perform(get("/svc/bds/crawler/crawledData")
+        .perform(post("/svc/bds/crawler/crawledData")
         )
         .andExpect(status().is(200))
     ;

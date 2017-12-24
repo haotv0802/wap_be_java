@@ -18,8 +18,6 @@ public class ItemPresenter {
   private Date publishDate;
   private Date endDate;
   private String url;
-  private String categoryName;
-  private String categoryUrl;
 
   public String getTitle() {
     return title;
@@ -91,21 +89,5 @@ public class ItemPresenter {
 
   public void setUrl(String url) {
     this.url = url;
-  }
-
-  public String getCategoryName() {
-    return categoryName;
-  }
-
-  public void setCategoryName(String categoryName) {
-    this.categoryName = categoryName;
-  }
-
-  public String getCategoryUrl() {
-    return categoryUrl;
-  }
-
-  public void setCategoryUrl(String categoryUrl) {
-    this.categoryUrl = categoryUrl;
   }
 }

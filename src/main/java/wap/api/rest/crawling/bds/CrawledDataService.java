@@ -2,11 +2,9 @@ package wap.api.rest.crawling.bds;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CreationHelper;
-import org.apache.poi.ss.usermodel.Hyperlink;
-import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -58,6 +56,25 @@ public class CrawledDataService implements ICrawledDataService {
   public List<ItemPresenter> exportCrawledData(Criterion criterion) throws IOException {
     XSSFWorkbook workbook = new XSSFWorkbook();
     XSSFSheet sheet = workbook.createSheet("Contacts");
+    sheet.autoSizeColumn(0); //adjust width of the first column
+    sheet.autoSizeColumn(1); //adjust width of the second column
+    sheet.createFreezePane(0, 1);
+    sheet.setDefaultColumnWidth(20);
+
+    CellStyle headerStyle = workbook.createCellStyle();
+    XSSFFont font = workbook.createFont();
+    font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
+    font.setFontHeight(18);
+
+    headerStyle.setBorderBottom(HSSFCellStyle.BORDER_MEDIUM);
+    headerStyle.setBorderTop(HSSFCellStyle.BORDER_MEDIUM);
+    headerStyle.setBorderRight(HSSFCellStyle.BORDER_MEDIUM);
+    headerStyle.setBorderLeft(HSSFCellStyle.BORDER_MEDIUM);
+    headerStyle.setFillForegroundColor((short) 200);
+    headerStyle.setFillPattern(XSSFCellStyle.SOLID_FOREGROUND);
+    headerStyle.setFont(font);
+
+
     CreationHelper createHelper = workbook.getCreationHelper();
     XSSFCellStyle hlinkstyle = workbook.createCellStyle();
     XSSFFont hlinkfont = workbook.createFont();
@@ -68,19 +85,30 @@ public class CrawledDataService implements ICrawledDataService {
     int rowCount = 0;
     int columnCount = 0;
 
-    Row row = sheet.createRow(++rowCount);
+    Row row = sheet.createRow(rowCount);
     Cell cell = row.createCell(++columnCount);
     cell.setCellValue("Name");
+    cell.setCellStyle(headerStyle);
+
     cell = row.createCell(++columnCount);
     cell.setCellValue("Number");
+    cell.setCellStyle(headerStyle);
+
     cell = row.createCell(++columnCount);
     cell.setCellValue("Email");
+    cell.setCellStyle(headerStyle);
+
     cell = row.createCell(++columnCount);
     cell.setCellValue("City");
+    cell.setCellStyle(headerStyle);
+
     cell = row.createCell(++columnCount);
     cell.setCellValue("District");
+    cell.setCellStyle(headerStyle);
+
     cell = row.createCell(++columnCount);
     cell.setCellValue("Link");
+    cell.setCellStyle(headerStyle);
 
     List<ItemPresenter> list = crawledDataDao.getAllItemsByCriterion(criterion);
 
@@ -88,7 +116,8 @@ public class CrawledDataService implements ICrawledDataService {
       row = sheet.createRow(++rowCount);
 
       columnCount = 0;
-
+      cell = row.createCell(columnCount);
+      cell.setCellValue(rowCount - 1);
       cell = row.createCell(++columnCount);
       cell.setCellValue(item.getContactName());
       cell = row.createCell(++columnCount);
@@ -100,7 +129,6 @@ public class CrawledDataService implements ICrawledDataService {
       cell = row.createCell(++columnCount);
       cell.setCellValue(item.getDistrict());
       cell = row.createCell(++columnCount);
-      LOGGER.info(item.getUrl());
       XSSFHyperlink link = (XSSFHyperlink)createHelper.createHyperlink(Hyperlink.LINK_URL);
       link.setAddress(item.getUrl());
       cell.setCellValue(item.getUrl());

@@ -111,13 +111,13 @@ public class CrawlingDao implements ICrawlingDao {
   @Override
   public void addItem(Item item) {
     final String sql =
-    "INSERT INTO crwlr_items (name, address, description, contactName, contactNumber, contactEmail, publish_date, end_date, url, category_id)"
-  + " VALUE (:name, :address, :description, :contactName, :contactNumber, :contactEmail, :publishDate, :endDate, :url, :category_id)          ";
+    "INSERT INTO crwlr_items (name, address, contactName, contactNumber, contactEmail, publish_date, end_date, url, category_id)"
+  + " VALUE (:name, :address, :contactName, :contactNumber, :contactEmail, :publishDate, :endDate, :url, :category_id)          ";
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("name", item.getTitle());
     paramsMap.addValue("address", item.getAddress());
-    paramsMap.addValue("description", item.getDescription());
+//    paramsMap.addValue("description", item.getDescription());
     paramsMap.addValue("contactName", item.getContactName());
     paramsMap.addValue("contactNumber", item.getContactNumber());
     paramsMap.addValue("contactEmail", item.getContactEmail());
@@ -134,14 +134,14 @@ public class CrawlingDao implements ICrawlingDao {
   @Override
   public void updateItem(Item item) {
     final String sql =
-        "UPDATE crwlr_items SET name = :name, description = :description, address = :address, contactNumber = :contactNumber,             "
+        "UPDATE crwlr_items SET name = :name, address = :address, contactNumber = :contactNumber,                                         "
       + " contactEmail = :contactEmail, publish_date = :publish_date, end_date = :end_date, category_id = :category_id, updated = :updated"
       + " WHERE url = :url AND category_id = :category_id                                                                                 "
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("name", item.getTitle());
     paramsMap.addValue("address", item.getAddress());
-    paramsMap.addValue("description", item.getDescription());
+//    paramsMap.addValue("description", item.getDescription());
     paramsMap.addValue("contactName", item.getContactName());
     paramsMap.addValue("contactNumber", item.getContactNumber());
     paramsMap.addValue("contactEmail", item.getContactEmail());

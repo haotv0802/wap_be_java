@@ -10,7 +10,7 @@ import java.util.Date;
 public class Item {
   private String title;
   private String address;
-  private String description;
+//  private String description;
   private String contactName;
   private String contactNumber;
   private String contactEmail;
@@ -54,13 +54,13 @@ public class Item {
     this.address = address;
   }
 
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
+//  public String getDescription() {
+//    return description;
+//  }
+//
+//  public void setDescription(String description) {
+//    this.description = description;
+//  }
 
   public String getContactName() {
     return contactName;

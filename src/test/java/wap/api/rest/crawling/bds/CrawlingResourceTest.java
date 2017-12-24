@@ -44,4 +44,23 @@ public class CrawlingResourceTest extends TestBase {
         .andExpect(status().is(200))
     ;
   }
+
+  @Test
+  public void testExportCrawledData() throws Exception {
+    Criterion criterion = new Criterion();
+    criterion.setCity("Hồ Chí Minh");
+//    criterion.setDistrict("Quận Gò Vấp");
+    criterion.setAcreageLessThan("100");
+    criterion.setAcreageLargerThan("80");
+    criterion.setPriceLargerThan("6000000");
+    criterion.setPriceLessThan("9000000");
+
+    mockMvc
+        .perform(post("/svc/bds/crawler/exportCrawledData")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(new ObjectMapper().writeValueAsBytes(criterion))
+        )
+        .andExpect(status().is(200))
+    ;
+  }
 }

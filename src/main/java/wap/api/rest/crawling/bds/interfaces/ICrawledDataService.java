@@ -3,6 +3,7 @@ package wap.api.rest.crawling.bds.interfaces;
 import wap.api.rest.crawling.bds.beans.Criterion;
 import wap.api.rest.crawling.bds.beans.ItemPresenter;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -15,4 +16,6 @@ public interface ICrawledDataService {
   List<ItemPresenter> getAllItems();
 
   List<ItemPresenter> getAllItemsByCriterion(Criterion criterion);
+
+  List<ItemPresenter> exportCrawledData(Criterion criterion) throws IOException;
 }

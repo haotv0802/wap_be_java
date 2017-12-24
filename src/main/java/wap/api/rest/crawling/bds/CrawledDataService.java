@@ -2,10 +2,12 @@ package wap.api.rest.crawling.bds;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Hyperlink;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -56,6 +58,12 @@ public class CrawledDataService implements ICrawledDataService {
   public List<ItemPresenter> exportCrawledData(Criterion criterion) throws IOException {
     XSSFWorkbook workbook = new XSSFWorkbook();
     XSSFSheet sheet = workbook.createSheet("Contacts");
+    CreationHelper createHelper = workbook.getCreationHelper();
+    XSSFCellStyle hlinkstyle = workbook.createCellStyle();
+    XSSFFont hlinkfont = workbook.createFont();
+    hlinkfont.setUnderline(XSSFFont.U_SINGLE);
+    hlinkfont.setColor(HSSFColor.BLUE.index);
+    hlinkstyle.setFont(hlinkfont);
 
     int rowCount = 0;
     int columnCount = 0;
@@ -71,6 +79,8 @@ public class CrawledDataService implements ICrawledDataService {
     cell.setCellValue("City");
     cell = row.createCell(++columnCount);
     cell.setCellValue("District");
+    cell = row.createCell(++columnCount);
+    cell.setCellValue("Link");
 
     List<ItemPresenter> list = crawledDataDao.getAllItemsByCriterion(criterion);
 
@@ -89,6 +99,13 @@ public class CrawledDataService implements ICrawledDataService {
       cell.setCellValue(item.getCity());
       cell = row.createCell(++columnCount);
       cell.setCellValue(item.getDistrict());
+      cell = row.createCell(++columnCount);
+      LOGGER.info(item.getUrl());
+      XSSFHyperlink link = (XSSFHyperlink)createHelper.createHyperlink(Hyperlink.LINK_URL);
+      link.setAddress(item.getUrl());
+      cell.setCellValue(item.getUrl());
+      cell.setHyperlink((XSSFHyperlink) link);
+      cell.setCellStyle(hlinkstyle);
     }
 
     File dir = new File ("exports");

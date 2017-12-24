@@ -77,8 +77,8 @@ public class CrawlingDao implements ICrawlingDao {
   @Override
   public void addItem(Item item) {
     final String sql =
-    "INSERT INTO crwlr_items (name, address, contactName, contactNumber, contactEmail, publish_date, end_date, url, acreage, price, location, district, city, category_id)"
-  + " VALUE (:name, :address, :contactName, :contactNumber, :contactEmail, :publishDate, :endDate, :url, :acreage, :price, :location, :district, :city, :category_id)          ";
+    "INSERT INTO crwlr_items (name, address, contactName, contactNumber, contactEmail, publish_date, end_date, url, acreage, price, district, city, category_id)    "
+  + " VALUE (:name, :address, :contactName, :contactNumber, :contactEmail, :publishDate, :endDate, :url, :acreage, :price, :district, :city, :category_id)          ";
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("name", item.getTitle());
@@ -92,7 +92,6 @@ public class CrawlingDao implements ICrawlingDao {
     paramsMap.addValue("url", item.getUrl());
     paramsMap.addValue("acreage", item.getAcreage());
     paramsMap.addValue("price", item.getPrice());
-    paramsMap.addValue("location", item.getLocation());
     paramsMap.addValue("district", item.getDistrict());
     paramsMap.addValue("city", item.getCity());
     paramsMap.addValue("category_id", item.getCategoryId());
@@ -109,7 +108,7 @@ public class CrawlingDao implements ICrawlingDao {
   public void updateItem(Item item) {
     final String sql =
         "UPDATE crwlr_items SET name = :name, address = :address, contactNumber = :contactNumber, acreage = :acreage,                      "
-      + " price = :price, location = :location, district = :district, city = :city,                                                        "
+      + " price = :price, district = :district, city = :city,                                                                              "
       + " contactEmail = :contactEmail, publish_date = :publish_date, end_date = :end_date, category_id = :category_id, updated = :updated "
       + " WHERE url = :url                                                                                                                 "
         ;
@@ -125,7 +124,6 @@ public class CrawlingDao implements ICrawlingDao {
     paramsMap.addValue("url", item.getUrl());
     paramsMap.addValue("acreage", item.getAcreage());
     paramsMap.addValue("price", item.getPrice());
-    paramsMap.addValue("location", item.getLocation());
     paramsMap.addValue("district", item.getDistrict());
     paramsMap.addValue("city", item.getCity());
     paramsMap.addValue("category_id", item.getCategoryId());

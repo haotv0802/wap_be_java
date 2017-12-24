@@ -17,7 +17,6 @@ public class Item {
   private String contactEmail;
   private Date publishDate;
   private Date endDate;
-  private String location;
   private String district;
   private String city;
   private String acreage;
@@ -135,14 +134,6 @@ public class Item {
 
   public void setCrawlingEnd(Date crawlingEnd) {
     this.crawlingEnd = crawlingEnd;
-  }
-
-  public String getLocation() {
-    return location;
-  }
-
-  public void setLocation(String location) {
-    this.location = location;
   }
 
   public Long getCrawlingTime() {

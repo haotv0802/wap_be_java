@@ -35,7 +35,6 @@ CREATE TABLE `crwlr_items` (
   `contactEmail`  VARCHAR(100)  NULL,
   `acreage`       VARCHAR(100)  NULL,
   `price`         VARCHAR(100)  NULL,
-  `location`      VARCHAR(100)  NULL,
   `district`      VARCHAR(50)  NULL,
   `city`          VARCHAR(50)  NULL,
   `publish_date`  DATE          NULL,

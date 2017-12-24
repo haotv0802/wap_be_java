@@ -155,6 +155,7 @@ public class CrawlingService implements ICrawlingService {
         district = locationArray[1].trim();
         city = locationArray[2].trim();
       }
+
       Element itemDescription = document.select("div.div-table").get(0);
       String type = itemDescription.select("div.table-detail").get(0).select("div.row").get(0).select("div.right").get(0).text();
       String address = itemDescription.select("div.table-detail").get(0).select("div.row").get(1).select("div.right").get(0).text();
@@ -192,7 +193,6 @@ public class CrawlingService implements ICrawlingService {
       item.setContactEmail(email);
       item.setPublishDate(spd.parse(publishDate));
       item.setEndDate(spd.parse(endDate));
-      item.setLocation(location);
       item.setDistrict(district);
       item.setCity(city);
       item.setPrice(price);

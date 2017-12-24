@@ -30,7 +30,6 @@ public class CrawledDataResource {
 
   private final ICrawledDataService crawledDataService;
 
-  @Autowired
   public CrawledDataResource(
       @Qualifier("bdsCrawledDataService") ICrawledDataService crawledDataService
   ) {
@@ -49,6 +48,6 @@ public class CrawledDataResource {
   public List<ItemPresenter> getCrawledDataByCriterion(
       @RequestBody Criterion criterion
       ) {
-    return crawledDataService.getAllItems();
+    return crawledDataService.getAllItemsByCriterion(criterion);
   }
 }

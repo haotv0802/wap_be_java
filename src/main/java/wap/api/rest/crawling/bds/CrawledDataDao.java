@@ -63,13 +63,14 @@ public class CrawledDataDao implements ICrawledDataDao {
       presenter.setPublishDate(JdbcUtils.toUtilDate(rs.getDate("publish_date")));
       presenter.setEndDate(JdbcUtils.toUtilDate(rs.getDate("end_date")));
       presenter.setUrl(rs.getString("url"));
+
       return presenter;
     });
   }
 
   @Override
   public List<ItemPresenter> getAllItemsByCriterion(Criterion criterion) {
-    final String sql =
+    String sql =
               "SELECT                                        "
             + "    i.name,                                   "
             + "    i.address,                                "
@@ -77,12 +78,70 @@ public class CrawledDataDao implements ICrawledDataDao {
             + "    i.contactNumber,                          "
             + "    i.contactEmail,                           "
             + "    i.publish_date,                           "
+            + "    i.acreage,                                "
+            + "    i.city,                                   "
+            + "    i.district,                               "
+            + "    i.price,                                  "
+            + "    i.end_date,                               "
             + "    i.end_date,                               "
             + "    i.url                                     "
             + "FROM                                          "
             + "    crwlr_items i WHERE 1 = 1                 "
         ;
-    return null;
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    if (null != criterion) {
+      if (null != criterion.getCity()) {
+        sql += " AND city = :city";
+        paramsMap.addValue("city", criterion.getCity());
+      }
+      if (null != criterion.getDistrict()) {
+        sql += " AND district = :district";
+        paramsMap.addValue("district", criterion.getDistrict());
+      }
+
+      if (null != criterion.getPriceLargerThan()) {
+        sql += " AND price >= :priceLargerThan";
+        paramsMap.addValue("priceLargerThan", criterion.getPriceLargerThan());
+      }
+
+      if (null != criterion.getPriceLessThan()) {
+        sql += " AND price <= :priceLessThan";
+        paramsMap.addValue("priceLessThan", criterion.getPriceLessThan());
+      }
+
+      if (null != criterion.getPriceLargerThan()) {
+        sql += " AND acreage >= :acreageLargerThan";
+        paramsMap.addValue("acreageLargerThan", criterion.getAcreageLargerThan());
+      }
+
+      if (null != criterion.getAcreageLessThan()) {
+        sql += " AND acreage <= :acreageLessThan";
+        paramsMap.addValue("acreageLessThan", criterion.getAcreageLessThan());
+      }
+
+    }
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
+      ItemPresenter presenter = new ItemPresenter();
+      presenter.setTitle(rs.getString("name"));
+      presenter.setAddress(rs.getString("address"));
+      presenter.setContactName(rs.getString("contactName"));
+      presenter.setContactEmail(rs.getString("contactEmail"));
+      presenter.setContactNumber(rs.getString("contactNumber"));
+      presenter.setPublishDate(JdbcUtils.toUtilDate(rs.getDate("publish_date")));
+      presenter.setEndDate(JdbcUtils.toUtilDate(rs.getDate("end_date")));
+      presenter.setUrl(rs.getString("url"));
+      presenter.setCity(rs.getString("city"));
+      presenter.setDistrict(rs.getString("district"));
+      presenter.setPrice(rs.getBigDecimal("price"));
+      presenter.setAcreage(rs.getBigDecimal("acreage"));
+      return presenter;
+    });
   }
 
 }

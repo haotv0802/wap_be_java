@@ -1,5 +1,6 @@
 package wap.api.rest.crawling.bds.beans;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -18,6 +19,10 @@ public class ItemPresenter {
   private Date publishDate;
   private Date endDate;
   private String url;
+  private String district;
+  private String city;
+  private BigDecimal acreage;
+  private BigDecimal price;
 
   public String getTitle() {
     return title;
@@ -89,5 +94,37 @@ public class ItemPresenter {
 
   public void setUrl(String url) {
     this.url = url;
+  }
+
+  public String getDistrict() {
+    return district;
+  }
+
+  public void setDistrict(String district) {
+    this.district = district;
+  }
+
+  public String getCity() {
+    return city;
+  }
+
+  public void setCity(String city) {
+    this.city = city;
+  }
+
+  public BigDecimal getAcreage() {
+    return acreage;
+  }
+
+  public void setAcreage(BigDecimal acreage) {
+    this.acreage = acreage;
+  }
+
+  public BigDecimal getPrice() {
+    return price;
+  }
+
+  public void setPrice(BigDecimal price) {
+    this.price = price;
   }
 }

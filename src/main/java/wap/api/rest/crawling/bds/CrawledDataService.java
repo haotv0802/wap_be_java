@@ -39,6 +39,6 @@ public class CrawledDataService implements ICrawledDataService {
 
   @Override
   public List<ItemPresenter> getAllItemsByCriterion(Criterion criterion) {
-    return null;
+    return this.crawledDataDao.getAllItemsByCriterion(criterion);
   }
 }

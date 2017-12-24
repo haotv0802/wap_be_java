@@ -4,6 +4,11 @@ public class Criteria {
   private String name;
   private String value;
 
+  public Criteria(String name, String value) {
+    this.name = name;
+    this.value = value;
+  }
+
   public String getName() {
     return name;
   }

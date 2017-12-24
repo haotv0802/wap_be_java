@@ -33,7 +33,7 @@ CREATE TABLE `crwlr_items` (
   `contactName`   VARCHAR(200)   NULL,
   `contactNumber` VARCHAR(45)    NULL,
   `contactEmail`  VARCHAR(100)   NULL,
-  `acreage`       DECIMAL(5, 2)  NULL,
+  `acreage`       DECIMAL(13, 2) NULL,
   `price`         DECIMAL(13, 2) NULL,
   `district`      VARCHAR(50)    NULL,
   `city`          VARCHAR(50)    NULL,

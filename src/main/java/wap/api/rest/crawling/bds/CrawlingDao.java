@@ -10,6 +10,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
+import wap.api.rest.crawling.bds.beans.Category;
 import wap.api.rest.crawling.bds.beans.CrawlingTracking;
 import wap.api.rest.crawling.bds.beans.Item;
 import wap.api.rest.crawling.bds.interfaces.ICrawlingDao;
@@ -56,6 +57,26 @@ public class CrawlingDao implements ICrawlingDao {
     namedTemplate.update(sql, paramsMap, keyHolder);
     final Long id = keyHolder.getKey().longValue();
     crawlingTracking.setId(id);
+  }
+
+  @Override
+  public void addCategory(Category category) {
+    final String sql =
+        "INSERT INTO crwlr_categories (name, url, source)"
+      + " VALUE (:name, :url, :source)                   "
+        ;
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("name", category.getName());
+    paramsMap.addValue("url", category.getUrl());
+    paramsMap.addValue("source", category.getSource());
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    KeyHolder keyHolder = new GeneratedKeyHolder();
+    namedTemplate.update(sql, paramsMap, keyHolder);
+    final Long id = keyHolder.getKey().longValue();
+    category.setId(id);
   }
 
   @Override
@@ -140,6 +161,21 @@ public class CrawlingDao implements ICrawlingDao {
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("crawling_tracking_id", crawlingTrackingId);
+    paramsMap.addValue("item_id", itemId);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    namedTemplate.update(sql, paramsMap);
+  }
+
+  @Override
+  public void connectItemToCategory(Long categoryId, Long itemId) {
+    final String sql =
+        "INSERT INTO crwlr_categories_items_details (category_id, item_id)"
+      + " VALUE (:category_id, :item_id)                                         ";
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("category_id", categoryId);
     paramsMap.addValue("item_id", itemId);
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());

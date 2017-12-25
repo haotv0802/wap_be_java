@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import wap.api.rest.crawling.bds.beans.Category;
 import wap.api.rest.crawling.bds.beans.CrawlingTracking;
 import wap.api.rest.crawling.bds.beans.Item;
 import wap.api.rest.crawling.bds.interfaces.ICrawlingDao;
@@ -44,15 +45,19 @@ public class CrawlingService implements ICrawlingService {
   public Map<String, CrawlingTracking> saveCrawledData(List<String> pages) {
 
     Map<String, CrawlingTracking> crawlingTrackingMap = new HashMap<>();
+    Category category = new Category();
     for (String page : pages) {
-      getCategoriesAndItems(page, crawlingTrackingMap);
+      getTrackingAndItems(page, crawlingTrackingMap, category);
     }
+
+    // Saving category.
+    crawlingDao.addCategory(category);
 
     Set<String> keys = crawlingTrackingMap.keySet();
     for (String key : keys) {
       CrawlingTracking crawlingTracking = crawlingTrackingMap.get(key);
       crawlingTracking.setItemsCount(crawlingTracking.getItems().size());
-      // Saving category.
+      // Saving tracking info.
       crawlingDao.addCrawlingTracking(crawlingTracking);
 
       Set<Item> items = crawlingTracking.getItems();
@@ -68,8 +73,11 @@ public class CrawlingService implements ICrawlingService {
             crawlingDao.addItem(item);
           }
 
-          // Saving relationship between category and item.
+          // Tracking item
           crawlingDao.trackingItem(crawlingTracking.getId(), item.getId());
+
+          // Add relationship between category & item.
+          crawlingDao.connectItemToCategory(category.getId(), item.getId());
         }
       }
 
@@ -81,10 +89,21 @@ public class CrawlingService implements ICrawlingService {
    * Get list of products from given Category.
    * @param categoryLink
    */
-  private void getCategoriesAndItems(String categoryLink, Map<String, CrawlingTracking> categoryMap) {
+  private void getTrackingAndItems(String categoryLink, Map<String, CrawlingTracking> categoryMap, Category category) {
     try {
       Document document = Jsoup.connect(categoryLink).get();
       String categoryName = document.select("div.product-list-page").get(0).select("div.Title").select("h1").get(0).text();
+
+      category.setName(categoryName);
+      category.setUrl(categoryLink);
+      String source = categoryLink;
+      source = source.substring(source.indexOf("//") + 2);
+      category.setSource(source.substring(0, source.indexOf("/")));
+//      String name = source;
+//      name = name.substring(name.indexOf("/") + 1);
+//      name = name.substring(0, name.indexOf("/"));
+//      category.setCategoryName(name);
+
       CrawlingTracking crawlingTracking = categoryMap.get(categoryLink);
       if (null == crawlingTracking) {
         crawlingTracking = new CrawlingTracking();

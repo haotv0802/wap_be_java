@@ -26,10 +26,14 @@ CREATE TABLE `crwlr_crawling_tracking` (
 DROP TABLE IF EXISTS `crwlr_categories`;
 CREATE TABLE `crwlr_categories` (
   `id`            BIGINT   AUTO_INCREMENT,
-  `name`          NVARCHAR(200) NULL,
-  `url`           NVARCHAR(200) NULL,
-  `source`        NVARCHAR(100) NULL,
-  `category_name` NVARCHAR(100) NULL,
+  `name`          NVARCHAR(200)                        NULL,
+  `url`           NVARCHAR(200)                        NULL,
+  `source`        NVARCHAR(100)                        NULL,
+#   `category_name` NVARCHAR(100)                        NULL,
+  `type`          VARCHAR(100) DEFAULT 'Selling'       NOT NULL, # Selling house, buying house, selling apartment, buying apartment
+  `propertyType`  VARCHAR(100) DEFAULT 'House'         NOT NULL,
+  `city`          VARCHAR(100) DEFAULT 'Ho Chi Minh'   NOT NULL,
+  `district`      VARCHAR(100) DEFAULT 'ALL'           NOT NULL,
   `created`       DATETIME DEFAULT NOW(),
   #   `updated`      DATETIME      NULL,
   PRIMARY KEY (`id`),

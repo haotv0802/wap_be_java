@@ -123,6 +123,7 @@ public class CrawledDataDao implements ICrawledDataDao {
       }
 
     }
+    sql += " ORDER BY i.price ASC";
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 

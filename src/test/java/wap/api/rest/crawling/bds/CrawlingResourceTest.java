@@ -32,10 +32,10 @@ public class CrawlingResourceTest extends TestBase {
     criterion.setPersonName("HaoHo");
     criterion.setCity("Hồ Chí Minh");
 //    criterion.setDistrict("Quận Gò Vấp");
-    criterion.setAcreageLessThan("100");
-    criterion.setAcreageLargerThan("80");
-    criterion.setPriceLargerThan("6000000");
-    criterion.setPriceLessThan("9000000");
+//    criterion.setAcreageLessThan("100");
+//    criterion.setAcreageLargerThan("80");
+    criterion.setPriceLargerThan("15000000");
+    criterion.setPriceLessThan("3000000");
 
     mockMvc
         .perform(post("/svc/bds/crawler/crawledData")
@@ -49,13 +49,15 @@ public class CrawlingResourceTest extends TestBase {
   @Test
   public void testExportCrawledData() throws Exception {
     Criterion criterion = new Criterion();
-    criterion.setPersonName("HaoHo");
+    criterion.setPersonName("HaoHo_ALL_Quan12");
     criterion.setCity("Hồ Chí Minh");
 //    criterion.setDistrict("Quận Gò Vấp");
-    criterion.setAcreageLessThan("100");
-    criterion.setAcreageLargerThan("80");
-    criterion.setPriceLargerThan("6000000");
-    criterion.setPriceLessThan("9000000");
+    criterion.setDistrict("Quận 12");
+
+//    criterion.setAcreageLessThan("100");
+//    criterion.setAcreageLargerThan("80");
+//    criterion.setPriceLargerThan("1500000");
+//    criterion.setPriceLessThan("3000000");
 
     mockMvc
         .perform(post("/svc/bds/crawler/exportCrawledData")

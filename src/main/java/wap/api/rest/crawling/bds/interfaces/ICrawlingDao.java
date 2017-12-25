@@ -1,6 +1,6 @@
 package wap.api.rest.crawling.bds.interfaces;
 
-import wap.api.rest.crawling.bds.beans.Category;
+import wap.api.rest.crawling.bds.beans.CrawlingTracking;
 import wap.api.rest.crawling.bds.beans.Item;
 
 /**
@@ -9,8 +9,7 @@ import wap.api.rest.crawling.bds.beans.Item;
  * @author haho
  */
 public interface ICrawlingDao {
-  void addCategory(Category category);
-
+  void addCrawlingTracking(CrawlingTracking crawlingTracking);
   Long isItemExisting(String url);
 
   void addItem(Item product);

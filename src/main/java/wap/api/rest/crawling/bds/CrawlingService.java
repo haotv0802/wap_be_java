@@ -10,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
-import sun.rmi.runtime.Log;
-import wap.api.rest.crawling.bds.beans.Category;
+import wap.api.rest.crawling.bds.beans.CrawlingTracking;
 import wap.api.rest.crawling.bds.beans.Item;
 import wap.api.rest.crawling.bds.interfaces.ICrawlingDao;
 import wap.api.rest.crawling.bds.interfaces.ICrawlingService;
@@ -43,25 +41,25 @@ public class CrawlingService implements ICrawlingService {
   }
 
   @Override
-  public Map<String, Category> saveCrawledData(List<String> pages) {
+  public Map<String, CrawlingTracking> saveCrawledData(List<String> pages) {
 
-    Map<String, Category> categoryMap = new HashMap<>();
+    Map<String, CrawlingTracking> crawlingTrackingMap = new HashMap<>();
     for (String page : pages) {
-      getCategoriesAndItems(page, categoryMap);
+      getCategoriesAndItems(page, crawlingTrackingMap);
     }
 
-    Set<String> keys = categoryMap.keySet();
+    Set<String> keys = crawlingTrackingMap.keySet();
     for (String key : keys) {
-      Category category = categoryMap.get(key);
-      category.setItemsCount(category.getItems().size());
+      CrawlingTracking crawlingTracking = crawlingTrackingMap.get(key);
+      crawlingTracking.setItemsCount(crawlingTracking.getItems().size());
       // Saving category.
-      crawlingDao.addCategory(category);
+      crawlingDao.addCrawlingTracking(crawlingTracking);
 
-      Set<Item> items = category.getItems();
+      Set<Item> items = crawlingTracking.getItems();
       if (null != items && items.size() > 0) {
         for (Item item: items) {
           // Saving Product
-          item.setCategoryId(category.getId());
+          item.setCategoryId(crawlingTracking.getId());
           Long itemId = crawlingDao.isItemExisting(item.getUrl());
           if (itemId > 0) {
             crawlingDao.updateItem(item);
@@ -71,28 +69,28 @@ public class CrawlingService implements ICrawlingService {
           }
 
           // Saving relationship between category and item.
-          crawlingDao.connectItemToCategory(category.getId(), item.getId());
+          crawlingDao.connectItemToCategory(crawlingTracking.getId(), item.getId());
         }
       }
 
     }
-    return categoryMap;
+    return crawlingTrackingMap;
   }
 
   /**
    * Get list of products from given Category.
    * @param categoryLink
    */
-  private void getCategoriesAndItems(String categoryLink, Map<String, Category> categoryMap) {
+  private void getCategoriesAndItems(String categoryLink, Map<String, CrawlingTracking> categoryMap) {
     try {
       Document document = Jsoup.connect(categoryLink).get();
       String categoryName = document.select("div.product-list-page").get(0).select("div.Title").select("h1").get(0).text();
-      Category category = categoryMap.get(categoryLink);
-      if (null == category) {
-        category = new Category();
-        category.setName(categoryName);
-        category.setUrl(categoryLink);
-        categoryMap.put(categoryLink, category);
+      CrawlingTracking crawlingTracking = categoryMap.get(categoryLink);
+      if (null == crawlingTracking) {
+        crawlingTracking = new CrawlingTracking();
+        crawlingTracking.setName(categoryName);
+        crawlingTracking.setUrl(categoryLink);
+        categoryMap.put(categoryLink, crawlingTracking);
       }
 
 //      document.select("div.background-pager-right-controls").get(0);
@@ -110,7 +108,7 @@ public class CrawlingService implements ICrawlingService {
           Elements titleOfProduct = element.select("div.p-title");
           String link = titleOfProduct.get(0).select("a").attr("abs:href");
 
-          getItemDetails(link, category);
+          getItemDetails(link, crawlingTracking);
         }
 
         for (int i = 0; i < hrefTags.size(); i++) {
@@ -131,9 +129,9 @@ public class CrawlingService implements ICrawlingService {
     }
   }
 
-  private void getItemDetails(String itemLink, Category category) {
-    int itemCrawled = category.getItemsCrawled();
-    Set<Item> items = category.getItems();
+  private void getItemDetails(String itemLink, CrawlingTracking crawlingTracking) {
+    int itemCrawled = crawlingTracking.getItemsCrawled();
+    Set<Item> items = crawlingTracking.getItems();
     if (null == items) {
       items = new HashSet<>();
     }
@@ -223,7 +221,7 @@ public class CrawlingService implements ICrawlingService {
       item.setCrawlingTime(start.getTime() - end.getTime());
       items.add(item);
 
-      category.addItems(items);
+      crawlingTracking.addItems(items);
       itemCrawled++;
     } catch (IOException e) {
       e.printStackTrace();
@@ -231,7 +229,7 @@ public class CrawlingService implements ICrawlingService {
       e.printStackTrace();
     }
 
-    category.setItemsCrawled(itemCrawled);
+    crawlingTracking.setItemsCrawled(itemCrawled);
   }
   
   private String getEmailFromCharaters(String[] charaters) {

@@ -10,7 +10,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
-import wap.api.rest.crawling.bds.beans.Category;
+import wap.api.rest.crawling.bds.beans.CrawlingTracking;
 import wap.api.rest.crawling.bds.beans.Item;
 import wap.api.rest.crawling.bds.interfaces.ICrawlingDao;
 import wap.common.JdbcUtils;
@@ -38,24 +38,24 @@ public class CrawlingDao implements ICrawlingDao {
   }
 
   @Override
-  public void addCategory(Category category) {
+  public void addCrawlingTracking(CrawlingTracking crawlingTracking) {
     final String sql =
              "INSERT INTO crwlr_categories (name, url, itemsCount, itemsCrawled)"
            + " VALUE (:name, :url, :itemsCount, :itemsCrawled)                  "
         ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-    paramsMap.addValue("name", category.getName());
-    paramsMap.addValue("url", category.getUrl());
-    paramsMap.addValue("itemsCount", category.getItemsCount());
-    paramsMap.addValue("itemsCrawled", category.getItemsCrawled());
+    paramsMap.addValue("name", crawlingTracking.getName());
+    paramsMap.addValue("url", crawlingTracking.getUrl());
+    paramsMap.addValue("itemsCount", crawlingTracking.getItemsCount());
+    paramsMap.addValue("itemsCrawled", crawlingTracking.getItemsCrawled());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
     KeyHolder keyHolder = new GeneratedKeyHolder();
     namedTemplate.update(sql, paramsMap, keyHolder);
     final Long id = keyHolder.getKey().longValue();
-    category.setId(id);
+    crawlingTracking.setId(id);
   }
 
   @Override

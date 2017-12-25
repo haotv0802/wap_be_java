@@ -1,6 +1,6 @@
 package wap.api.rest.crawling.bds.interfaces;
 
-import wap.api.rest.crawling.bds.beans.Category;
+import wap.api.rest.crawling.bds.beans.CrawlingTracking;
 
 import java.util.List;
 import java.util.Map;
@@ -11,5 +11,5 @@ import java.util.Map;
  * @author haho
  */
 public interface ICrawlingService {
-  Map<String, Category> saveCrawledData(List<String> pages);
+  Map<String, CrawlingTracking> saveCrawledData(List<String> pages);
 }

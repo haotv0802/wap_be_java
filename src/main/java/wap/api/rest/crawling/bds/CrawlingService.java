@@ -69,7 +69,7 @@ public class CrawlingService implements ICrawlingService {
           }
 
           // Saving relationship between category and item.
-          crawlingDao.connectItemToCategory(crawlingTracking.getId(), item.getId());
+          crawlingDao.trackingItem(crawlingTracking.getId(), item.getId());
         }
       }
 

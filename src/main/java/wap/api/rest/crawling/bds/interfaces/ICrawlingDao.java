@@ -16,5 +16,5 @@ public interface ICrawlingDao {
 
   void updateItem(Item product);
 
-  void connectItemToCategory(Long categoryId, Long itemId);
+  void trackingItem(Long crawlingTrackingId, Long itemId);
 }

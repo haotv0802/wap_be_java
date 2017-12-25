@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import wap.api.rest.crawling.bds.beans.Category;
-import wap.api.rest.crawling.bds.beans.ItemPresenter;
-import wap.api.rest.crawling.bds.interfaces.ICrawledDataService;
+import wap.api.rest.crawling.bds.beans.CrawlingTracking;
 import wap.api.rest.crawling.bds.interfaces.ICrawlingService;
 
 import java.util.ArrayList;
@@ -43,7 +42,7 @@ public class CrawlingResource {
   }
 
   @GetMapping("/crawler/crawlingData")
-  public Map<String, Category> crawlingData(
+  public Map<String, CrawlingTracking> crawlingData(
       @RequestParam(value = "link", required = false) String link
   ) {
     List<String> pages = new ArrayList<>();

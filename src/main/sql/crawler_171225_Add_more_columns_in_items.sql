@@ -44,26 +44,27 @@ CREATE TABLE `crwlr_categories` (
 DROP TABLE IF EXISTS `crwlr_items`;
 CREATE TABLE `crwlr_items` (
   `id`            BIGINT   AUTO_INCREMENT,
-  `name`          NVARCHAR(200)  NULL,
-  `address`       VARCHAR(300)   NULL,
+  `name`          NVARCHAR(200)                  NULL,
+  `address`       VARCHAR(300)                   NULL,
   #   `description`    TEXT CHARACTER SET utf8mb4
   #                    COLLATE utf8mb4_unicode_ci NULL,
-  `contactName`   VARCHAR(200)   NULL,
-  `contactNumber` VARCHAR(45)    NULL,
-  `contactEmail`  VARCHAR(100)   NULL,
-  `acreage`       DECIMAL(13, 2) NULL,
-  `price`         DECIMAL(13, 2) NULL,
-  `district`      VARCHAR(50)    NULL,
-  `city`          VARCHAR(50)    NULL,
-  `publish_date`  DATE           NULL,
-  `end_date`      DATE           NULL,
-  `url`           TEXT           NULL,
-  `type`          VARCHAR(100)   NOT NULL, # Selling house, buying house, selling apartment, buying apartment
+  `contactName`   VARCHAR(200)                   NULL,
+  `contactNumber` VARCHAR(45)                    NULL,
+  `contactEmail`  VARCHAR(100)                   NULL,
+  `acreage`       DECIMAL(13, 2)                 NULL,
+  `price`         DECIMAL(13, 2)                 NULL,
+  `district`      VARCHAR(50)                    NULL,
+  `city`          VARCHAR(50)                    NULL,
+  `publish_date`  DATE                           NULL,
+  `end_date`      DATE                           NULL,
+  `url`           TEXT                           NULL,
+  `type`          VARCHAR(100) DEFAULT 'Selling' NOT NULL, # Selling house, buying house, selling apartment, buying apartment
+  `propertyType`  VARCHAR(100) DEFAULT 'House'   NOT NULL,
   #   `source`
   #   `crawling_start` DATETIME                   NOT NULL,
   #   `crawling_end`   DATETIME                   NOT NULL,
   `created`       DATETIME DEFAULT NOW(),
-  `updated`       DATETIME       NULL,
+  `updated`       DATETIME                       NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `crwlr_items` (`id`)
 )

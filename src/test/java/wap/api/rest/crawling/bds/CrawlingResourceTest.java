@@ -19,7 +19,7 @@ public class CrawlingResourceTest extends TestBase {
   public void testCrawlingData() throws Exception {
     mockMvc
         .perform(get("/svc/bds/crawler/crawlingData")
-//            .param("link", "https://www.lazada.sg/empire-13")
+            .param("link", "https://batdongsan.com.vn/ban-nha-rieng-tp-hcm/p872")
         )
         .andExpect(status().is(200))
     ;

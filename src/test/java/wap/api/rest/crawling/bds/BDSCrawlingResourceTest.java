@@ -13,13 +13,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Created by haho on 19/10/2017.
  */
-public class CrawlingResourceTest extends TestBase {
+public class BDSCrawlingResourceTest extends TestBase {
 
   @Test
   public void testCrawlingData() throws Exception {
     mockMvc
         .perform(get("/svc/bds/crawler/crawlingData")
-            .param("link", "https://batdongsan.com.vn/ban-nha-rieng-tp-hcm/p860")
+            .param("link", "https://batdongsan.com.vn/ban-nha-rieng-tp-hcm")
         )
         .andExpect(status().is(200))
     ;

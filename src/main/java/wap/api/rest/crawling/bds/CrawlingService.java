@@ -110,7 +110,9 @@ public class CrawlingService implements ICrawlingService {
       category.setSource(source.substring(0, source.indexOf("/")));
       String name = source;
       name = name.substring(name.indexOf("/") + 1);
-      name = name.substring(0, name.indexOf("/"));
+      if (name.indexOf("/") > 0) {
+        name = name.substring(0, name.indexOf("/"));
+      }
 //      category.setCategoryName(name);
 
       String categoryUrl = pageLink.substring(0, pageLink.indexOf(name) + name.length());

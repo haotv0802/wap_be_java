@@ -19,7 +19,7 @@ public class BDSCrawlingResourceTest extends TestBase {
   public void testCrawlingData() throws Exception {
     mockMvc
         .perform(get("/svc/bds/crawler/crawlingData")
-            .param("link", "https://batdongsan.com.vn/ban-nha-rieng-tp-hcm")
+            .param("link", "https://batdongsan.com.vn/ban-nha-rieng/-1/11/-1/-1")
         )
         .andExpect(status().is(200))
     ;
@@ -48,10 +48,11 @@ public class BDSCrawlingResourceTest extends TestBase {
   @Test
   public void testExportCrawledData() throws Exception {
     Criterion criterion = new Criterion();
-    criterion.setPersonName("HaoHo_ALL_Quan12");
+    criterion.setPersonName("Thanh_BinhThanh");
     criterion.setCity("Hồ Chí Minh");
 //    criterion.setDistrict("Quận Gò Vấp");
-    criterion.setDistrict("Quận 12");
+//    criterion.setDistrict("Quận 12");
+    criterion.setDistrict("Quận Bình Thạnh");
 
 //    criterion.setAcreageLessThan("100");
 //    criterion.setAcreageLargerThan("80");

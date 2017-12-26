@@ -61,8 +61,8 @@ public class CrawledDataService implements ICrawledDataService {
     sheet.setColumnWidth(1, 5000);
     sheet.setColumnWidth(2, 3000);
     sheet.setColumnWidth(3, 7000);
-    sheet.setColumnWidth(4, 3000);
-    sheet.setColumnWidth(5, 2000);
+    sheet.setColumnWidth(4, 4000);
+    sheet.setColumnWidth(5, 5000);
     sheet.setColumnWidth(6, 4000);
     sheet.setColumnWidth(7, 4000);
     sheet.createFreezePane(0, 1);
@@ -94,11 +94,11 @@ public class CrawledDataService implements ICrawledDataService {
 
     Row row = sheet.createRow(rowCount);
     Cell cell = row.createCell(++columnCount);
-    cell.setCellValue("Name");
+    cell.setCellValue("Tên");
     cell.setCellStyle(headerStyle);
 
     cell = row.createCell(++columnCount);
-    cell.setCellValue("Number");
+    cell.setCellValue("SDT");
     cell.setCellStyle(headerStyle);
 
     cell = row.createCell(++columnCount);
@@ -106,19 +106,19 @@ public class CrawledDataService implements ICrawledDataService {
     cell.setCellStyle(headerStyle);
 
     cell = row.createCell(++columnCount);
-    cell.setCellValue("Price (*1000)");
+    cell.setCellValue("Giá (*1000)");
     cell.setCellStyle(headerStyle);
 
     cell = row.createCell(++columnCount);
-    cell.setCellValue("Acreage (m2)");
+    cell.setCellValue("Dien tich (m2)");
     cell.setCellStyle(headerStyle);
 
     cell = row.createCell(++columnCount);
-    cell.setCellValue("City");
+    cell.setCellValue("Thành phố");
     cell.setCellStyle(headerStyle);
 
     cell = row.createCell(++columnCount);
-    cell.setCellValue("District");
+    cell.setCellValue("Quận");
     cell.setCellStyle(headerStyle);
 
     cell = row.createCell(++columnCount);

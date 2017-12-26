@@ -47,7 +47,8 @@ public class CrawlingResource {
   ) {
     List<String> pages = new ArrayList<>();
     if (StringUtils.isEmpty(link)) {
-      pages.add("https://batdongsan.com.vn/ban-nha-rieng-tp-hcm/p500");
+      pages.add("https://batdongsan.com.vn/ban-nha-rieng-tp-hcm/p862");
+      pages.add("https://batdongsan.com.vn/ban-nha-rieng-tp-hcm/p860");
 //      pages.add("https://www.lazada.sg/empire-13");
 //      pages.add("https://www.lazada.sg/boom_");
 //      pages.add("https://www.lazada.sg/the-bro-store");

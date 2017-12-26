@@ -96,37 +96,40 @@ public class CrawlingService implements ICrawlingService {
 
   /**
    * Get list of products from given Category.
-   * @param categoryLink
+   * @param pageLink
    */
-  private void getTrackingAndItems(String categoryLink, Map<String, CrawlingTracking> crawlingTrackingMap, Category category) {
+  private void getTrackingAndItems(String pageLink, Map<String, CrawlingTracking> crawlingTrackingMap, Category category) {
     try {
-      Document document = Jsoup.connect(categoryLink).get();
+      Document document = Jsoup.connect(pageLink).get();
       String categoryName = document.select("div.product-list-page").get(0).select("div.Title").select("h1").get(0).text();
 
       category.setName(categoryName);
-      category.setUrl(categoryLink);
-      String source = categoryLink;
+//      category.setUrl(pageLink);
+      String source = pageLink;
       source = source.substring(source.indexOf("//") + 2);
       category.setSource(source.substring(0, source.indexOf("/")));
-//      String name = source;
-//      name = name.substring(name.indexOf("/") + 1);
-//      name = name.substring(0, name.indexOf("/"));
+      String name = source;
+      name = name.substring(name.indexOf("/") + 1);
+      name = name.substring(0, name.indexOf("/"));
 //      category.setCategoryName(name);
 
-      CrawlingTracking crawlingTracking = crawlingTrackingMap.get(categoryLink);
+      String categoryUrl = pageLink.substring(0, pageLink.indexOf(name) + name.length());
+      category.setUrl(categoryUrl);
+
+      CrawlingTracking crawlingTracking = crawlingTrackingMap.get(pageLink);
       if (null == crawlingTracking) {
         crawlingTracking = new CrawlingTracking();
         crawlingTracking.setName(categoryName);
-        crawlingTracking.setUrl(categoryLink);
-        crawlingTrackingMap.put(categoryLink, crawlingTracking);
+        crawlingTracking.setUrl(pageLink);
+        crawlingTrackingMap.put(pageLink, crawlingTracking);
       }
 
 //      document.select("div.background-pager-right-controls").get(0);
 //      document.select("div.background-pager-right-controls").get(0).child(1).attr("abs:href");
-      String currentPage = categoryLink;
+      String currentPage = pageLink;
       String nextPage = null;
       do {
-        LOGGER.info(">>> Crawling category data: " + currentPage);
+        LOGGER.info(">>> Crawling on page: " + currentPage);
         document = Jsoup.connect(currentPage).get();
         Elements hrefTags = document.select("div.background-pager-right-controls").get(0).children();
 
@@ -153,7 +156,7 @@ public class CrawlingService implements ICrawlingService {
       } while (nextPage != null && nextPage.length() > 0);
 
     } catch (IOException e) {
-      System.err.println("For '" + categoryLink + "': " + e.getMessage());
+      System.err.println("For '" + pageLink + "': " + e.getMessage());
     }
   }
 

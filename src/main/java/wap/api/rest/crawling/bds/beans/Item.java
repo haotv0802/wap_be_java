@@ -12,7 +12,6 @@ public class Item {
   private Long id;
   private String title;
   private String address;
-//  private String description;
   private String contactName;
   private String contactNumber;
   private String contactEmail;
@@ -23,7 +22,6 @@ public class Item {
   private BigDecimal acreage;
   private BigDecimal price;
   private String url;
-  private Long categoryId;
   private Date crawlingStart;
   private Date crawlingEnd;
   private Long crawlingTime;
@@ -111,14 +109,6 @@ public class Item {
 
   public void setUrl(String url) {
     this.url = url;
-  }
-
-  public Long getCategoryId() {
-    return categoryId;
-  }
-
-  public void setCategoryId(Long categoryId) {
-    this.categoryId = categoryId;
   }
 
   public Date getCrawlingStart() {

@@ -1,6 +1,5 @@
 package wap.api.rest.crawling.bds.interfaces;
 
-import wap.api.rest.crawling.bds.beans.CategoryPresenter;
 import wap.api.rest.crawling.bds.beans.Criterion;
 import wap.api.rest.crawling.bds.beans.ItemPresenter;
 

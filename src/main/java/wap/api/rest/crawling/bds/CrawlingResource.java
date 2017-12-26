@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import wap.api.rest.crawling.bds.beans.Category;
-import wap.api.rest.crawling.bds.beans.ItemPresenter;
-import wap.api.rest.crawling.bds.interfaces.ICrawledDataService;
+import wap.api.rest.crawling.bds.beans.CrawlingTracking;
 import wap.api.rest.crawling.bds.interfaces.ICrawlingService;
 
 import java.util.ArrayList;
@@ -43,12 +42,13 @@ public class CrawlingResource {
   }
 
   @GetMapping("/crawler/crawlingData")
-  public Map<String, Category> crawlingData(
+  public Map<String, CrawlingTracking> crawlingData(
       @RequestParam(value = "link", required = false) String link
   ) {
     List<String> pages = new ArrayList<>();
     if (StringUtils.isEmpty(link)) {
-      pages.add("https://batdongsan.com.vn/ban-nha-rieng-tp-hcm/p500");
+      pages.add("https://batdongsan.com.vn/ban-nha-rieng-tp-hcm/p862");
+      pages.add("https://batdongsan.com.vn/ban-nha-rieng-tp-hcm/p860");
 //      pages.add("https://www.lazada.sg/empire-13");
 //      pages.add("https://www.lazada.sg/boom_");
 //      pages.add("https://www.lazada.sg/the-bro-store");

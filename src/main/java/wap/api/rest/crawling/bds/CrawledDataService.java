@@ -18,7 +18,6 @@ import wap.api.rest.crawling.bds.interfaces.ICrawledDataService;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;

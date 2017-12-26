@@ -196,7 +196,9 @@ public class CrawlingService implements ICrawlingService {
         } else if (suffix.equals("triệu ")) {
           priceInBigDecimal = new BigDecimal(price);
         } else  if (suffix.equals("triệu/m² ")) {
-          priceInBigDecimal = new BigDecimal(price).multiply(acreageInBigDecimal).multiply(new BigDecimal(1000));
+          if (null != acreageInBigDecimal) {
+            priceInBigDecimal = new BigDecimal(price).multiply(acreageInBigDecimal).multiply(new BigDecimal(1000));
+          }
         }
         if (null != priceInBigDecimal && priceInBigDecimal.compareTo(new BigDecimal("999999999"))  > 0) {
           priceInBigDecimal = null;

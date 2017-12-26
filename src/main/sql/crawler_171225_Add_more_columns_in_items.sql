@@ -9,7 +9,7 @@ DROP TABLE IF EXISTS `crwlr_crawling_tracking`;
 CREATE TABLE `crwlr_crawling_tracking` (
   `id`           BIGINT   AUTO_INCREMENT,
   `name`         NVARCHAR(200) NULL,
-  `url`          NVARCHAR(200) NULL,
+  `url`          NVARCHAR(500) NULL,
   `itemsCount`   INT           NOT NULL,
   `itemsCrawled` INT           NOT NULL,
   `created`      DATETIME DEFAULT NOW(),
@@ -25,19 +25,20 @@ CREATE TABLE `crwlr_crawling_tracking` (
 --
 DROP TABLE IF EXISTS `crwlr_categories`;
 CREATE TABLE `crwlr_categories` (
-  `id`            BIGINT   AUTO_INCREMENT,
-  `name`          NVARCHAR(200)                        NULL,
-  `url`           NVARCHAR(200)                        NULL,
-  `source`        NVARCHAR(100)                        NULL,
-#   `category_name` NVARCHAR(100)                        NULL,
-  `type`          VARCHAR(100) DEFAULT 'Selling'       NOT NULL, # Selling house, buying house, selling apartment, buying apartment
-  `propertyType`  VARCHAR(100) DEFAULT 'House'         NOT NULL,
-  `city`          VARCHAR(100) DEFAULT 'Ho Chi Minh'   NOT NULL,
-  `district`      VARCHAR(100) DEFAULT 'ALL'           NOT NULL,
-  `created`       DATETIME DEFAULT NOW(),
+  `id`           BIGINT   AUTO_INCREMENT,
+  `name`         NVARCHAR(200)                        NULL,
+  `url`          NVARCHAR(500)                        NULL,
+  `source`       NVARCHAR(100)                        NULL,
+  #   `category_name` NVARCHAR(100)                        NULL,
+  `type`         VARCHAR(100) DEFAULT 'Selling'       NOT NULL, # Selling house, buying house, selling apartment, buying apartment
+  `propertyType` VARCHAR(100) DEFAULT 'House'         NOT NULL,
+  `city`         VARCHAR(100) DEFAULT 'Ho Chi Minh'   NOT NULL,
+  `district`     VARCHAR(100) DEFAULT 'ALL'           NOT NULL,
+  `created`      DATETIME DEFAULT NOW(),
   #   `updated`      DATETIME      NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `crwlr_categories_id` (`id`)
+  UNIQUE KEY `crwlr_categories_id` (`id`),
+  UNIQUE KEY `crwlr_categories_url` (`url`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -61,7 +62,7 @@ CREATE TABLE `crwlr_items` (
   `city`          VARCHAR(50)                    NULL,
   `publish_date`  DATE                           NULL,
   `end_date`      DATE                           NULL,
-  `url`           TEXT                           NULL,
+  `url`           NVARCHAR(500)                  NULL,
   `type`          VARCHAR(100) DEFAULT 'Selling' NOT NULL, # Selling house, buying house, selling apartment, buying apartment
   `propertyType`  VARCHAR(100) DEFAULT 'House'   NOT NULL,
   #   `source`
@@ -70,7 +71,8 @@ CREATE TABLE `crwlr_items` (
   `created`       DATETIME DEFAULT NOW(),
   `updated`       DATETIME                       NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `crwlr_items` (`id`)
+  UNIQUE KEY `crwlr_items_id` (`id`),
+  UNIQUE KEY `crwlr_items_url` (`url`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;

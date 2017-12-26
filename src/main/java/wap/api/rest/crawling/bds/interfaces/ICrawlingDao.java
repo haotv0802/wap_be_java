@@ -18,6 +18,8 @@ public interface ICrawlingDao {
 
   Long isItemExisting(String url);
 
+  Boolean isItemLinkedToCategory(Long id, Long categoryId);
+
   void addItem(Item product);
 
   void updateItem(Item product);

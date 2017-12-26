@@ -71,6 +71,7 @@ public class CrawlingService implements ICrawlingService {
           // Saving Product
           item.setCategoryId(crawlingTracking.getId());
           Long itemId = crawlingDao.isItemExisting(item.getUrl());
+
           if (itemId > 0) {
             crawlingDao.updateItem(item);
             item.setId(itemId);
@@ -82,7 +83,10 @@ public class CrawlingService implements ICrawlingService {
           crawlingDao.trackingItem(crawlingTracking.getId(), item.getId());
 
           // Add relationship between category & item.
-          crawlingDao.connectItemToCategory(category.getId(), item.getId());
+          Boolean itemLinkedToCategory = crawlingDao.isItemLinkedToCategory(item.getId(), category.getId());
+          if (!itemLinkedToCategory) {
+            crawlingDao.connectItemToCategory(category.getId(), item.getId());
+          }
         }
       }
 
@@ -94,7 +98,7 @@ public class CrawlingService implements ICrawlingService {
    * Get list of products from given Category.
    * @param categoryLink
    */
-  private void getTrackingAndItems(String categoryLink, Map<String, CrawlingTracking> categoryMap, Category category) {
+  private void getTrackingAndItems(String categoryLink, Map<String, CrawlingTracking> crawlingTrackingMap, Category category) {
     try {
       Document document = Jsoup.connect(categoryLink).get();
       String categoryName = document.select("div.product-list-page").get(0).select("div.Title").select("h1").get(0).text();
@@ -109,12 +113,12 @@ public class CrawlingService implements ICrawlingService {
 //      name = name.substring(0, name.indexOf("/"));
 //      category.setCategoryName(name);
 
-      CrawlingTracking crawlingTracking = categoryMap.get(categoryLink);
+      CrawlingTracking crawlingTracking = crawlingTrackingMap.get(categoryLink);
       if (null == crawlingTracking) {
         crawlingTracking = new CrawlingTracking();
         crawlingTracking.setName(categoryName);
         crawlingTracking.setUrl(categoryLink);
-        categoryMap.put(categoryLink, crawlingTracking);
+        crawlingTrackingMap.put(categoryLink, crawlingTracking);
       }
 
 //      document.select("div.background-pager-right-controls").get(0);

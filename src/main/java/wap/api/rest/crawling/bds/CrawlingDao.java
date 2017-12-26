@@ -112,6 +112,22 @@ public class CrawlingDao implements ICrawlingDao {
   }
 
   @Override
+  public Boolean isItemLinkedToCategory(Long id, Long categoryId) {
+    final String sql =
+          "SELECT                                           "
+        + "	COUNT(*)                                        "
+        + "FROM  crwlr_categories_items_details             "
+        + " WHERE                                           "
+        + "	category_id = :categoryId AND item_id = :itemId "
+        ;
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("categoryId", categoryId);
+    paramsMap.addValue("itemId", id);
+
+    return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0;
+  }
+
+  @Override
   public void addItem(Item item) {
     final String sql =
     "INSERT INTO crwlr_items (name, address, contactName, contactNumber, contactEmail, publish_date, end_date, url, acreage, price, district, city)    "

@@ -12,6 +12,8 @@ import wap.api.rest.crawling.bds.beans.Item;
 public interface ICrawlingDao {
   void addCrawlingTracking(CrawlingTracking crawlingTracking);
 
+  Long isCategoryExisting(String url);
+
   void addCategory(Category category);
 
   Long isItemExisting(String url);

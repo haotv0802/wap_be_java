@@ -60,6 +60,22 @@ public class CrawlingDao implements ICrawlingDao {
   }
 
   @Override
+  public Long isCategoryExisting(String url) {
+    final String sql =
+        "SELECT id FROM crwlr_categories where url = :url";
+    ;
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("url", url);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+    try {
+      return namedTemplate.queryForObject(sql, paramsMap, Long.class);
+    } catch (EmptyResultDataAccessException ex) {
+      return new Long(-1);
+    }
+  }
+
+  @Override
   public void addCategory(Category category) {
     final String sql =
         "INSERT INTO crwlr_categories (name, url, source)"

@@ -51,7 +51,12 @@ public class CrawlingService implements ICrawlingService {
     }
 
     // Saving category.
-    crawlingDao.addCategory(category);
+    Long categoryId = crawlingDao.isCategoryExisting(category.getUrl());
+    if (categoryId > 0) {
+      category.setId(categoryId);
+    } else {
+      crawlingDao.addCategory(category);
+    }
 
     Set<String> keys = crawlingTrackingMap.keySet();
     for (String key : keys) {

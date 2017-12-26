@@ -63,8 +63,6 @@ CREATE TABLE `crwlr_items` (
   `publish_date`  DATE                           NULL,
   `end_date`      DATE                           NULL,
   `url`           NVARCHAR(500)                  NULL,
-  `type`          VARCHAR(100) DEFAULT 'Selling' NOT NULL, # Selling house, buying house, selling apartment, buying apartment
-  `propertyType`  VARCHAR(100) DEFAULT 'House'   NOT NULL,
   #   `source`
   #   `crawling_start` DATETIME                   NOT NULL,
   #   `crawling_end`   DATETIME                   NOT NULL,

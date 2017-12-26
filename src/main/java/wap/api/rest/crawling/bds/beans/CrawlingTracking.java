@@ -16,6 +16,7 @@ public class CrawlingTracking {
   private Integer itemsCount = 0;
   private Integer itemsCrawled = 0;
   private Set<Item> items;
+  private Category category;
 
   public String getName() {
     return name;
@@ -78,5 +79,13 @@ public class CrawlingTracking {
 
   public void setItemsCrawled(Integer itemsCrawled) {
     this.itemsCrawled = itemsCrawled;
+  }
+
+  public Category getCategory() {
+    return category;
+  }
+
+  public void setCategory(Category category) {
+    this.category = category;
   }
 }

@@ -185,20 +185,20 @@ public class CrawlingDao implements ICrawlingDao {
     namedTemplate.update(sql, paramsMap);
   }
 
-  @Override
-  public void trackingItem(Long crawlingTrackingId, Long itemId) {
-    final String sql =
-        "INSERT INTO crwlr_crawling_tracking_items_details (crawling_tracking_id, item_id)"
-      + " VALUE (:crawling_tracking_id, :item_id)                                         ";
-
-    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-    paramsMap.addValue("crawling_tracking_id", crawlingTrackingId);
-    paramsMap.addValue("item_id", itemId);
-
-    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
-
-    namedTemplate.update(sql, paramsMap);
-  }
+//  @Override
+//  public void trackingItem(Long crawlingTrackingId, Long itemId) {
+//    final String sql =
+//        "INSERT INTO crwlr_crawling_tracking_items_details (crawling_tracking_id, item_id)"
+//      + " VALUE (:crawling_tracking_id, :item_id)                                         ";
+//
+//    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+//    paramsMap.addValue("crawling_tracking_id", crawlingTrackingId);
+//    paramsMap.addValue("item_id", itemId);
+//
+//    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+//
+//    namedTemplate.update(sql, paramsMap);
+//  }
 
   @Override
   public void connectItemToCategory(Long categoryId, Long itemId) {

@@ -95,18 +95,18 @@ CREATE TABLE `crwlr_categories_items_details` (
   DEFAULT CHARSET = utf8;
 
 --
--- Table structure for table `crwlr_categories`
---
-DROP TABLE IF EXISTS `crwlr_crawling_tracking_items_details`;
-CREATE TABLE `crwlr_crawling_tracking_items_details` (
-  `id`                   BIGINT   AUTO_INCREMENT,
-  `crawling_tracking_id` BIGINT NOT NULL,
-  `item_id`              BIGINT NOT NULL,
-  `created`              DATETIME DEFAULT NOW(),
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `crwlr_crawling_tracking_items_details_id` (`crawling_tracking_id`, `item_id`),
-  CONSTRAINT `crwlr_crawling_tracking_items_details_crawling_tracking_id` FOREIGN KEY (`crawling_tracking_id`) REFERENCES `crwlr_crawling_tracking` (`id`),
-  CONSTRAINT `crwlr_crawling_tracking_items_details_item_id` FOREIGN KEY (`item_id`) REFERENCES `crwlr_items` (`id`)
-)
-  ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
+# -- Table structure for table `crwlr_categories`
+# --
+# DROP TABLE IF EXISTS `crwlr_crawling_tracking_items_details`;
+# CREATE TABLE `crwlr_crawling_tracking_items_details` (
+#   `id`                   BIGINT   AUTO_INCREMENT,
+#   `crawling_tracking_id` BIGINT NOT NULL,
+#   `item_id`              BIGINT NOT NULL,
+#   `created`              DATETIME DEFAULT NOW(),
+#   PRIMARY KEY (`id`),
+#   UNIQUE KEY `crwlr_crawling_tracking_items_details_id` (`crawling_tracking_id`, `item_id`),
+#   CONSTRAINT `crwlr_crawling_tracking_items_details_crawling_tracking_id` FOREIGN KEY (`crawling_tracking_id`) REFERENCES `crwlr_crawling_tracking` (`id`),
+#   CONSTRAINT `crwlr_crawling_tracking_items_details_item_id` FOREIGN KEY (`item_id`) REFERENCES `crwlr_items` (`id`)
+# )
+#   ENGINE = InnoDB
+#   DEFAULT CHARSET = utf8;

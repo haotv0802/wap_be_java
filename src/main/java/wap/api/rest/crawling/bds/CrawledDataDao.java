@@ -123,7 +123,14 @@ public class CrawledDataDao implements ICrawledDataDao {
       }
 
     }
-    sql += " ORDER BY i.price ASC";
+    sql +=
+              " AND id IN (SELECT                        "
+            + "    MAX(id) nn                           "
+            + "FROM                                     "
+            + "    crwlr_items                          "
+            + "GROUP BY contactNumber , contactEmail)   "
+            + " ORDER BY i.price ASC                    "
+    ;
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 

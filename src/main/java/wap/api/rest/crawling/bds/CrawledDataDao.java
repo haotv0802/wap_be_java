@@ -40,9 +40,9 @@ public class CrawledDataDao implements ICrawledDataDao {
                     "SELECT                                        "
                   + "    i.name,                                   "
                   + "    i.address,                                "
-                  + "    i.contactName,                            "
-                  + "    i.contactNumber,                          "
-                  + "    i.contactEmail,                           "
+                  + "    i.contact_name,                            "
+                  + "    i.contact_number,                          "
+                  + "    i.contact_email,                           "
                   + "    i.publish_date,                           "
                   + "    i.end_date,                               "
                   + "    i.url                                     "
@@ -57,9 +57,9 @@ public class CrawledDataDao implements ICrawledDataDao {
       ItemPresenter presenter = new ItemPresenter();
       presenter.setTitle(rs.getString("name"));
       presenter.setAddress(rs.getString("address"));
-      presenter.setContactName(rs.getString("contactName"));
-      presenter.setContactEmail(rs.getString("contactEmail"));
-      presenter.setContactNumber(rs.getString("contactNumber"));
+      presenter.setContactName(rs.getString("contact_name"));
+      presenter.setContactEmail(rs.getString("contact_email"));
+      presenter.setContactNumber(rs.getString("contact_number"));
       presenter.setPublishDate(JdbcUtils.toUtilDate(rs.getDate("publish_date")));
       presenter.setEndDate(JdbcUtils.toUtilDate(rs.getDate("end_date")));
       presenter.setUrl(rs.getString("url"));
@@ -74,9 +74,9 @@ public class CrawledDataDao implements ICrawledDataDao {
               "SELECT                                        "
             + "    i.name,                                   "
             + "    i.address,                                "
-            + "    i.contactName,                            "
-            + "    i.contactNumber,                          "
-            + "    i.contactEmail,                           "
+            + "    i.contact_name,                            "
+            + "    i.contact_number,                          "
+            + "    i.contact_email,                           "
             + "    i.publish_date,                           "
             + "    i.acreage,                                "
             + "    i.city,                                   "
@@ -128,7 +128,7 @@ public class CrawledDataDao implements ICrawledDataDao {
             + "    MAX(id) nn                           "
             + "FROM                                     "
             + "    crwlr_items                          "
-            + "GROUP BY contactNumber , contactEmail)   "
+            + "GROUP BY contact_number , contact_email)   "
             + " ORDER BY i.price ASC                    "
     ;
 
@@ -138,9 +138,9 @@ public class CrawledDataDao implements ICrawledDataDao {
       ItemPresenter presenter = new ItemPresenter();
       presenter.setTitle(rs.getString("name"));
       presenter.setAddress(rs.getString("address"));
-      presenter.setContactName(rs.getString("contactName"));
-      presenter.setContactEmail(rs.getString("contactEmail"));
-      presenter.setContactNumber(rs.getString("contactNumber"));
+      presenter.setContactName(rs.getString("contact_name"));
+      presenter.setContactEmail(rs.getString("contact_email"));
+      presenter.setContactNumber(rs.getString("contact_number"));
       presenter.setPublishDate(JdbcUtils.toUtilDate(rs.getDate("publish_date")));
       presenter.setEndDate(JdbcUtils.toUtilDate(rs.getDate("end_date")));
       presenter.setUrl(rs.getString("url"));

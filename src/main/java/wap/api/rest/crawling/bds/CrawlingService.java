@@ -52,10 +52,7 @@ public class CrawlingService implements ICrawlingService {
     Set<String> keys = crawlingTrackingMap.keySet();
     for (String key : keys) {
       CrawlingTracking crawlingTracking = crawlingTrackingMap.get(key);
-      crawlingTracking.setItemsCount(crawlingTracking.getItems().size());
-      // Saving tracking info.
-      crawlingDao.addCrawlingTracking(crawlingTracking);
-
+      int itemsAddedCount = 0;
       Set<Item> items = crawlingTracking.getItems();
       if (null != items && items.size() > 0) {
         for (Item item: items) {
@@ -67,10 +64,8 @@ public class CrawlingService implements ICrawlingService {
             item.setId(itemId);
           } else {
             crawlingDao.addItem(item);
+            itemsAddedCount++;
           }
-
-          // Tracking item
-//          crawlingDao.trackingItem(crawlingTracking.getId(), item.getId());
 
           // Saving category.
           Category category = crawlingTracking.getCategory();
@@ -87,6 +82,11 @@ public class CrawlingService implements ICrawlingService {
             crawlingDao.connectItemToCategory(category.getId(), item.getId());
           }
         }
+
+        crawlingTracking.setItemsCount(crawlingTracking.getItems().size());
+        crawlingTracking.setItemsAdded(itemsAddedCount);
+        // Saving tracking info.
+        crawlingDao.addCrawlingTracking(crawlingTracking);
       }
 
     }
@@ -246,7 +246,7 @@ public class CrawlingService implements ICrawlingService {
       SimpleDateFormat spd = new SimpleDateFormat("dd-MM-yyyy");
       Item item = new Item();
       item.setTitle(title);
-//      item.setDescription(description);
+      item.setDescription(description);
       item.setAddress(address);
       item.setContactName(contactName);
       item.setContactNumber(contactMobile);

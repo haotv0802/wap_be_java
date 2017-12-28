@@ -11,6 +11,7 @@ import java.util.Date;
 public class Item {
   private Long id;
   private String title;
+  private String description;
   private String address;
   private String contactName;
   private String contactNumber;
@@ -55,13 +56,13 @@ public class Item {
     this.address = address;
   }
 
-//  public String getDescription() {
-//    return description;
-//  }
-//
-//  public void setDescription(String description) {
-//    this.description = description;
-//  }
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
   public String getContactName() {
     return contactName;

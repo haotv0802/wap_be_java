@@ -48,6 +48,20 @@ CREATE TABLE `crwlr_categories` (
   DEFAULT CHARSET = utf8;
 
 --
+-- Table structure for table `crwlr_locations`
+--
+DROP TABLE IF EXISTS `crwlr_locations`;
+CREATE TABLE `crwlr_locations` (
+  `id`       BIGINT AUTO_INCREMENT,
+  `city`     NVARCHAR(100),
+  `district` NVARCHAR(100),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `crwlr_locations_city_district` (`city`, `district`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+--
 -- Table structure for table `crwlr_items`
 --
 DROP TABLE IF EXISTS `crwlr_items`;
@@ -69,6 +83,7 @@ CREATE TABLE `crwlr_items` (
   `publish_date`   DATE                       NULL,
   `end_date`       DATE                       NULL,
   `url`            NVARCHAR(500)              NULL,
+  `location_id`    BIGINT                     NULL,
   #   `source`
   #   `crawling_start` DATETIME                   NOT NULL,
   #   `crawling_end`   DATETIME                   NOT NULL,
@@ -76,7 +91,8 @@ CREATE TABLE `crwlr_items` (
   `updated`        DATETIME                   NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `crwlr_items_id` (`id`),
-  UNIQUE KEY `crwlr_items_url` (`url`)
+  UNIQUE KEY `crwlr_items_url` (`url`),
+  CONSTRAINT `crwlr_items_location_id` FOREIGN KEY (`location_id`) REFERENCES `crwlr_locations` (`id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;

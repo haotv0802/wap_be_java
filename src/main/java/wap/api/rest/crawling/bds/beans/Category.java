@@ -11,6 +11,8 @@ public class Category {
   private String name;
   private String url;
   private String source;
+  private String type;
+  private String propertyType;
 
   public Long getId() {
     return id;
@@ -42,5 +44,21 @@ public class Category {
 
   public void setSource(String source) {
     this.source = source;
+  }
+
+  public String getType() {
+    return type;
+  }
+
+  public void setType(String type) {
+    this.type = type;
+  }
+
+  public String getPropertyType() {
+    return propertyType;
+  }
+
+  public void setPropertyType(String propertyType) {
+    this.propertyType = propertyType;
   }
 }

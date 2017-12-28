@@ -1,4 +1,4 @@
-package wap.api.rest.crawling.bds;
+package wap.api.rest.crawling.muaban;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,11 +23,11 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * Date: 12/21/2017
+ * Date: 12/28/2017
  *
  * @author haho
  */
-@Service("bdsCrawlingService")
+@Service("muabanCrawlingService")
 public class CrawlingService implements ICrawlingService {
 
   private final ICrawlingDao crawlingDao;
@@ -35,7 +35,7 @@ public class CrawlingService implements ICrawlingService {
   private final Logger LOGGER = LogManager.getLogger(getClass());
 
   @Autowired
-  public CrawlingService(@Qualifier("bdsCrawlingDao") ICrawlingDao crawlingDao) {
+  public CrawlingService(@Qualifier("muabanCrawlingDao") ICrawlingDao crawlingDao) {
     Assert.notNull(crawlingDao);
 
     this.crawlingDao = crawlingDao;
@@ -100,7 +100,7 @@ public class CrawlingService implements ICrawlingService {
   private void getTrackingAndItems(String pageLink, Map<String, CrawlingTracking> crawlingTrackingMap) {
     try {
       Document document = Jsoup.connect(pageLink).get();
-      String categoryName = document.select("div.product-list-page").get(0).select("div.Title").select("h1").get(0).text();
+      String categoryName = document.select("div.mbn-box-list").get(0).select("div.list-title").get(0).select("h1").text();
 
       Category category = new Category();
       category.setName(categoryName);
@@ -113,7 +113,8 @@ public class CrawlingService implements ICrawlingService {
       if (name.indexOf("/") > 0) {
         name = name.substring(0, name.indexOf("/"));
       }
-
+      category.setType("Buying");
+      category.setPropertyType("House");
 
       String categoryUrl = pageLink.substring(0, pageLink.indexOf(name) + name.length());
       category.setUrl(categoryUrl);
@@ -127,27 +128,24 @@ public class CrawlingService implements ICrawlingService {
         crawlingTrackingMap.put(pageLink, crawlingTracking);
       }
 
-//      document.select("div.background-pager-right-controls").get(0);
-//      document.select("div.background-pager-right-controls").get(0).child(1).attr("abs:href");
       String currentPage = pageLink;
       String nextPage = null;
       do {
         LOGGER.info(">>> Crawling on page: " + currentPage);
         document = Jsoup.connect(currentPage).get();
-        Elements hrefTagsPager = document.select("div.background-pager-right-controls").get(0).children();
+        Elements hrefTagsPager = document.select("div.paging").get(0).select("ul").get(0).select("li");
 
         Elements elements = document.select("div.Main");
-        Elements itemsList = elements.get(0).select("div.search-productItem");
+        Elements itemsList = document.select("div.mbn-box-left").get(0).select("div.mbn-box-list-content");
         for (Element element : itemsList) {
-          Elements titleOfProduct = element.select("div.p-title");
-          String link = titleOfProduct.get(0).select("a").attr("abs:href");
+          String link = element.select("a").get(0).attr("abs:href");
 
           getItemDetails(link, crawlingTracking);
         }
 
         for (int i = 0; i < hrefTagsPager.size(); i++) {
           Element href = hrefTagsPager.get(i);
-          String page = href.attr("abs:href");
+          String page = href.select("li").select("a").attr("abs:href");
           nextPage = null; // for the last page
           if (page.length() == currentPage.length() && page.lastIndexOf(currentPage) == 0) {
             nextPage = hrefTagsPager.get(i + 1).attr("abs:href");
@@ -174,89 +172,73 @@ public class CrawlingService implements ICrawlingService {
       Document document = Jsoup.connect(itemLink).get();
       Date start = new Date();
 
-      String description = document.select("div.pm-desc").get(0).text();
-      String title = document.select("div.pm-title").get(0).select("h1").get(0).text();
+      String description = document.select("div.ct-body.overflow.clearfix").get(0).text();
+      String title = document.select("div.cl-title.clearfix").get(0).text();
 
-      String acreage = document.select("div.kqchitiet").get(0).select("span.gia-title:not(.mar-right-15)").select("strong").get(0).text();
-      String[] acreageArray = acreage.split("m");
-      BigDecimal acreageInBigDecimal = null;
-      if (acreageArray.length == 2) {
-        acreage = acreageArray[0];
-        acreageInBigDecimal = new BigDecimal(acreage);
+      String contactName = "";
+      String contactMobile = "";
+      String address = "";
+      Elements contactsElements = document.select("div.ct-contact.clearfix");
+      if (null != contactsElements && contactsElements.size() > 0) {
+        Elements contactNameEl = contactsElements.get(0).select("div.clearfix").select("div.contact-name");
+        if (null != contactNameEl && contactNameEl.size() > 0) {
+          contactName = contactNameEl.get(0).text();
+        }
+        Elements contactMobileEl = contactsElements.get(0).select("div.clearfix").select("div.contact-mobile");
+        if (null != contactMobileEl && contactMobileEl.size() > 0) {
+          contactMobile = contactMobileEl.get(0).text();
+        }
+        if (null != contactNameEl && contactNameEl.size() > 1) {
+          address = contactNameEl.get(1).text();
+        }
       }
 
-      String price = document.select("div.kqchitiet").get(0).select("span.gia-title.mar-right-15").select("strong").get(0).text();
+      String publishDate = "";
+      String city = "";
+      String district = "";
+      String price = "";
       BigDecimal priceInBigDecimal = null;
-      String[] priceArray = price.split(" ");
-      if (priceArray.length == 2) {
-        price = priceArray[0];
-        String suffix = priceArray[1];
-        if (suffix.equals("tỷ ")) {
-          priceInBigDecimal = new BigDecimal(price).multiply(new BigDecimal(1000));
-        } else if (suffix.equals("triệu ")) {
-          priceInBigDecimal = new BigDecimal(price);
-        } else  if (suffix.equals("triệu/m² ")) {
-          if (null != acreageInBigDecimal) {
-            priceInBigDecimal = new BigDecimal(price).multiply(acreageInBigDecimal).multiply(new BigDecimal(1000));
+      String location = "";
+          Elements afterTittleEls = document.select("div.cl-price-sm.clearfix");
+      if (null != afterTittleEls && afterTittleEls.size() > 0) {
+        Elements priceAndLocationEles =  afterTittleEls.get(0).select("span.visible-lg.float-left");
+        if (null != priceAndLocationEles && priceAndLocationEles.size() > 0) {
+          if (priceAndLocationEles.size() == 1) {
+            location = priceAndLocationEles.get(0).childNode(1).toString();
+
+          } else if (priceAndLocationEles.size() == 2) {
+            price = priceAndLocationEles.get(0).text().split(" ")[1];
+            price = price.replace(".", "");
+            priceInBigDecimal = new BigDecimal(price).divide(new BigDecimal(1000000));
+            location = priceAndLocationEles.get(1).childNode(1).toString();
+          }
+          location = location.substring(city.indexOf("&nbsp;") + 7).trim();
+          String[] cityAndDistrict = location.split("-");
+          if (null != cityAndDistrict && cityAndDistrict.length == 2) {
+            district = cityAndDistrict[0].trim();
+            city = cityAndDistrict[1].trim();
+          } else {
+            city = location.trim();
           }
         }
-        if (null != priceInBigDecimal && priceInBigDecimal.compareTo(new BigDecimal("999999999"))  > 0) {
-          priceInBigDecimal = null;
-        }
+
+        publishDate = afterTittleEls.get(0).select("span.float-left:not(.visible-lg)").get(0).text();
+        publishDate = publishDate.substring(publishDate.indexOf(" Ngày ") + 6).trim();
       }
-
-      String location = document.select("div.kqchitiet").get(0).select("span.diadiem-title.mar-right-15").get(0).textNodes().get(2).text();
-      String[] locationArray = location.split("-");
-      String district = null;
-      String city = null;
-      if (locationArray.length == 2) {
-        city = locationArray[1].trim();
-      } else if (locationArray.length == 3) {
-        district = locationArray[1].trim();
-        city = locationArray[2].trim();
-      }
-
-      Element itemDescription = document.select("div.div-table").get(0);
-      String type = itemDescription.select("div.table-detail").get(0).select("div.row").get(0).select("div.right").get(0).text();
-      String address = itemDescription.select("div.table-detail").get(0).select("div.row").get(1).select("div.right").get(0).text();
-      String contactName = "";
-      Elements contactInfo = itemDescription.select("div.div-table-cell.table2").get(0).select("div.table-detail");
-      contactName = contactInfo.select("div#LeftMainContent__productDetail_contactName").size() > 0 ? contactInfo.select("div#LeftMainContent__productDetail_contactName").get(0).select("div.right").get(0).text() : "";
-//      String contactPhone = itemDescription.select("div.div-table-cell.table2").get(0).select("div.table-detail").select("div#LeftMainContent__productDetail_contactPhone").get(0).select("div.right").get(0).text();
-      String contactMobile = itemDescription.select("div.div-table-cell.table2").get(0).select("div.table-detail").select("div#LeftMainContent__productDetail_contactMobile").get(0).select("div.right").get(0).text();
-
-//      itemDescription.select("div.div-table-cell.table2").get(0).select("div.table-detail").select("div#contactEmail").get(0).select("script").first();
-      Elements unprocessedEmail_elements = itemDescription.getElementsByTag("script");
-      String email = "";
-      if (unprocessedEmail_elements.size() > 0) {
-        String unprocessedEmail = unprocessedEmail_elements.get(0).dataNodes().get(0).getWholeData();
-        unprocessedEmail = unprocessedEmail.substring(unprocessedEmail.indexOf("mailto:") + 7, unprocessedEmail.lastIndexOf("'>&#"));
-        String[] characters = unprocessedEmail.split(";");
-        email = getEmailFromCharaters(characters);
-      }
-
-      Element moreInfo = document.select("div.prd-more-info").get(0);
-      String publishDate = moreInfo.select("div").get(4).text();
-      publishDate = publishDate.substring(publishDate.lastIndexOf(": ") + 2);
-      String endDate = moreInfo.select("div").get(5).text();
-      endDate = endDate.substring(endDate.lastIndexOf(": ") + 2);
 
       Date end = new Date();
 
-      SimpleDateFormat spd = new SimpleDateFormat("dd-MM-yyyy");
+      SimpleDateFormat spd = new SimpleDateFormat("dd/MM/yyyy");
       Item item = new Item();
       item.setTitle(title);
-      item.setDescription(description);
       item.setAddress(address);
+      item.setDescription(description);
       item.setContactName(contactName);
       item.setContactNumber(contactMobile);
-      item.setContactEmail(email);
       item.setPublishDate(spd.parse(publishDate));
-      item.setEndDate(spd.parse(endDate));
-      item.setDistrict(district);
       item.setCity(city);
+      item.setDistrict(district);
       item.setPrice(priceInBigDecimal);
-      item.setAcreage(acreageInBigDecimal);
       item.setUrl(itemLink);
       item.setCrawlingStart(start);
       item.setCrawlingEnd(end);

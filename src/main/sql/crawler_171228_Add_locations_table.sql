@@ -1,5 +1,7 @@
 DROP DATABASE IF EXISTS `crawler_db4`;
-CREATE DATABASE IF NOT EXISTS `crawler_db4`;
+CREATE DATABASE IF NOT EXISTS `crawler_db4`
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_general_ci;
 USE `crawler_db4`;
 
 --

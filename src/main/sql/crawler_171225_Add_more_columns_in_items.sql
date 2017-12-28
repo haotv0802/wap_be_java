@@ -8,7 +8,7 @@ USE `crawler_db4`;
 DROP TABLE IF EXISTS `crwlr_crawling_tracking`;
 CREATE TABLE `crwlr_crawling_tracking` (
   `id`            BIGINT   AUTO_INCREMENT,
-  `name`          NVARCHAR(200)
+  `name`          VARCHAR(200)
                   CHARACTER SET utf8mb4
                   COLLATE utf8mb4_unicode_ci NULL,
   `url`           NVARCHAR(500)              NULL,
@@ -29,8 +29,8 @@ CREATE TABLE `crwlr_crawling_tracking` (
 DROP TABLE IF EXISTS `crwlr_categories`;
 CREATE TABLE `crwlr_categories` (
   `id`           BIGINT   AUTO_INCREMENT,
-  `name`         NVARCHAR(200)
-                 CHARACTER SET utf8 NULL,
+  `name`         VARCHAR(200)
+                 CHARACTER SET utf8                   NULL,
   `url`          NVARCHAR(500)                        NULL,
   `source`       NVARCHAR(100)                        NULL,
   #   `category_name` NVARCHAR(100)                        NULL,
@@ -53,7 +53,7 @@ CREATE TABLE `crwlr_categories` (
 DROP TABLE IF EXISTS `crwlr_items`;
 CREATE TABLE `crwlr_items` (
   `id`             BIGINT   AUTO_INCREMENT,
-  `name`           NVARCHAR(200)
+  `name`           VARCHAR(200)
                    CHARACTER SET utf8mb4
                    COLLATE utf8mb4_unicode_ci NULL,
   `address`        VARCHAR(300)               NULL,

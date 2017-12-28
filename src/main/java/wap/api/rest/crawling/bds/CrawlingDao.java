@@ -161,7 +161,7 @@ public class CrawlingDao implements ICrawlingDao {
   public void updateItem(Item item) {
     final String sql =
         "UPDATE crwlr_items SET name = :name, description = :description, address = :address, contact_number = :contact_number, acreage = :acreage,"
-      + " price = :price, district = :district, city = :city, contact_name =: contact_name,                                                        "
+      + " price = :price, district = :district, city = :city, contact_name = :contact_name,                                                        "
       + " contact_email = :contact_email, publish_date = :publish_date, end_date = :end_date, updated = :updated                                   "
       + " WHERE url = :url                                                                                                                         "
         ;

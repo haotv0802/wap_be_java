@@ -71,7 +71,7 @@ CREATE TABLE `crwlr_items` (
                    CHARACTER SET utf8mb4
                    COLLATE utf8mb4_unicode_ci NULL,
   `address`        VARCHAR(300)               NULL,
-  `description`    TEXT CHARACTER SET utf8mb4
+  `description`    LONGTEXT CHARACTER SET utf8mb4
                    COLLATE utf8mb4_unicode_ci NULL,
   `contact_name`   VARCHAR(200)               NULL,
   `contact_number` VARCHAR(45)                NULL,

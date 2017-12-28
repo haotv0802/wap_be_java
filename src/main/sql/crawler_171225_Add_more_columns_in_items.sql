@@ -108,3 +108,9 @@ CREATE TABLE `crwlr_categories_items_details` (
 # )
 #   ENGINE = InnoDB
 #   DEFAULT CHARSET = utf8;
+
+SELECT *
+FROM crwlr_items i WHERE 1 = 1 AND city = 'Hồ Chí Minh'  AND district like 'Quận Tân Phú'
+                         AND price >= 0 AND acreage >= 0
+                         AND id IN (SELECT MAX(id) nn FROM crwlr_items
+GROUP BY contactNumber , contactEmail) ORDER BY i.price ASC;

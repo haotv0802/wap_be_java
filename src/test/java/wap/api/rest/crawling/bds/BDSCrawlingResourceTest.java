@@ -49,11 +49,13 @@ public class BDSCrawlingResourceTest extends TestBase {
   @Test
   public void testExportCrawledData() throws Exception {
     Criterion criterion = new Criterion();
-    criterion.setPersonName("Thanh_BinhThanh");
+    criterion.setPersonName("LyLy_TanPhu");
     criterion.setCity("Hồ Chí Minh");
 //    criterion.setDistrict("Quận Gò Vấp");
 //    criterion.setDistrict("Quận 12");
-    criterion.setDistrict("Quận Bình Thạnh");
+//    criterion.setDistrict("Quận Bình Thạnh");
+    criterion.setDistrict("Quận Tân Phú");
+
 
 //    criterion.setAcreageLessThan("100");
 //    criterion.setAcreageLargerThan("80");

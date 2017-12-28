@@ -52,10 +52,7 @@ public class CrawlingService implements ICrawlingService {
     Set<String> keys = crawlingTrackingMap.keySet();
     for (String key : keys) {
       CrawlingTracking crawlingTracking = crawlingTrackingMap.get(key);
-      crawlingTracking.setItemsCount(crawlingTracking.getItems().size());
-      // Saving tracking info.
-      crawlingDao.addCrawlingTracking(crawlingTracking);
-
+      int itemsAddedCount = 0;
       Set<Item> items = crawlingTracking.getItems();
       if (null != items && items.size() > 0) {
         for (Item item: items) {
@@ -67,10 +64,8 @@ public class CrawlingService implements ICrawlingService {
             item.setId(itemId);
           } else {
             crawlingDao.addItem(item);
+            itemsAddedCount++;
           }
-
-          // Tracking item
-//          crawlingDao.trackingItem(crawlingTracking.getId(), item.getId());
 
           // Saving category.
           Category category = crawlingTracking.getCategory();
@@ -87,6 +82,11 @@ public class CrawlingService implements ICrawlingService {
             crawlingDao.connectItemToCategory(category.getId(), item.getId());
           }
         }
+
+        crawlingTracking.setItemsCount(crawlingTracking.getItems().size());
+        crawlingTracking.setItemsAdded(itemsAddedCount);
+        // Saving tracking info.
+        crawlingDao.addCrawlingTracking(crawlingTracking);
       }
 
     }
@@ -110,7 +110,9 @@ public class CrawlingService implements ICrawlingService {
       category.setSource(source.substring(0, source.indexOf("/")));
       String name = source;
       name = name.substring(name.indexOf("/") + 1);
-      name = name.substring(0, name.indexOf("/"));
+      if (name.indexOf("/") > 0) {
+        name = name.substring(0, name.indexOf("/"));
+      }
 //      category.setCategoryName(name);
 
       String categoryUrl = pageLink.substring(0, pageLink.indexOf(name) + name.length());
@@ -174,18 +176,6 @@ public class CrawlingService implements ICrawlingService {
 
       String description = document.select("div.pm-desc").get(0).text();
       String title = document.select("div.pm-title").get(0).select("h1").get(0).text();
-      String price = document.select("div.kqchitiet").get(0).select("span.gia-title.mar-right-15").select("strong").get(0).text();
-      BigDecimal priceInBigDecimal = null;
-      String[] priceArray = price.split(" ");
-      if (priceArray.length == 2) {
-        price = priceArray[0];
-        String suffix = priceArray[1];
-        if (suffix.equals("tỷ ")) {
-          priceInBigDecimal = new BigDecimal(price).multiply(new BigDecimal(1000000));
-        } else if (suffix.equals("triệu ")) {
-          priceInBigDecimal = new BigDecimal(price).multiply(new BigDecimal(1000));
-        }
-      }
 
       String acreage = document.select("div.kqchitiet").get(0).select("span.gia-title:not(.mar-right-15)").select("strong").get(0).text();
       String[] acreageArray = acreage.split("m");
@@ -193,6 +183,26 @@ public class CrawlingService implements ICrawlingService {
       if (acreageArray.length == 2) {
         acreage = acreageArray[0];
         acreageInBigDecimal = new BigDecimal(acreage);
+      }
+
+      String price = document.select("div.kqchitiet").get(0).select("span.gia-title.mar-right-15").select("strong").get(0).text();
+      BigDecimal priceInBigDecimal = null;
+      String[] priceArray = price.split(" ");
+      if (priceArray.length == 2) {
+        price = priceArray[0];
+        String suffix = priceArray[1];
+        if (suffix.equals("tỷ ")) {
+          priceInBigDecimal = new BigDecimal(price).multiply(new BigDecimal(1000));
+        } else if (suffix.equals("triệu ")) {
+          priceInBigDecimal = new BigDecimal(price);
+        } else  if (suffix.equals("triệu/m² ")) {
+          if (null != acreageInBigDecimal) {
+            priceInBigDecimal = new BigDecimal(price).multiply(acreageInBigDecimal).multiply(new BigDecimal(1000));
+          }
+        }
+        if (null != priceInBigDecimal && priceInBigDecimal.compareTo(new BigDecimal("999999999"))  > 0) {
+          priceInBigDecimal = null;
+        }
       }
 
       String location = document.select("div.kqchitiet").get(0).select("span.diadiem-title.mar-right-15").get(0).textNodes().get(2).text();
@@ -236,7 +246,7 @@ public class CrawlingService implements ICrawlingService {
       SimpleDateFormat spd = new SimpleDateFormat("dd-MM-yyyy");
       Item item = new Item();
       item.setTitle(title);
-//      item.setDescription(description);
+      item.setDescription(description);
       item.setAddress(address);
       item.setContactName(contactName);
       item.setContactNumber(contactMobile);

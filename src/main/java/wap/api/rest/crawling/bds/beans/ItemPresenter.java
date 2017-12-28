@@ -24,6 +24,21 @@ public class ItemPresenter {
   private BigDecimal acreage;
   private BigDecimal price;
 
+  @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof ItemPresenter)) {
+      return false;
+    }
+    ItemPresenter comparedItem = (ItemPresenter) obj;
+    if (comparedItem.getContactNumber().equals(this.getContactNumber())
+        && comparedItem.getContactEmail().equals(this.getContactEmail())) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
   public String getTitle() {
     return title;
   }

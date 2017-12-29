@@ -1,8 +1,8 @@
-DROP DATABASE IF EXISTS `crawler_db4`;
-CREATE DATABASE IF NOT EXISTS `crawler_db4`
+DROP DATABASE IF EXISTS `crawler_db_bds`;
+CREATE DATABASE IF NOT EXISTS `crawler_db_bds`
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci;
-USE `crawler_db4`;
+USE `crawler_db_bds`;
 
 --
 -- Table structure for table `crwlr_crawling_tracking`
@@ -30,17 +30,17 @@ CREATE TABLE `crwlr_crawling_tracking` (
 --
 DROP TABLE IF EXISTS `crwlr_categories`;
 CREATE TABLE `crwlr_categories` (
-  `id`           BIGINT   AUTO_INCREMENT,
-  `name`         VARCHAR(200)
-                 CHARACTER SET utf8                   NULL,
-  `url`          NVARCHAR(500)                        NULL,
-  `source`       NVARCHAR(100)                        NULL,
+  `id`            BIGINT   AUTO_INCREMENT,
+  `name`          VARCHAR(200)
+                  CHARACTER SET utf8                   NULL,
+  `url`           NVARCHAR(500)                        NULL,
+  `source`        NVARCHAR(100)                        NULL,
   #   `category_name` NVARCHAR(100)                        NULL,
-  `type`         VARCHAR(100) DEFAULT 'Selling'       NOT NULL, # Selling house, buying house, selling apartment, buying apartment
-  `propertyType` VARCHAR(100) DEFAULT 'House'         NOT NULL,
-  `city`         VARCHAR(100) DEFAULT 'Ho Chi Minh'   NOT NULL,
-  `district`     VARCHAR(100) DEFAULT 'ALL'           NOT NULL,
-  `created`      DATETIME DEFAULT NOW(),
+  `type`          VARCHAR(100) DEFAULT 'Selling'       NOT NULL, # Selling house, buying house, selling apartment, buying apartment
+  `property_type` VARCHAR(100) DEFAULT 'House'         NOT NULL,
+  `city`          VARCHAR(100) DEFAULT 'Ho Chi Minh'   NOT NULL,
+  `district`      VARCHAR(100) DEFAULT 'ALL'           NOT NULL,
+  `created`       DATETIME DEFAULT NOW(),
   #   `updated`      DATETIME      NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `crwlr_categories_id` (`id`),

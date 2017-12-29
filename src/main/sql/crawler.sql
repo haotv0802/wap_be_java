@@ -1,8 +1,8 @@
-DROP DATABASE IF EXISTS `crawler_db4`;
-CREATE DATABASE IF NOT EXISTS `crawler_db4`
+DROP DATABASE IF EXISTS `crawler_171229`;
+CREATE DATABASE IF NOT EXISTS `crawler_171229`
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci;
-USE `crawler_db4`;
+USE `crawler_171229`;
 
 --
 -- Table structure for table `crwlr_crawling_tracking`

@@ -143,6 +143,15 @@ public class CrawledDataService implements ICrawledDataService {
         continue;
       }
 
+      String name = item.getContactName().toLowerCase();
+      if (name.contains("real")
+        || name.contains("land")
+          || name.contains("bds")
+          || name.contains("bất động sản")
+          ) {
+        continue;
+      }
+
       row = sheet.createRow(++rowCount);
 
       columnCount = 0;

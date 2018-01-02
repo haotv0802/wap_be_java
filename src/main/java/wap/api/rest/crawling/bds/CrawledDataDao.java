@@ -71,22 +71,23 @@ public class CrawledDataDao implements ICrawledDataDao {
   @Override
   public List<ItemPresenter> getAllItemsByCriterion(Criterion criterion) {
     String sql =
-              "SELECT                                        "
-            + "    i.name,                                   "
-            + "    i.address,                                "
+              "SELECT                                         "
+            + "    i.name,                                    "
+            + "    i.address,                                 "
             + "    i.contact_name,                            "
             + "    i.contact_number,                          "
             + "    i.contact_email,                           "
-            + "    i.publish_date,                           "
-            + "    i.acreage,                                "
-            + "    i.city,                                   "
-            + "    i.district,                               "
-            + "    i.price,                                  "
-            + "    i.end_date,                               "
-            + "    i.end_date,                               "
-            + "    i.url                                     "
-            + "FROM                                          "
-            + "    crwlr_items i WHERE 1 = 1                 "
+            + "    i.publish_date,                            "
+            + "    i.acreage,                                 "
+            + "    i.city,                                    "
+            + "    i.district,                                "
+            + "    i.price,                                   "
+            + "    i.end_date,                                "
+            + "    i.end_date,                                "
+            + "    i.url                                      "
+            + "FROM                                           "
+            + "    crwlr_items i inner join crwlr_categories_items_details ci on i.id = ci.item_id  "
+            + "WHERE 1 = 1                                                                          "
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
 
@@ -123,12 +124,12 @@ public class CrawledDataDao implements ICrawledDataDao {
       }
 
     }
-    sql +=
-              " AND id IN (SELECT                        "
+    sql +=    " AND ci.category_id = 1                  "
+            + " AND i.id IN (SELECT                     "
             + "    MAX(id) nn                           "
             + "FROM                                     "
             + "    crwlr_items                          "
-            + "GROUP BY contact_number , contact_email)   "
+            + "GROUP BY contact_number , contact_email) "
             + " ORDER BY i.price ASC                    "
     ;
 

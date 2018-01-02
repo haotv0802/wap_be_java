@@ -132,7 +132,7 @@ public class CrawledDataService implements ICrawledDataService {
 
       columnCount = 0;
       cell = row.createCell(columnCount);
-      cell.setCellValue(rowCount - 1);
+      cell.setCellValue(rowCount);
       cell = row.createCell(++columnCount);
       cell.setCellValue(item.getContactName());
       cell = row.createCell(++columnCount);

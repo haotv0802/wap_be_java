@@ -18,9 +18,22 @@ CREATE TABLE `crwlr_crawling_tracking` (
   `items_crawled` INT                        NOT NULL,
   `items_added`   INT                        NOT NULL,
   `created_at`    DATETIME DEFAULT NOW(),
-  #   `updated`      DATETIME      NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `crwlr_crawling_tracking_id` (`id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+--
+-- Table structure for table `crwlr_locations`
+--
+DROP TABLE IF EXISTS `crwlr_locations`;
+CREATE TABLE `crwlr_locations` (
+  `id`       BIGINT AUTO_INCREMENT,
+  `city`     NVARCHAR(100),
+  `district` NVARCHAR(100),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `crwlr_locations_city_district` (`city`, `district`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -38,27 +51,13 @@ CREATE TABLE `crwlr_categories` (
   `source`        NVARCHAR(100)                        NULL,
   `type`          VARCHAR(100) DEFAULT 'Selling'       NOT NULL, # Selling house, buying house, selling apartment, buying apartment
   `property_type` VARCHAR(100) DEFAULT 'House'         NOT NULL,
-  `city`          VARCHAR(100) DEFAULT 'Ho Chi Minh'   NOT NULL,
-  `district`      VARCHAR(100) DEFAULT 'ALL'           NOT NULL,
+  `location_id`   BIGINT                               NOT NULL,
   `created_at`    DATETIME DEFAULT NOW(),
   #   `updated`      DATETIME      NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `crwlr_categories_id` (`id`),
-  UNIQUE KEY `crwlr_categories_url` (`url`)
-)
-  ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
-
---
--- Table structure for table `crwlr_locations`
---
-DROP TABLE IF EXISTS `crwlr_locations`;
-CREATE TABLE `crwlr_locations` (
-  `id`       BIGINT AUTO_INCREMENT,
-  `city`     NVARCHAR(100),
-  `district` NVARCHAR(100),
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `crwlr_locations_city_district` (`city`, `district`)
+  UNIQUE KEY `crwlr_categories_url` (`url`),
+  CONSTRAINT `crwlr_categories_location_id` FOREIGN KEY (`location_id`) REFERENCES `crwlr_locations` (`id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;

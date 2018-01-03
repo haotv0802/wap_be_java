@@ -13,6 +13,7 @@ public class Category {
   private String source;
   private String type;
   private String propertyType;
+  private Long locationId;
 
   public Long getId() {
     return id;
@@ -60,5 +61,13 @@ public class Category {
 
   public void setPropertyType(String propertyType) {
     this.propertyType = propertyType;
+  }
+
+  public Long getLocationId() {
+    return locationId;
+  }
+
+  public void setLocationId(Long locationId) {
+    this.locationId = locationId;
   }
 }

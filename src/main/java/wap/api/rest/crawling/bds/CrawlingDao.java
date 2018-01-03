@@ -77,16 +77,53 @@ public class CrawlingDao implements ICrawlingDao {
   }
 
   @Override
+  public Long isLocationExisting(String district, String city) {
+    final String sql =
+        "SELECT id FROM crwlr_locations WHERE district = :district AND city = :city";
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("district", district);
+    paramsMap.addValue("city", city);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+    try {
+      return namedTemplate.queryForObject(sql, paramsMap, Long.class);
+    } catch (EmptyResultDataAccessException ex) {
+      return new Long(-1);
+    }
+  }
+
+
+  @Override
+  public Long addLocation(String district, String city) {
+    final String sql =
+              "INSERT INTO crwlr_locations (district, city)"
+            + " VALUE (:district, :city)                   "
+        ;
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("district", district);
+    paramsMap.addValue("city", city);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    KeyHolder keyHolder = new GeneratedKeyHolder();
+    namedTemplate.update(sql, paramsMap, keyHolder);
+    return keyHolder.getKey().longValue();
+  }
+
+  @Override
   public void addCategory(Category category) {
     final String sql =
-        "INSERT INTO crwlr_categories (name, url, source)"
-      + " VALUE (:name, :url, :source)                   "
+        "INSERT INTO crwlr_categories (name, url, source, location_id)"
+      + " VALUE (:name, :url, :source, :location_id)                  "
         ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("name", category.getName());
     paramsMap.addValue("url", category.getUrl());
     paramsMap.addValue("source", category.getSource());
+    paramsMap.addValue("location_id", category.getLocationId());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 

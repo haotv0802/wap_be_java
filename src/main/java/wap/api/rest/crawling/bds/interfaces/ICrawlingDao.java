@@ -14,6 +14,10 @@ public interface ICrawlingDao {
 
   Long isCategoryExisting(String url);
 
+  Long isLocationExisting(String district, String city);
+
+  Long addLocation(String district, String city);
+
   void addCategory(Category category);
 
   Long isItemExisting(String url);
@@ -23,8 +27,6 @@ public interface ICrawlingDao {
   void addItem(Item product);
 
   void updateItem(Item product);
-
-//  void trackingItem(Long crawlingTrackingId, Long itemId);
 
   void connectItemToCategory(Long categoryId, Long itemId);
 }

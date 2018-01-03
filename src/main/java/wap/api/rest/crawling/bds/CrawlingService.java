@@ -1,5 +1,6 @@
 package wap.api.rest.crawling.bds;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
@@ -100,11 +101,31 @@ public class CrawlingService implements ICrawlingService {
   private void getTrackingAndItems(String pageLink, Map<String, CrawlingTracking> crawlingTrackingMap) {
     try {
       Document document = Jsoup.connect(pageLink).get();
-      String categoryName = document.select("div.product-list-page").get(0).select("div.Title").select("h1").get(0).text();
+      Elements titleElements = document.select("div.product-list-page").select("div.Title");
+      String categoryName = titleElements.select("h1").get(0).text();
+      Element titleFooterEles = titleElements.select("div.Footer").get(0);
+      String district = null;
+      String city = null;
+      for(int i = 0; i < titleFooterEles.childNodes().size(); i++) {
+        String strAsNode = titleFooterEles.childNodes().get(i).toString();
+        strAsNode = StringUtils.stripAccents(strAsNode);
+        if (strAsNode.equals(". Quan/Huyen: ")) {
+          district = titleFooterEles.childNodes().get(++i).childNode(0).childNode(0).toString();
+          district = StringUtils.stripAccents(district);
+        } else if (strAsNode.equals(". Tinh/Tp: ")) {
+          city = titleFooterEles.childNodes().get(++i).childNode(0).childNode(0).toString();
+          city = StringUtils.stripAccents(city);
+        }
+      }
+
+      Long locationId = this.crawlingDao.isLocationExisting(district, city);
+      if (locationId < 0) {
+        locationId = this.crawlingDao.addLocation(district, city);
+      }
 
       Category category = new Category();
       category.setName(categoryName);
-//      category.setUrl(pageLink);
+      category.setLocationId(locationId);
       String source = pageLink;
       source = source.substring(source.indexOf("//") + 2);
       category.setSource(source.substring(0, source.indexOf("/")));
@@ -191,11 +212,12 @@ public class CrawlingService implements ICrawlingService {
       if (priceArray.length == 2) {
         price = priceArray[0];
         String suffix = priceArray[1];
-        if (suffix.equals("tỷ ")) {
+        suffix = StringUtils.stripAccents(suffix);
+        if (suffix.equals("ty ")) {
           priceInBigDecimal = new BigDecimal(price).multiply(new BigDecimal(1000));
-        } else if (suffix.equals("triệu ")) {
+        } else if (suffix.equals("trieu ")) {
           priceInBigDecimal = new BigDecimal(price);
-        } else  if (suffix.equals("triệu/m² ")) {
+        } else  if (suffix.equals("trieu/m² ")) {
           if (null != acreageInBigDecimal) {
             priceInBigDecimal = new BigDecimal(price).multiply(acreageInBigDecimal);
           }

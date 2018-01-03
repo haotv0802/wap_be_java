@@ -119,13 +119,15 @@ public class CrawlingService implements ICrawlingService {
       }
 
       Long locationId = this.crawlingDao.isLocationExisting(district, city);
-      if (locationId < 0) {
+      if (StringUtils.isEmpty(city) && StringUtils.isEmpty(district)) {
+        locationId = (long) -1;
+      } else if (locationId < 0) {
         locationId = this.crawlingDao.addLocation(district, city);
       }
 
       Category category = new Category();
       category.setName(categoryName);
-      category.setLocationId(locationId);
+      category.setLocationId(locationId < 0 ? null : locationId);
       String source = pageLink;
       source = source.substring(source.indexOf("//") + 2);
       category.setSource(source.substring(0, source.indexOf("/")));
@@ -198,7 +200,35 @@ public class CrawlingService implements ICrawlingService {
       String description = document.select("div.pm-desc").get(0).text();
       String title = document.select("div.pm-title").get(0).select("h1").get(0).text();
 
-      String acreage = document.select("div.kqchitiet").get(0).select("span.gia-title:not(.mar-right-15)").select("strong").get(0).text();
+      Element productHeaderEl = document.select("div.kqchitiet").get(0);
+
+//      String[] districtAndCity = productHeaderEl.select("span.diadiem-title.mar-right-15").get(0).childNodes().get(4).toString().split("-");
+      String district = null;
+      String city = null;
+//      if (null != districtAndCity && districtAndCity.length > 2) {
+//        district = StringUtils.stripAccents(districtAndCity[1].trim());
+//        city = StringUtils.stripAccents(districtAndCity[2].trim());
+//      }
+
+      String location = productHeaderEl.select("span.diadiem-title.mar-right-15").get(0).textNodes().get(2).text();
+      String[] locationArray = location.split("-");
+      if (locationArray.length == 2) {
+        city = StringUtils.stripAccents(locationArray[1].trim());
+      } else if (locationArray.length == 3) {
+        district = StringUtils.stripAccents(locationArray[1].trim());
+        if (district.contains("Quan")) {
+          district = district.replace("Quan", "").trim();
+        }
+        city = StringUtils.stripAccents(locationArray[2].trim());
+      }
+      Long locationId = this.crawlingDao.isLocationExisting(district, city);
+      if (StringUtils.isEmpty(city) && StringUtils.isEmpty(district)) {
+        locationId = (long) -1;
+      } else if (locationId < 0) {
+        locationId = this.crawlingDao.addLocation(district, city);
+      }
+
+      String acreage = productHeaderEl.select("span.gia-title:not(.mar-right-15)").select("strong").get(0).text();
       String[] acreageArray = acreage.split("m");
       BigDecimal acreageInBigDecimal = null;
       if (acreageArray.length == 2) {
@@ -206,7 +236,7 @@ public class CrawlingService implements ICrawlingService {
         acreageInBigDecimal = new BigDecimal(acreage);
       }
 
-      String price = document.select("div.kqchitiet").get(0).select("span.gia-title.mar-right-15").select("strong").get(0).text();
+      String price = productHeaderEl.select("span.gia-title.mar-right-15").select("strong").get(0).text();
       BigDecimal priceInBigDecimal = null;
       String[] priceArray = price.split(" ");
       if (priceArray.length == 2) {
@@ -225,17 +255,6 @@ public class CrawlingService implements ICrawlingService {
         if (null != priceInBigDecimal && priceInBigDecimal.compareTo(new BigDecimal("999999999"))  > 0) {
           priceInBigDecimal = null;
         }
-      }
-
-      String location = document.select("div.kqchitiet").get(0).select("span.diadiem-title.mar-right-15").get(0).textNodes().get(2).text();
-      String[] locationArray = location.split("-");
-      String district = null;
-      String city = null;
-      if (locationArray.length == 2) {
-        city = locationArray[1].trim();
-      } else if (locationArray.length == 3) {
-        district = locationArray[1].trim();
-        city = locationArray[2].trim();
       }
 
       Element itemDescription = document.select("div.div-table").get(0);
@@ -275,10 +294,9 @@ public class CrawlingService implements ICrawlingService {
       item.setContactEmail(email);
       item.setPublishDate(spd.parse(publishDate));
       item.setEndDate(spd.parse(endDate));
-      item.setDistrict(district);
-      item.setCity(city);
       item.setPrice(priceInBigDecimal);
       item.setAcreage(acreageInBigDecimal);
+      item.setLocationId(locationId < 0 ? null : locationId);
       item.setUrl(itemLink);
       item.setCrawlingStart(start);
       item.setCrawlingEnd(end);

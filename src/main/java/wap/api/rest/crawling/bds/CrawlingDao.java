@@ -168,8 +168,8 @@ public class CrawlingDao implements ICrawlingDao {
   @Override
   public void addItem(Item item) {
     final String sql =
-    "INSERT INTO crwlr_items (name, description, address, contact_name, contact_number, contact_email, publish_date, end_date, url, acreage, price, district, city)    "
-  + " VALUE (:name, :description, :address, :contact_name, :contact_number, :contact_email, :publishDate, :endDate, :url, :acreage, :price, :district, :city)           ";
+    "INSERT INTO crwlr_items (name, description, address, contact_name, contact_number, contact_email, publish_date, end_date, url, acreage, price, location_id)   "
+  + " VALUE (:name, :description, :address, :contact_name, :contact_number, :contact_email, :publishDate, :endDate, :url, :acreage, :price, :locationId)           ";
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("name", item.getTitle());
@@ -183,8 +183,7 @@ public class CrawlingDao implements ICrawlingDao {
     paramsMap.addValue("url", item.getUrl());
     paramsMap.addValue("acreage", item.getAcreage());
     paramsMap.addValue("price", item.getPrice());
-    paramsMap.addValue("district", item.getDistrict());
-    paramsMap.addValue("city", item.getCity());
+    paramsMap.addValue("locationId", item.getLocationId());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
@@ -198,7 +197,7 @@ public class CrawlingDao implements ICrawlingDao {
   public void updateItem(Item item) {
     final String sql =
         "UPDATE crwlr_items SET name = :name, description = :description, address = :address, contact_number = :contact_number, acreage = :acreage,"
-      + " price = :price, district = :district, city = :city, contact_name = :contact_name,                                                        "
+      + " price = :price, location_id = :locationId, contact_name = :contact_name,                                                                 "
       + " contact_email = :contact_email, publish_date = :publish_date, end_date = :end_date, updated_at = :updated                                "
       + " WHERE url = :url                                                                                                                         "
         ;
@@ -214,29 +213,13 @@ public class CrawlingDao implements ICrawlingDao {
     paramsMap.addValue("url", item.getUrl());
     paramsMap.addValue("acreage", item.getAcreage());
     paramsMap.addValue("price", item.getPrice());
-    paramsMap.addValue("district", item.getDistrict());
-    paramsMap.addValue("city", item.getCity());
+    paramsMap.addValue("locationId", item.getLocationId());
     paramsMap.addValue("updated", new Date());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
     namedTemplate.update(sql, paramsMap);
   }
-
-//  @Override
-//  public void trackingItem(Long crawlingTrackingId, Long itemId) {
-//    final String sql =
-//        "INSERT INTO crwlr_crawling_tracking_items_details (crawling_tracking_id, item_id)"
-//      + " VALUE (:crawling_tracking_id, :item_id)                                         ";
-//
-//    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-//    paramsMap.addValue("crawling_tracking_id", crawlingTrackingId);
-//    paramsMap.addValue("item_id", itemId);
-//
-//    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
-//
-//    namedTemplate.update(sql, paramsMap);
-//  }
 
   @Override
   public void connectItemToCategory(Long categoryId, Long itemId) {

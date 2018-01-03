@@ -18,14 +18,13 @@ public class Item {
   private String contactEmail;
   private Date publishDate;
   private Date endDate;
-  private String district;
-  private String city;
   private BigDecimal acreage;
   private BigDecimal price;
   private String url;
   private Date crawlingStart;
   private Date crawlingEnd;
   private Long crawlingTime;
+  private Long locationId;
 
   @Override
   public boolean equals(Object obj) {
@@ -160,19 +159,11 @@ public class Item {
     this.id = id;
   }
 
-  public String getDistrict() {
-    return district;
+  public Long getLocationId() {
+    return locationId;
   }
 
-  public void setDistrict(String district) {
-    this.district = district;
-  }
-
-  public String getCity() {
-    return city;
-  }
-
-  public void setCity(String city) {
-    this.city = city;
+  public void setLocationId(Long locationId) {
+    this.locationId = locationId;
   }
 }

@@ -51,7 +51,7 @@ CREATE TABLE `crwlr_categories` (
   `source`        NVARCHAR(100)                        NULL,
   `type`          VARCHAR(100) DEFAULT 'Selling'       NOT NULL, # Selling house, buying house, selling apartment, buying apartment
   `property_type` VARCHAR(100) DEFAULT 'House'         NOT NULL,
-  `location_id`   BIGINT                               NOT NULL,
+  `location_id`   BIGINT                               NULL,
   `created_at`    DATETIME DEFAULT NOW(),
   #   `updated`      DATETIME      NULL,
   PRIMARY KEY (`id`),
@@ -81,12 +81,10 @@ CREATE TABLE `crwlr_items` (
   `contact_email`  VARCHAR(100)               NULL,
   `acreage`        DECIMAL(13, 2)             NULL,
   `price`          DECIMAL(13, 2)             NULL,
-  `district`       VARCHAR(50)                NULL,
-  `city`           VARCHAR(50)                NULL,
   `publish_date`   DATE                       NULL,
   `end_date`       DATE                       NULL,
   `url`            NVARCHAR(500)              NULL,
-  `location_id`    BIGINT                     NULL,
+  `location_id`    BIGINT                     NOT NULL,
   #   `source`
   #   `crawling_start` DATETIME                   NOT NULL,
   #   `crawling_end`   DATETIME                   NOT NULL,

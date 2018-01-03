@@ -246,7 +246,7 @@ public class CrawlingService implements ICrawlingService {
       SimpleDateFormat spd = new SimpleDateFormat("dd-MM-yyyy");
       Item item = new Item();
       item.setTitle(title);
-//      item.setDescription(description);
+      item.setDescription(description);
       item.setAddress(address);
       item.setContactName(contactName);
       item.setContactNumber(contactMobile);

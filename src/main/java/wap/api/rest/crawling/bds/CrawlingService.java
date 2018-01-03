@@ -197,7 +197,7 @@ public class CrawlingService implements ICrawlingService {
           priceInBigDecimal = new BigDecimal(price);
         } else  if (suffix.equals("triệu/m² ")) {
           if (null != acreageInBigDecimal) {
-            priceInBigDecimal = new BigDecimal(price).multiply(acreageInBigDecimal).multiply(new BigDecimal(1000));
+            priceInBigDecimal = new BigDecimal(price).multiply(acreageInBigDecimal);
           }
         }
         if (null != priceInBigDecimal && priceInBigDecimal.compareTo(new BigDecimal("999999999"))  > 0) {
@@ -246,7 +246,7 @@ public class CrawlingService implements ICrawlingService {
       SimpleDateFormat spd = new SimpleDateFormat("dd-MM-yyyy");
       Item item = new Item();
       item.setTitle(title);
-      item.setDescription(description);
+//      item.setDescription(description);
       item.setAddress(address);
       item.setContactName(contactName);
       item.setContactNumber(contactMobile);

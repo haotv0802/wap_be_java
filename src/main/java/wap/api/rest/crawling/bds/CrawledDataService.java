@@ -128,11 +128,35 @@ public class CrawledDataService implements ICrawledDataService {
     List<ItemPresenter> list = crawledDataDao.getAllItemsByCriterion(criterion);
 
     for (ItemPresenter item : list) {
+      String email = item.getContactEmail().toLowerCase();
+      if (   email.contains("bds")
+          || email.contains("batdongsan")
+          || email.contains("real")
+          || email.contains("diaocsaigon")
+          || email.contains("nhadat")
+          || email.contains("saigonhousecenter")
+          || email.contains("saigoncenterreal")
+          || email.contains("land")
+          || email.contains("anhkhoiviettin")
+          || email.contains("vinhomes")
+          || email.contains("richgroup")) {
+        continue;
+      }
+
+      String name = item.getContactName().toLowerCase();
+      if (name.contains("real")
+        || name.contains("land")
+          || name.contains("bds")
+          || name.contains("bất động sản")
+          ) {
+        continue;
+      }
+
       row = sheet.createRow(++rowCount);
 
       columnCount = 0;
       cell = row.createCell(columnCount);
-      cell.setCellValue(rowCount - 1);
+      cell.setCellValue(rowCount);
       cell = row.createCell(++columnCount);
       cell.setCellValue(item.getContactName());
       cell = row.createCell(++columnCount);

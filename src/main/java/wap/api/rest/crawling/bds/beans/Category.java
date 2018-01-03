@@ -14,6 +14,9 @@ public class Category {
   private String type;
   private String propertyType;
   private Long locationId;
+  private String district;
+  private String city;
+
 
   public Long getId() {
     return id;
@@ -69,5 +72,21 @@ public class Category {
 
   public void setLocationId(Long locationId) {
     this.locationId = locationId;
+  }
+
+  public String getDistrict() {
+    return district;
+  }
+
+  public void setDistrict(String district) {
+    this.district = district;
+  }
+
+  public String getCity() {
+    return city;
+  }
+
+  public void setCity(String city) {
+    this.city = city;
   }
 }

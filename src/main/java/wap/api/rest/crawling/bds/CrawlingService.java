@@ -19,6 +19,7 @@ import wap.api.rest.crawling.bds.interfaces.ICrawlingService;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.Normalizer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -59,7 +60,13 @@ public class CrawlingService implements ICrawlingService {
         for (Item item: items) {
           // Saving Product
           Long itemId = crawlingDao.isItemExisting(item.getUrl());
-
+          Long locationId = this.crawlingDao.isLocationExisting(item.getDistrict(), item.getCity());
+          if (StringUtils.isEmpty(item.getCity()) && StringUtils.isEmpty(item.getDistrict())) {
+            locationId = (long) -1;
+          } else if (locationId < 0) {
+            locationId = this.crawlingDao.addLocation(item.getDistrict(), item.getCity());
+          }
+          item.setLocationId(locationId < 0 ? null : locationId);
           if (itemId > 0) {
             crawlingDao.updateItem(item);
             item.setId(itemId);
@@ -71,6 +78,13 @@ public class CrawlingService implements ICrawlingService {
           // Saving category.
           Category category = crawlingTracking.getCategory();
           Long categoryId = crawlingDao.isCategoryExisting(category.getUrl());
+          locationId = this.crawlingDao.isLocationExisting(category.getDistrict(), category.getCity());
+          if (StringUtils.isEmpty(category.getCity()) && StringUtils.isEmpty(category.getDistrict())) {
+            locationId = (long) -1;
+          } else if (locationId < 0) {
+            locationId = this.crawlingDao.addLocation(category.getDistrict(), category.getCity());
+          }
+          category.setLocationId(locationId < 0 ? null : locationId);
           if (categoryId > 0) {
             category.setId(categoryId);
           } else {
@@ -118,16 +132,18 @@ public class CrawlingService implements ICrawlingService {
         }
       }
 
-      Long locationId = this.crawlingDao.isLocationExisting(district, city);
-      if (StringUtils.isEmpty(city) && StringUtils.isEmpty(district)) {
-        locationId = (long) -1;
-      } else if (locationId < 0) {
-        locationId = this.crawlingDao.addLocation(district, city);
-      }
+//      Long locationId = this.crawlingDao.isLocationExisting(district, city);
+//      if (StringUtils.isEmpty(city) && StringUtils.isEmpty(district)) {
+//        locationId = (long) -1;
+//      } else if (locationId < 0) {
+//        locationId = this.crawlingDao.addLocation(district, city);
+//      }
 
       Category category = new Category();
       category.setName(categoryName);
-      category.setLocationId(locationId < 0 ? null : locationId);
+//      category.setLocationId(locationId < 0 ? null : locationId);
+      category.setCity(city);
+      category.setDistrict(district);
       String source = pageLink;
       source = source.substring(source.indexOf("//") + 2);
       category.setSource(source.substring(0, source.indexOf("/")));
@@ -221,12 +237,12 @@ public class CrawlingService implements ICrawlingService {
         }
         city = StringUtils.stripAccents(locationArray[2].trim());
       }
-      Long locationId = this.crawlingDao.isLocationExisting(district, city);
-      if (StringUtils.isEmpty(city) && StringUtils.isEmpty(district)) {
-        locationId = (long) -1;
-      } else if (locationId < 0) {
-        locationId = this.crawlingDao.addLocation(district, city);
-      }
+//      Long locationId = this.crawlingDao.isLocationExisting(district, city);
+//      if (StringUtils.isEmpty(city) && StringUtils.isEmpty(district)) {
+//        locationId = (long) -1;
+//      } else if (locationId < 0) {
+//        locationId = this.crawlingDao.addLocation(district, city);
+//      }
 
       String acreage = productHeaderEl.select("span.gia-title:not(.mar-right-15)").select("strong").get(0).text();
       String[] acreageArray = acreage.split("m");
@@ -296,7 +312,9 @@ public class CrawlingService implements ICrawlingService {
       item.setEndDate(spd.parse(endDate));
       item.setPrice(priceInBigDecimal);
       item.setAcreage(acreageInBigDecimal);
-      item.setLocationId(locationId < 0 ? null : locationId);
+//      item.setLocationId(locationId < 0 ? null : locationId);
+      item.setCity(city);
+      item.setDistrict(district);
       item.setUrl(itemLink);
       item.setCrawlingStart(start);
       item.setCrawlingEnd(end);

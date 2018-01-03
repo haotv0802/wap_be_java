@@ -1,8 +1,8 @@
-DROP DATABASE IF EXISTS `crawler_db_180103`;
-CREATE DATABASE IF NOT EXISTS `crawler_db_180103`
+DROP DATABASE IF EXISTS `crawler_db_180104`;
+CREATE DATABASE IF NOT EXISTS `crawler_db_180104`
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
-USE `crawler_db_180103`;
+USE `crawler_db_180104`;
 
 --
 -- Table structure for table `crwlr_crawling_tracking`
@@ -17,7 +17,7 @@ CREATE TABLE `crwlr_crawling_tracking` (
   `items_count`   INT                        NOT NULL,
   `items_crawled` INT                        NOT NULL,
   `items_added`   INT                        NOT NULL,
-  `created`       DATETIME DEFAULT NOW(),
+  `created_at`    DATETIME DEFAULT NOW(),
   #   `updated`      DATETIME      NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `crwlr_crawling_tracking_id` (`id`)
@@ -40,7 +40,7 @@ CREATE TABLE `crwlr_categories` (
   `property_type` VARCHAR(100) DEFAULT 'House'         NOT NULL,
   `city`          VARCHAR(100) DEFAULT 'Ho Chi Minh'   NOT NULL,
   `district`      VARCHAR(100) DEFAULT 'ALL'           NOT NULL,
-  `created`       DATETIME DEFAULT NOW(),
+  `created_at`    DATETIME DEFAULT NOW(),
   #   `updated`      DATETIME      NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `crwlr_categories_id` (`id`),
@@ -91,8 +91,8 @@ CREATE TABLE `crwlr_items` (
   #   `source`
   #   `crawling_start` DATETIME                   NOT NULL,
   #   `crawling_end`   DATETIME                   NOT NULL,
-  `created`        DATETIME DEFAULT NOW(),
-  `updated`        DATETIME                   NULL,
+  `created_at`     DATETIME DEFAULT NOW(),
+  `updated_at`     DATETIME                   NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `crwlr_items_id` (`id`),
   UNIQUE KEY `crwlr_items_url` (`url`),

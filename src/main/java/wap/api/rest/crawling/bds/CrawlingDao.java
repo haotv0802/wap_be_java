@@ -162,7 +162,7 @@ public class CrawlingDao implements ICrawlingDao {
     final String sql =
         "UPDATE crwlr_items SET name = :name, description = :description, address = :address, contact_number = :contact_number, acreage = :acreage,"
       + " price = :price, district = :district, city = :city, contact_name = :contact_name,                                                        "
-      + " contact_email = :contact_email, publish_date = :publish_date, end_date = :end_date, updated = :updated                                   "
+      + " contact_email = :contact_email, publish_date = :publish_date, end_date = :end_date, updated_at = :updated                                "
       + " WHERE url = :url                                                                                                                         "
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
@@ -205,7 +205,7 @@ public class CrawlingDao implements ICrawlingDao {
   public void connectItemToCategory(Long categoryId, Long itemId) {
     final String sql =
         "INSERT INTO crwlr_categories_items_details (category_id, item_id)"
-      + " VALUE (:category_id, :item_id)                                         ";
+      + " VALUE (:category_id, :item_id)                                  ";
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("category_id", categoryId);

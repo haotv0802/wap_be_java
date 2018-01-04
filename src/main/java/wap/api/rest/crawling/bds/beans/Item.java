@@ -30,6 +30,8 @@ public class Item {
   private Long locationId;
   private String district;
   private String city;
+  private Long contactId;
+  private Long contactBackupId;
 
   @Override
   public boolean equals(Object obj) {
@@ -210,5 +212,21 @@ public class Item {
 
   public void setPropertyType(String propertyType) {
     this.propertyType = propertyType;
+  }
+
+  public Long getContactId() {
+    return contactId;
+  }
+
+  public void setContactId(Long contactId) {
+    this.contactId = contactId;
+  }
+
+  public Long getContactBackupId() {
+    return contactBackupId;
+  }
+
+  public void setContactBackupId(Long contactBackupId) {
+    this.contactBackupId = contactBackupId;
   }
 }

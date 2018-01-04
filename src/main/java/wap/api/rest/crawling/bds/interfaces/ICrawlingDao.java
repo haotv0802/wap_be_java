@@ -1,5 +1,6 @@
 package wap.api.rest.crawling.bds.interfaces;
 
+import wap.api.rest.crawling.bds.beans.Contact;
 import wap.api.rest.crawling.bds.beans.CrawlingTracking;
 import wap.api.rest.crawling.bds.beans.Item;
 
@@ -14,6 +15,12 @@ public interface ICrawlingDao {
   Long isLocationExisting(String district, String city);
 
   Long addLocation(String district, String city);
+
+  void addContact(Contact contact);
+
+  Long isContactExisting(String name, String phone, String email);
+
+  void updateContact(Contact contact);
 
   Long isItemExisting(String url);
 

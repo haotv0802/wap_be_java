@@ -11,6 +11,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
+import wap.api.rest.crawling.bds.beans.Contact;
 import wap.api.rest.crawling.bds.beans.CrawlingTracking;
 import wap.api.rest.crawling.bds.beans.Item;
 import wap.api.rest.crawling.bds.interfaces.ICrawlingDao;
@@ -98,6 +99,70 @@ public class CrawlingDao implements ICrawlingDao {
   }
 
   @Override
+  public void addContact(Contact contact) {
+    final String sql =
+              "INSERT INTO crwlr_contacts (name, phone, email, type, latest_item_posted_at)"
+            + " VALUE (:name, :phone, :email, :type, :latest_item_posted_at)               "
+        ;
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("name", contact.getName());
+    paramsMap.addValue("phone", contact.getPhone());
+    paramsMap.addValue("email", contact.getEmail());
+    paramsMap.addValue("type", contact.getType());
+    paramsMap.addValue("latest_item_posted_at", contact.getLatestItemPostedAt());
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    KeyHolder keyHolder = new GeneratedKeyHolder();
+    namedTemplate.update(sql, paramsMap, keyHolder);
+    Long id = keyHolder.getKey().longValue();
+    contact.setId(id);
+  }
+
+  @Override
+  public Long isContactExisting(String name, String phone, String email) {
+    final String sql =
+              "SELECT                                             "
+            + "	id                                                "
+            + "FROM  crwlr_contacts                               "
+            + " WHERE                                             "
+            + "	name = :name AND phone = :phone AND email = :email"
+        ;
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("name", name);
+    paramsMap.addValue("phone", phone);
+    paramsMap.addValue("email", email);
+
+    try {
+      return namedTemplate.queryForObject(sql, paramsMap, Long.class);
+    } catch (EmptyResultDataAccessException ex) {
+      return new Long(-1);
+    }
+  }
+
+  @Override
+  public void updateContact(Contact contact) {
+    final String sql =
+        "UPDATE crwlr_contacts SET name = :name, phone = :phone, email = :email,"
+      + " type = :type, latest_item_posted_at = :latest_item_posted_at          "
+      + " WHERE id = :id                                                        "
+        ;
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("name", contact.getName());
+    paramsMap.addValue("phone", contact.getPhone());
+    paramsMap.addValue("email", contact.getEmail());
+    paramsMap.addValue("type", contact.getType());
+    paramsMap.addValue("latest_item_posted_at", contact.getLatestItemPostedAt());
+    paramsMap.addValue("id", contact.getId());
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    namedTemplate.update(sql, paramsMap);
+  }
+
+  @Override
   public Long isItemExisting(String url) {
     final String sql =
     "SELECT i.id FROM crwlr_posts i where i.url = :url";
@@ -133,9 +198,9 @@ public class CrawlingDao implements ICrawlingDao {
   public void addItem(Item item) {
     final String sql =
     "INSERT INTO crwlr_posts (name, description, address, contact_name, contact_number, contact_email, publish_date,  "
-  + "end_date, url, acreage, price, location_id, source, type, property_type)                                         "
+  + "end_date, url, acreage, price, location_id, source, type, property_type, contact_id)                             "
   + " VALUE (:name, :description, :address, :contact_name, :contact_number, :contact_email, :publishDate,             "
-  + " :endDate, :url, :acreage, :price, :locationId, :source, :type, :property_type)                                  "
+  + " :endDate, :url, :acreage, :price, :locationId, :source, :type, :property_type, :contact_id)                     "
         ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
@@ -154,6 +219,7 @@ public class CrawlingDao implements ICrawlingDao {
     paramsMap.addValue("source", item.getSource());
     paramsMap.addValue("source", item.getSource());
     paramsMap.addValue("type", item.getType());
+    paramsMap.addValue("contact_id", item.getContactId());
     paramsMap.addValue("property_type", item.getPropertyType());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
@@ -183,7 +249,7 @@ public class CrawlingDao implements ICrawlingDao {
     final String sql =
         "UPDATE crwlr_posts SET name = :name, description = :description, address = :address, contact_number = :contact_number, acreage = :acreage,"
       + " price = :price, location_id = :locationId, contact_name = :contact_name, source = :source, type = :type, property_type = :property_type, "
-      + " contact_email = :contact_email, publish_date = :publish_date, end_date = :end_date, updated_at = :updated                                "
+      + " contact_email = :contact_email, publish_date = :publish_date, end_date = :end_date, updated_at = :updated, contact_id = :contact_id      "
       + " WHERE url = :url                                                                                                                         "
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
@@ -202,6 +268,7 @@ public class CrawlingDao implements ICrawlingDao {
     paramsMap.addValue("updated", new Date());
     paramsMap.addValue("source", item.getSource());
     paramsMap.addValue("type", item.getType());
+    paramsMap.addValue("contact_id", item.getContactId());
     paramsMap.addValue("property_type", item.getPropertyType());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import wap.api.rest.crawling.bds.beans.Contact;
 import wap.api.rest.crawling.bds.beans.CrawlingTracking;
 import wap.api.rest.crawling.bds.beans.Item;
 import wap.api.rest.crawling.bds.interfaces.ICrawlingDao;
@@ -58,6 +59,7 @@ public class CrawlingService implements ICrawlingService {
         for (Item item: items) {
           // Saving Product
           Long itemId = crawlingDao.isItemExisting(item.getUrl());
+          //        location
           Long locationId = this.crawlingDao.isLocationExisting(item.getDistrict(), item.getCity());
           if (StringUtils.isEmpty(item.getCity()) && StringUtils.isEmpty(item.getDistrict())) {
             locationId = (long) -1;
@@ -65,9 +67,25 @@ public class CrawlingService implements ICrawlingService {
             locationId = this.crawlingDao.addLocation(item.getDistrict(), item.getCity());
           }
           item.setLocationId(locationId < 0 ? null : locationId);
+
+          //        contact
+          Contact contact = new Contact();
+          contact.setName(StringUtils.stripAccents(item.getContactName()));
+          contact.setEmail(item.getContactEmail());
+          contact.setPhone(item.getContactNumber());
+          contact.setType("OWNER"); // TODO need to work on this
+          contact.setLatestItemPostedAt(new Date());
+          Long contactId = this.crawlingDao.isContactExisting(item.getContactName(), item.getContactNumber(), item.getContactEmail());
+          if (contactId > 0) {
+            contact.setId(contactId);
+            this.crawlingDao.updateContact(contact);
+          } else {
+            this.crawlingDao.addContact(contact);
+          }
+          item.setContactId(contact.getId());
+
           if (itemId > 0) {
             crawlingDao.updateItem(item);
-            item.setId(itemId);
           } else {
             crawlingDao.addItem(item);
             itemsAddedCount++;

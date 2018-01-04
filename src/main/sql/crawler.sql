@@ -106,7 +106,7 @@ CREATE TABLE `crwlr_posts` (
   #   `crawling_start` DATETIME                   NOT NULL,
   #   `crawling_end`   DATETIME                   NOT NULL,
   `contact_id`        BIGINT                               NOT NULL,
-  `contact_id_backup` BIGINT                               NULL,
+  `contact_backup_id` BIGINT                               NULL,
   `created_at`        DATETIME DEFAULT NOW(),
   `updated_at`        DATETIME                             NULL,
   PRIMARY KEY (`id`),
@@ -114,7 +114,7 @@ CREATE TABLE `crwlr_posts` (
   UNIQUE KEY `crwlr_posts_url` (`url`),
   CONSTRAINT `crwlr_posts_location_id` FOREIGN KEY (`location_id`) REFERENCES `crwlr_locations` (`id`),
   CONSTRAINT `crwlr_posts_contact_id` FOREIGN KEY (`contact_id`) REFERENCES `crwlr_contacts` (`id`),
-  CONSTRAINT `crwlr_posts_contact_id_backup` FOREIGN KEY (`contact_id_backup`) REFERENCES `crwlr_contacts_backup` (`id`)
+  CONSTRAINT `crwlr_posts_contact_backup_id` FOREIGN KEY (`contact_backup_id`) REFERENCES `crwlr_contacts_backup` (`id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;

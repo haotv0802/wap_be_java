@@ -11,5 +11,5 @@ import java.util.Map;
  * @author haho
  */
 public interface ICrawlingService {
-  Map<String, CrawlingTracking> saveCrawledData(List<String> pages);
+  Map<String, CrawlingTracking> saveCrawledData(List<String> pages, boolean recrawl);
 }

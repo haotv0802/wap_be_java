@@ -48,11 +48,11 @@ public class CrawlingService implements ICrawlingService {
   }
 
   @Override
-  public Map<String, CrawlingTracking> saveCrawledData(List<String> pages) {
+  public Map<String, CrawlingTracking> saveCrawledData(List<String> pages, boolean recrawl) {
 
     Map<String, CrawlingTracking> crawlingTrackingMap = new HashMap<>();
     for (String page : pages) {
-      getTrackingAndItems(page, crawlingTrackingMap);
+      getTrackingAndItems(page, crawlingTrackingMap, recrawl);
     }
 
     Set<String> keys = crawlingTrackingMap.keySet();
@@ -78,7 +78,7 @@ public class CrawlingService implements ICrawlingService {
           contact.setName(item.getContactName() == null ? "" : StringUtils.stripAccents(item.getContactName()));
           contact.setEmail(item.getContactEmail() == null ? "" : item.getContactEmail());
           contact.setPhone(item.getContactNumber() == null ? "" : item.getContactNumber().replace(" ", ""));
-          contact.setType("OWNER"); // TODO need to work on this
+          contact.setType("OWNER");
           if (businessService.isSale(contact.getName(), contact.getEmail())) {
             contact.setType("SALE");
           }
@@ -112,7 +112,7 @@ public class CrawlingService implements ICrawlingService {
    * Get list of products from given Category.
    * @param pageLink
    */
-  private void getTrackingAndItems(String pageLink, Map<String, CrawlingTracking> crawlingTrackingMap) {
+  private void getTrackingAndItems(String pageLink, Map<String, CrawlingTracking> crawlingTrackingMap, boolean recrawl) {
     try {
       Document document = Jsoup.connect(pageLink).get();
       Elements titleElements = document.select("div.product-list-page").select("div.Title");
@@ -146,7 +146,6 @@ public class CrawlingService implements ICrawlingService {
           Elements titleOfProduct = element.select("div.p-title");
           String link = titleOfProduct.get(0).select("a").attr("abs:href");
           urls.add(link);
-//          getItemDetails(link, crawlingTracking);
         }
 
         for (int i = 0; i < hrefTagsPager.size(); i++) {
@@ -162,15 +161,18 @@ public class CrawlingService implements ICrawlingService {
 
       } while (nextPage != null && nextPage.length() > 0);
 
-//      Iterator<String> iterator = urls.iterator();
-//      while (iterator.hasNext()) {
-//        String link = iterator.next();
-//        if (this.crawlingDao.isItemExisting(link) < 0) {
-//          iterator.remove();
-//        }
-//      }
+      Iterator<String> iterator = null;
+      if (!recrawl) {
+        iterator = urls.iterator();
+        while (iterator.hasNext()) {
+          String link = iterator.next();
+          if (this.crawlingDao.isItemExisting(link) < 0) {
+            iterator.remove();
+          }
+        }
+      }
 
-      Iterator<String> iterator = urls.iterator();
+      iterator = urls.iterator();
       int i = 0;
       while (iterator.hasNext()) {
         String link = iterator.next();

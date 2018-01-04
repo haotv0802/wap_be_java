@@ -42,19 +42,20 @@ public class CrawlingResource {
 
   @GetMapping("/crawler/crawlingData")
   public Map<String, CrawlingTracking> crawlingData(
-      @RequestParam(value = "link", required = false) String link
+      @RequestParam(value = "link", required = false) String link,
+      @RequestParam(value = "recrawl", required = false) boolean recrawl
   ) {
     List<String> pages = new ArrayList<>();
     if (StringUtils.isEmpty(link)) {
-        pages.add("https://batdongsan.com.vn/ban-nha-rieng-tp-hcm/p800");
+//        pages.add("https://batdongsan.com.vn/ban-nha-rieng-tp-hcm/p500");
 //      pages.add("https://batdongsan.com.vn/nha-dat-ban/p7243");
-//      pages.add("https://batdongsan.com.vn/ban-can-ho-chung-cu/p1907");
+      pages.add("https://batdongsan.com.vn/ban-can-ho-chung-cu/p1907");
 //      pages.add("https://batdongsan.com.vn/nha-dat-can-mua/p26");
 //      pages.add("https://batdongsan.com.vn/nha-dat-can-thue/p19");
     } else {
       pages.add(link);
     }
-    return this.crawlingService.saveCrawledData(pages);
+    return this.crawlingService.saveCrawledData(pages, recrawl);
   }
 
 }

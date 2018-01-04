@@ -185,39 +185,9 @@ public class CrawlingService implements ICrawlingService {
       String businessType = typeAndPropertyType.split(" ")[0].trim();
       String propertyType = typeAndPropertyType.substring(typeAndPropertyTypeOriginal.indexOf(businessType) + businessType.length()).trim();
 
-      if (businessType.equalsIgnoreCase("ban")) {
-        businessType = "SELLING";
-      } else if (businessType.equalsIgnoreCase("cho thue")) {
-        businessType = "FOR RENT";
-      } else if (businessType.equalsIgnoreCase("can thue")) {
-        businessType = "RENT";
-      } else if (businessType.equalsIgnoreCase("mua")) {
-        businessType = "BUYING";
-      } else {
-        businessType = null;
-      }
+      businessType = businessService.getBusinessType(businessType);
 
-      if (propertyType.equalsIgnoreCase("nha rieng")) {
-        propertyType = "HOUSE";
-      } else if (propertyType.equalsIgnoreCase("can ho chung cu")) {
-        propertyType = "APARTMENT";
-      } else if (propertyType.equalsIgnoreCase("nha mat pho")) {
-        propertyType = "BIG HOUSE";
-      } else if (propertyType.equalsIgnoreCase("nha biet thu, lien ke")) {
-        propertyType = "VILLA";
-      } else if (propertyType.equalsIgnoreCase("dat nen du an") || propertyType.equalsIgnoreCase("đat nen du an")) {
-        propertyType = "PROJECT LAND";
-      } else if (propertyType.equalsIgnoreCase("dat") || propertyType.equalsIgnoreCase("đat") ) {
-        propertyType = "LAND";
-      } else if (propertyType.equalsIgnoreCase("trang trai, khu nghi duong")) {
-        propertyType = "FARM, RESORT";
-      } else if (propertyType.equalsIgnoreCase("kho, nha xuong")) {
-        propertyType = "WAREHOUSE";
-      } else if (propertyType.equalsIgnoreCase("loai bat dong san khac") || propertyType.equalsIgnoreCase("loai bat đong san khac")) {
-        propertyType = "OTHER";
-      } else {
-        propertyType = null;
-      }
+      propertyType = businessService.getPropertyType(propertyType);
 
       String district = null;
       String city = null;

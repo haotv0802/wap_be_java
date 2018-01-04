@@ -91,20 +91,6 @@ public class CrawlingService implements ICrawlingService {
       Document document = Jsoup.connect(pageLink).get();
       Elements titleElements = document.select("div.product-list-page").select("div.Title");
       String categoryName = titleElements.select("h1").get(0).text();
-      Element titleFooterEles = titleElements.select("div.Footer").get(0);
-      String district = null;
-      String city = null;
-      for(int i = 0; i < titleFooterEles.childNodes().size(); i++) {
-        String strAsNode = titleFooterEles.childNodes().get(i).toString();
-        strAsNode = StringUtils.stripAccents(strAsNode);
-        if (strAsNode.equals(". Quan/Huyen: ")) {
-          district = titleFooterEles.childNodes().get(++i).childNode(0).childNode(0).toString();
-          district = StringUtils.stripAccents(district);
-        } else if (strAsNode.equals(". Tinh/Tp: ")) {
-          city = titleFooterEles.childNodes().get(++i).childNode(0).childNode(0).toString();
-          city = StringUtils.stripAccents(city);
-        }
-      }
 
       String source = pageLink;
       source = source.substring(source.indexOf("//") + 2);
@@ -118,8 +104,6 @@ public class CrawlingService implements ICrawlingService {
         crawlingTrackingMap.put(pageLink, crawlingTracking);
       }
 
-//      document.select("div.background-pager-right-controls").get(0);
-//      document.select("div.background-pager-right-controls").get(0).child(1).attr("abs:href");
       String currentPage = pageLink;
       String nextPage = null;
       do {
@@ -169,11 +153,11 @@ public class CrawlingService implements ICrawlingService {
 
       Element productHeaderEl = document.select("div.kqchitiet").get(0);
 
-      String typeAndPropertyType = productHeaderEl.select("span.diadiem-title.mar-right-15").get(0).select("a").get(0).text();
-      typeAndPropertyType = StringUtils.stripAccents(typeAndPropertyType);
-      typeAndPropertyType = typeAndPropertyType.substring(0, typeAndPropertyType.indexOf("tai"));
+      String typeAndPropertyTypeOriginal = productHeaderEl.select("span.diadiem-title.mar-right-15").get(0).select("a").get(0).text();
+      typeAndPropertyTypeOriginal = StringUtils.stripAccents(typeAndPropertyTypeOriginal);
+      String typeAndPropertyType = typeAndPropertyTypeOriginal.substring(0, typeAndPropertyTypeOriginal.indexOf("tai"));
       String businessType = typeAndPropertyType.split(" ")[0].trim();
-      String propertyType = typeAndPropertyType.substring(typeAndPropertyType.indexOf(businessType) + businessType.length()).trim();
+      String propertyType = typeAndPropertyType.substring(typeAndPropertyTypeOriginal.indexOf(businessType) + businessType.length()).trim();
 
       if (businessType.equalsIgnoreCase("ban")) {
         businessType = "SELLING";
@@ -215,6 +199,10 @@ public class CrawlingService implements ICrawlingService {
       String[] locationArray = location.split("-");
       if (locationArray.length == 2) {
         city = StringUtils.stripAccents(locationArray[1].trim());
+        if (typeAndPropertyTypeOriginal.indexOf("tai") > 0) { // sometimes district is not here (at position 2)
+          typeAndPropertyTypeOriginal = typeAndPropertyTypeOriginal.substring(typeAndPropertyTypeOriginal.indexOf("tai") + 7).trim();
+          district = typeAndPropertyTypeOriginal;
+        }
       } else if (locationArray.length == 3) {
         district = StringUtils.stripAccents(locationArray[1].trim());
         if (district.contains("Quan")) {
@@ -222,12 +210,6 @@ public class CrawlingService implements ICrawlingService {
         }
         city = StringUtils.stripAccents(locationArray[2].trim());
       }
-//      Long locationId = this.crawlingDao.isLocationExisting(district, city);
-//      if (StringUtils.isEmpty(city) && StringUtils.isEmpty(district)) {
-//        locationId = (long) -1;
-//      } else if (locationId < 0) {
-//        locationId = this.crawlingDao.addLocation(district, city);
-//      }
 
       String acreage = productHeaderEl.select("span.gia-title:not(.mar-right-15)").select("strong").get(0).text();
       String[] acreageArray = acreage.split("m");

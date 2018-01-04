@@ -177,7 +177,6 @@ public class CrawlingService implements ICrawlingService {
       items = new HashSet<>();
     }
     try {
-//      this.LOGGER.info(itemLink);
       Document document = Jsoup.connect(itemLink).get();
       Date start = new Date();
 
@@ -186,13 +185,6 @@ public class CrawlingService implements ICrawlingService {
 
       Element productHeaderEl = document.select("div.kqchitiet").get(0);
 
-//      String[] districtAndCity = productHeaderEl.select("span.diadiem-title.mar-right-15").get(0).childNodes().get(4).toString().split("-");
-      String district = null;
-      String city = null;
-//      if (null != districtAndCity && districtAndCity.length > 2) {
-//        district = StringUtils.stripAccents(districtAndCity[1].trim());
-//        city = StringUtils.stripAccents(districtAndCity[2].trim());
-//      }
       String typeAndPropertyType = productHeaderEl.select("span.diadiem-title.mar-right-15").get(0).select("a").get(0).text();
       typeAndPropertyType = StringUtils.stripAccents(typeAndPropertyType);
       typeAndPropertyType = typeAndPropertyType.substring(0, typeAndPropertyType.indexOf("tai"));
@@ -233,6 +225,8 @@ public class CrawlingService implements ICrawlingService {
         propertyType = null;
       }
 
+      String district = null;
+      String city = null;
       String location = productHeaderEl.select("span.diadiem-title.mar-right-15").get(0).textNodes().get(2).text();
       String[] locationArray = location.split("-");
       if (locationArray.length == 2) {
@@ -322,8 +316,8 @@ public class CrawlingService implements ICrawlingService {
       item.setSource(crawlingTracking.getSource());
       item.setType(businessType);
       item.setPropertyType(propertyType);
-      item.setCity(city);
-      item.setDistrict(district);
+      item.setCity(city == null ? "UNKNOWN" : city);
+      item.setDistrict(district == null ? "UNKNOWN" : district);
       item.setUrl(itemLink);
       item.setCrawlingStart(start);
       item.setCrawlingEnd(end);

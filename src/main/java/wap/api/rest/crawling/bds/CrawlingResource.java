@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import wap.api.rest.crawling.bds.beans.Category;
 import wap.api.rest.crawling.bds.beans.CrawlingTracking;
 import wap.api.rest.crawling.bds.interfaces.ICrawlingService;
 
@@ -48,8 +47,8 @@ public class CrawlingResource {
     List<String> pages = new ArrayList<>();
     if (StringUtils.isEmpty(link)) {
 //      pages.add("https://batdongsan.com.vn/nha-dat-ban/p7243");
-//      pages.add("https://batdongsan.com.vn/nha-dat-cho-thue/p1563");
-      pages.add("https://batdongsan.com.vn/nha-dat-can-mua/p26");
+      pages.add("https://batdongsan.com.vn/ban-can-ho-chung-cu/p1900");
+//      pages.add("https://batdongsan.com.vn/nha-dat-can-mua/p26");
 //      pages.add("https://batdongsan.com.vn/nha-dat-can-thue/p19");
     } else {
       pages.add(link);

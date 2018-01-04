@@ -1,5 +1,6 @@
 package wap.api.rest.crawling.bds;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import wap.api.rest.crawling.bds.interfaces.ICrawlingDao;
 import wap.common.JdbcUtils;
 import wap.common.dao.DaoUtils;
 
+import java.sql.SQLException;
 import java.util.Date;
 
 /**
@@ -195,9 +197,23 @@ public class CrawlingDao implements ICrawlingDao {
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
     KeyHolder keyHolder = new GeneratedKeyHolder();
-    namedTemplate.update(sql, paramsMap, keyHolder);
-    final Long id = keyHolder.getKey().longValue();
-    item.setId(id);
+    try {
+      namedTemplate.update(sql, paramsMap, keyHolder);
+      final Long id = keyHolder.getKey().longValue();
+      item.setId(id);
+    } catch (Exception ex) {
+      if (ex instanceof SQLException) {
+        if (ex.getMessage().contains("Incorrect string value")) {
+          item.setContactName(StringUtils.stripAccents(item.getContactName()));
+          item.setTitle(StringUtils.stripAccents(item.getTitle()));
+          item.setAddress(StringUtils.stripAccents(item.getAddress()));
+          item.setDescription(StringUtils.stripAccents(item.getDescription()));
+          namedTemplate.update(sql, paramsMap, keyHolder);
+          final Long id = keyHolder.getKey().longValue();
+          item.setId(id);
+        }
+      }
+    }
   }
 
   @Override
@@ -228,7 +244,19 @@ public class CrawlingDao implements ICrawlingDao {
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
-    namedTemplate.update(sql, paramsMap);
+    try {
+      namedTemplate.update(sql, paramsMap);
+    } catch (Exception ex) {
+      if (ex instanceof SQLException) {
+        if (ex.getMessage().contains("Incorrect string value")) {
+          item.setContactName(StringUtils.stripAccents(item.getContactName()));
+          item.setTitle(StringUtils.stripAccents(item.getTitle()));
+          item.setAddress(StringUtils.stripAccents(item.getAddress()));
+          item.setDescription(StringUtils.stripAccents(item.getDescription()));
+          namedTemplate.update(sql, paramsMap);
+        }
+      }
+    }
   }
 
   @Override

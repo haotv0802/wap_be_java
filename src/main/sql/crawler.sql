@@ -31,7 +31,7 @@ DROP TABLE IF EXISTS `crwlr_locations`;
 CREATE TABLE `crwlr_locations` (
   `id`       BIGINT AUTO_INCREMENT,
   `city`     VARCHAR(100) NOT NULL,
-  `district` VARCHAR(100),
+  `district` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `crwlr_locations_city_district` (`city`, `district`)
 )

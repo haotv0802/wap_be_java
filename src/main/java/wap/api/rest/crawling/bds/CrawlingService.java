@@ -33,13 +33,18 @@ public class CrawlingService implements ICrawlingService {
 
   private final ICrawlingDao crawlingDao;
 
+  private final BusinessService businessService;
+
   private final Logger LOGGER = LogManager.getLogger(getClass());
 
   @Autowired
-  public CrawlingService(@Qualifier("bdsCrawlingDao") ICrawlingDao crawlingDao) {
+  public CrawlingService(@Qualifier("bdsCrawlingDao") ICrawlingDao crawlingDao,
+                         @Qualifier("bdsBusinessService") BusinessService businessService) {
     Assert.notNull(crawlingDao);
+    Assert.notNull(businessService);
 
     this.crawlingDao = crawlingDao;
+    this.businessService = businessService;
   }
 
   @Override
@@ -70,12 +75,15 @@ public class CrawlingService implements ICrawlingService {
 
           //        contact
           Contact contact = new Contact();
-          contact.setName(StringUtils.stripAccents(item.getContactName()));
-          contact.setEmail(item.getContactEmail());
-          contact.setPhone(item.getContactNumber());
+          contact.setName(item.getContactName() == null ? "" : StringUtils.stripAccents(item.getContactName()));
+          contact.setEmail(item.getContactEmail() == null ? "" : item.getContactEmail());
+          contact.setPhone(item.getContactNumber() == null ? "" : item.getContactNumber().replace(" ", ""));
           contact.setType("OWNER"); // TODO need to work on this
+          if (businessService.isSale(contact.getName(), contact.getEmail())) {
+            contact.setType("SALE");
+          }
           contact.setLatestItemPostedOn(item.getPublishDate());
-          Long contactId = this.crawlingDao.isContactExisting(item.getContactName(), item.getContactNumber(), item.getContactEmail());
+          Long contactId = this.crawlingDao.isContactExisting(contact.getName(), contact.getPhone(), contact.getEmail());
           if (contactId > 0) {
             contact.setId(contactId);
             this.crawlingDao.updateContact(contact);

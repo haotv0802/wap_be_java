@@ -144,9 +144,9 @@ public class CrawlingDao implements ICrawlingDao {
   @Override
   public void updateContact(Contact contact) {
     final String sql =
-        "UPDATE crwlr_contacts SET name = :name, phone = :phone, email = :email,"
-      + " type = :type, latest_item_posted_on = :latest_item_posted_on          "
-      + " WHERE id = :id                                                        "
+        "UPDATE crwlr_contacts SET name = :name, phone = :phone, email = :email,           "
+      + " type = :type, latest_item_posted_on = :latest_item_posted_on, updated_at = now() "
+      + " WHERE id = :id                                                                   "
         ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();

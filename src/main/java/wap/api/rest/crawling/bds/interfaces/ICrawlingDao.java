@@ -1,6 +1,5 @@
 package wap.api.rest.crawling.bds.interfaces;
 
-import wap.api.rest.crawling.bds.beans.Category;
 import wap.api.rest.crawling.bds.beans.CrawlingTracking;
 import wap.api.rest.crawling.bds.beans.Item;
 
@@ -12,13 +11,9 @@ import wap.api.rest.crawling.bds.beans.Item;
 public interface ICrawlingDao {
   void addCrawlingTracking(CrawlingTracking crawlingTracking);
 
-  Long isCategoryExisting(String url);
-
   Long isLocationExisting(String district, String city);
 
   Long addLocation(String district, String city);
-
-  void addCategory(Category category);
 
   Long isItemExisting(String url);
 

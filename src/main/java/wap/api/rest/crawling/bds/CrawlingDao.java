@@ -11,7 +11,6 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
-import wap.api.rest.crawling.bds.beans.Category;
 import wap.api.rest.crawling.bds.beans.CrawlingTracking;
 import wap.api.rest.crawling.bds.beans.Item;
 import wap.api.rest.crawling.bds.interfaces.ICrawlingDao;
@@ -63,22 +62,6 @@ public class CrawlingDao implements ICrawlingDao {
   }
 
   @Override
-  public Long isCategoryExisting(String url) {
-    final String sql =
-        "SELECT id FROM crwlr_categories where url = :url";
-    ;
-    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-    paramsMap.addValue("url", url);
-
-    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
-    try {
-      return namedTemplate.queryForObject(sql, paramsMap, Long.class);
-    } catch (EmptyResultDataAccessException ex) {
-      return new Long(-1);
-    }
-  }
-
-  @Override
   public Long isLocationExisting(String district, String city) {
     final String sql =
         "SELECT id FROM crwlr_locations WHERE district = :district AND city = :city";
@@ -112,27 +95,6 @@ public class CrawlingDao implements ICrawlingDao {
     KeyHolder keyHolder = new GeneratedKeyHolder();
     namedTemplate.update(sql, paramsMap, keyHolder);
     return keyHolder.getKey().longValue();
-  }
-
-  @Override
-  public void addCategory(Category category) {
-    final String sql =
-        "INSERT INTO crwlr_categories (name, url, source, location_id)"
-      + " VALUE (:name, :url, :source, :location_id)                  "
-        ;
-
-    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-    paramsMap.addValue("name", category.getName());
-    paramsMap.addValue("url", category.getUrl());
-    paramsMap.addValue("source", category.getSource());
-    paramsMap.addValue("location_id", category.getLocationId());
-
-    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
-
-    KeyHolder keyHolder = new GeneratedKeyHolder();
-    namedTemplate.update(sql, paramsMap, keyHolder);
-    final Long id = keyHolder.getKey().longValue();
-    category.setId(id);
   }
 
   @Override

@@ -18,7 +18,6 @@ public class CrawlingTracking {
   private Integer itemsAdded = 0;
   private String source;
   private Set<Item> items;
-  private Category category;
 
   public String getName() {
     return name;
@@ -26,19 +25,6 @@ public class CrawlingTracking {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (!(obj instanceof Category)) {
-      return false;
-    }
-    Category comparedCategory = (Category) obj;
-    if (comparedCategory.getUrl().equals(this.getUrl())) {
-      return true;
-    } else {
-      return false;
-    }
   }
 
   public Set<Item> getItems() {
@@ -81,14 +67,6 @@ public class CrawlingTracking {
 
   public void setItemsCrawled(Integer itemsCrawled) {
     this.itemsCrawled = itemsCrawled;
-  }
-
-  public Category getCategory() {
-    return category;
-  }
-
-  public void setCategory(Category category) {
-    this.category = category;
   }
 
   public Integer getItemsAdded() {

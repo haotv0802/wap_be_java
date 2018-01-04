@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import wap.api.rest.crawling.bds.beans.Category;
 import wap.api.rest.crawling.bds.beans.CrawlingTracking;
 import wap.api.rest.crawling.bds.beans.Item;
 import wap.api.rest.crawling.bds.interfaces.ICrawlingDao;
@@ -107,29 +106,14 @@ public class CrawlingService implements ICrawlingService {
         }
       }
 
-      Category category = new Category();
-      category.setName(categoryName);
-      category.setCity(city);
-      category.setDistrict(district);
       String source = pageLink;
       source = source.substring(source.indexOf("//") + 2);
-      category.setSource(source.substring(0, source.indexOf("/")));
-      String name = source;
-      name = name.substring(name.indexOf("/") + 1);
-      if (name.indexOf("/") > 0) {
-        name = name.substring(0, name.indexOf("/"));
-      }
-
-
-      String categoryUrl = pageLink.substring(0, pageLink.indexOf(name) + name.length());
-      category.setUrl(categoryUrl);
 
       CrawlingTracking crawlingTracking = crawlingTrackingMap.get(pageLink);
       if (null == crawlingTracking) {
         crawlingTracking = new CrawlingTracking();
         crawlingTracking.setName(categoryName);
         crawlingTracking.setUrl(pageLink);
-        crawlingTracking.setCategory(category);
         crawlingTracking.setSource(source);
         crawlingTrackingMap.put(pageLink, crawlingTracking);
       }

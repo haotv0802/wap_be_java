@@ -16,6 +16,7 @@ public class CrawlingTracking {
   private Integer itemsCount = 0;
   private Integer itemsCrawled = 0;
   private Integer itemsAdded = 0;
+  private String source;
   private Set<Item> items;
   private Category category;
 
@@ -96,5 +97,13 @@ public class CrawlingTracking {
 
   public void setItemsAdded(Integer itemsAdded) {
     this.itemsAdded = itemsAdded;
+  }
+
+  public String getSource() {
+    return source;
+  }
+
+  public void setSource(String source) {
+    this.source = source;
   }
 }

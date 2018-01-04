@@ -166,7 +166,7 @@ public class CrawlingDao implements ICrawlingDao {
   }
 
   @Override
-  public void addItem(Item item, Category category) {
+  public void addItem(Item item) {
     final String sql =
     "INSERT INTO crwlr_items (name, description, address, contact_name, contact_number, contact_email, publish_date,  "
   + "end_date, url, acreage, price, location_id, source, type, property_type)                                         "
@@ -187,11 +187,10 @@ public class CrawlingDao implements ICrawlingDao {
     paramsMap.addValue("acreage", item.getAcreage());
     paramsMap.addValue("price", item.getPrice());
     paramsMap.addValue("locationId", item.getLocationId());
-    paramsMap.addValue("source", category.getSource());
-//    paramsMap.addValue("type", category.getType());
-//    paramsMap.addValue("property_type", category.getPropertyType());
-    paramsMap.addValue("type", "SELLING");
-    paramsMap.addValue("property_type", "HOUSE");
+    paramsMap.addValue("source", item.getSource());
+    paramsMap.addValue("source", item.getSource());
+    paramsMap.addValue("type", item.getType());
+    paramsMap.addValue("property_type", item.getPropertyType());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
@@ -202,7 +201,7 @@ public class CrawlingDao implements ICrawlingDao {
   }
 
   @Override
-  public void updateItem(Item item, Category category) {
+  public void updateItem(Item item) {
     final String sql =
         "UPDATE crwlr_items SET name = :name, description = :description, address = :address, contact_number = :contact_number, acreage = :acreage,"
       + " price = :price, location_id = :locationId, contact_name = :contact_name, source = :source, type = :type, property_type = :property_type, "
@@ -223,11 +222,9 @@ public class CrawlingDao implements ICrawlingDao {
     paramsMap.addValue("price", item.getPrice());
     paramsMap.addValue("locationId", item.getLocationId());
     paramsMap.addValue("updated", new Date());
-    paramsMap.addValue("source", category.getSource());
-//    paramsMap.addValue("type", category.getType());
-//    paramsMap.addValue("property_type", category.getPropertyType());
-    paramsMap.addValue("type", "SELLING");
-    paramsMap.addValue("property_type", "HOUSE");
+    paramsMap.addValue("source", item.getSource());
+    paramsMap.addValue("type", item.getType());
+    paramsMap.addValue("property_type", item.getPropertyType());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 

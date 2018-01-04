@@ -19,10 +19,10 @@ public class BDSCrawlingResourceTest extends TestBase {
   public void testCrawlingData() throws Exception {
     mockMvc
         .perform(get("/svc/bds/crawler/crawlingData")
-//    .param("link", "https://batdongsan.com.vn/ban-dat-dong-nai")
+//    .param("link", "https://batdongsan.com.vn/cho-thue-can-ho-chung-cu/p613")
 //                .param("link", "https://batdongsan.com.vn/ban-dat-dat-nen-tp-hcm")
 
-            .param("link", "https://batdongsan.com.vn/ban-nha-rieng-tp-hcm/p821")
+//            .param("link", "https://batdongsan.com.vn/ban-nha-rieng-tp-hcm/p818")
 //              .param("link", "https://batdongsan.com.vn/ban-can-ho-chung-cu-tp-hcm")
         )
         .andExpect(status().is(200))

@@ -19,7 +19,6 @@ import wap.api.rest.crawling.bds.interfaces.ICrawlingService;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.Normalizer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -68,42 +67,18 @@ public class CrawlingService implements ICrawlingService {
           }
           item.setLocationId(locationId < 0 ? null : locationId);
           if (itemId > 0) {
-            crawlingDao.updateItem(item, crawlingTracking.getCategory());
+            crawlingDao.updateItem(item);
             item.setId(itemId);
           } else {
-            crawlingDao.addItem(item, crawlingTracking.getCategory());
+            crawlingDao.addItem(item);
             itemsAddedCount++;
           }
-
-//          // Saving category.
-//          Category category = crawlingTracking.getCategory();
-//          Long categoryId = crawlingDao.isCategoryExisting(category.getUrl());
-//          locationId = this.crawlingDao.isLocationExisting(category.getDistrict(), category.getCity());
-//          if (StringUtils.isEmpty(category.getCity()) && StringUtils.isEmpty(category.getDistrict())) {
-//            locationId = (long) -1;
-//          } else if (locationId < 0) {
-//            locationId = this.crawlingDao.addLocation(category.getDistrict(), category.getCity());
-//          }
-//          category.setLocationId(locationId < 0 ? null : locationId);
-//          if (categoryId > 0) {
-//            category.setId(categoryId);
-//          } else {
-//            crawlingDao.addCategory(category);
-//          }
-
-//          // Add relationship between category & item.
-//          Boolean itemLinkedToCategory = crawlingDao.isItemLinkedToCategory(item.getId(), category.getId());
-//          if (!itemLinkedToCategory) {
-//            crawlingDao.connectItemToCategory(category.getId(), item.getId());
-//          }
         }
-
-        crawlingTracking.setItemsCount(crawlingTracking.getItems().size());
-        crawlingTracking.setItemsAdded(itemsAddedCount);
-        // Saving tracking info.
-        crawlingDao.addCrawlingTracking(crawlingTracking);
       }
-
+      crawlingTracking.setItemsCount(crawlingTracking.getItems() == null ? 0 : crawlingTracking.getItems().size());
+      crawlingTracking.setItemsAdded(itemsAddedCount);
+      // Saving tracking info.
+      crawlingDao.addCrawlingTracking(crawlingTracking);
     }
     return crawlingTrackingMap;
   }
@@ -132,16 +107,8 @@ public class CrawlingService implements ICrawlingService {
         }
       }
 
-//      Long locationId = this.crawlingDao.isLocationExisting(district, city);
-//      if (StringUtils.isEmpty(city) && StringUtils.isEmpty(district)) {
-//        locationId = (long) -1;
-//      } else if (locationId < 0) {
-//        locationId = this.crawlingDao.addLocation(district, city);
-//      }
-
       Category category = new Category();
       category.setName(categoryName);
-//      category.setLocationId(locationId < 0 ? null : locationId);
       category.setCity(city);
       category.setDistrict(district);
       String source = pageLink;
@@ -163,6 +130,7 @@ public class CrawlingService implements ICrawlingService {
         crawlingTracking.setName(categoryName);
         crawlingTracking.setUrl(pageLink);
         crawlingTracking.setCategory(category);
+        crawlingTracking.setSource(source);
         crawlingTrackingMap.put(pageLink, crawlingTracking);
       }
 
@@ -225,6 +193,45 @@ public class CrawlingService implements ICrawlingService {
 //        district = StringUtils.stripAccents(districtAndCity[1].trim());
 //        city = StringUtils.stripAccents(districtAndCity[2].trim());
 //      }
+      String typeAndPropertyType = productHeaderEl.select("span.diadiem-title.mar-right-15").get(0).select("a").get(0).text();
+      typeAndPropertyType = StringUtils.stripAccents(typeAndPropertyType);
+      typeAndPropertyType = typeAndPropertyType.substring(0, typeAndPropertyType.indexOf("tai"));
+      String businessType = typeAndPropertyType.split(" ")[0].trim();
+      String propertyType = typeAndPropertyType.substring(typeAndPropertyType.indexOf(businessType) + businessType.length()).trim();
+
+      if (businessType.equalsIgnoreCase("ban")) {
+        businessType = "SELLING";
+      } else if (businessType.equalsIgnoreCase("cho thue")) {
+        businessType = "FOR RENT";
+      } else if (businessType.equalsIgnoreCase("can thue")) {
+        businessType = "RENT";
+      } else if (businessType.equalsIgnoreCase("mua")) {
+        businessType = "BUYING";
+      } else {
+        businessType = null;
+      }
+
+      if (propertyType.equalsIgnoreCase("nha rieng")) {
+        propertyType = "HOUSE";
+      } else if (propertyType.equalsIgnoreCase("can ho chung cu")) {
+        propertyType = "APARTMENT";
+      } else if (propertyType.equalsIgnoreCase("nha mat pho")) {
+        propertyType = "BIG HOUSE";
+      } else if (propertyType.equalsIgnoreCase("nha biet thu, lien ke")) {
+        propertyType = "VILLA";
+      } else if (propertyType.equalsIgnoreCase("dat nen du an") || propertyType.equalsIgnoreCase("đat nen du an")) {
+        propertyType = "PROJECT LAND";
+      } else if (propertyType.equalsIgnoreCase("dat") || propertyType.equalsIgnoreCase("đat") ) {
+        propertyType = "LAND";
+      } else if (propertyType.equalsIgnoreCase("trang trai, khu nghi duong")) {
+        propertyType = "FARM, RESORT";
+      } else if (propertyType.equalsIgnoreCase("kho, nha xuong")) {
+        propertyType = "WAREHOUSE";
+      } else if (propertyType.equalsIgnoreCase("loai bat dong san khac") || propertyType.equalsIgnoreCase("loai bat đong san khac")) {
+        propertyType = "OTHER";
+      } else {
+        propertyType = null;
+      }
 
       String location = productHeaderEl.select("span.diadiem-title.mar-right-15").get(0).textNodes().get(2).text();
       String[] locationArray = location.split("-");
@@ -312,7 +319,9 @@ public class CrawlingService implements ICrawlingService {
       item.setEndDate(spd.parse(endDate));
       item.setPrice(priceInBigDecimal);
       item.setAcreage(acreageInBigDecimal);
-//      item.setLocationId(locationId < 0 ? null : locationId);
+      item.setSource(crawlingTracking.getSource());
+      item.setType(businessType);
+      item.setPropertyType(propertyType);
       item.setCity(city);
       item.setDistrict(district);
       item.setUrl(itemLink);

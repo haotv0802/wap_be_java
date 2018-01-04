@@ -24,9 +24,9 @@ public interface ICrawlingDao {
 
   Boolean isItemLinkedToCategory(Long id, Long categoryId);
 
-  void addItem(Item product, Category category);
+  void addItem(Item product);
 
-  void updateItem(Item product, Category category);
+  void updateItem(Item product);
 
   void connectItemToCategory(Long categoryId, Long itemId);
 }

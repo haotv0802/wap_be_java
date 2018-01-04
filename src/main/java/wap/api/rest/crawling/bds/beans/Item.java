@@ -21,6 +21,9 @@ public class Item {
   private BigDecimal acreage;
   private BigDecimal price;
   private String url;
+  private String source;
+  private String type;
+  private String propertyType;
   private Date crawlingStart;
   private Date crawlingEnd;
   private Long crawlingTime;
@@ -183,5 +186,29 @@ public class Item {
 
   public void setCity(String city) {
     this.city = city;
+  }
+
+  public String getSource() {
+    return source;
+  }
+
+  public void setSource(String source) {
+    this.source = source;
+  }
+
+  public String getType() {
+    return type;
+  }
+
+  public void setType(String type) {
+    this.type = type;
+  }
+
+  public String getPropertyType() {
+    return propertyType;
+  }
+
+  public void setPropertyType(String propertyType) {
+    this.propertyType = propertyType;
   }
 }

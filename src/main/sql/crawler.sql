@@ -189,7 +189,8 @@ CREATE TABLE `crwlr_exports_tracking` (
   CONSTRAINT `crwlr_exports_tracking_contact_id` FOREIGN KEY (`contact_id`) REFERENCES `crwlr_contacts` (`id`)
 )
   ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;DROP DATABASE IF EXISTS `crawler_db_180104`;
+  DEFAULT CHARSET = utf8;
+DROP DATABASE IF EXISTS `crawler_db_180104`;
 CREATE DATABASE IF NOT EXISTS `crawler_db_180104`
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
@@ -261,28 +262,28 @@ CREATE TABLE `crwlr_items` (
   `id`             BIGINT   AUTO_INCREMENT,
   `name`           VARCHAR(200)
                    CHARACTER SET utf8mb4
-                   COLLATE utf8mb4_unicode_ci           NULL,
+                   COLLATE utf8mb4_unicode_ci NULL,
   `address`        VARCHAR(300)
                    CHARACTER SET utf8mb4
-                   COLLATE utf8mb4_unicode_ci           NULL,
+                   COLLATE utf8mb4_unicode_ci NULL,
   `description`    LONGTEXT CHARACTER SET utf8mb4
-                   COLLATE utf8mb4_unicode_ci           NULL,
-  `contact_name`   VARCHAR(200)                         NULL,
-  `contact_number` VARCHAR(45)                          NULL,
-  `contact_email`  VARCHAR(100)                         NULL,
-  `acreage`        DECIMAL(13, 2)                       NULL,
-  `price`          DECIMAL(13, 2)                       NULL,
-  `publish_date`   DATE                                 NULL,
-  `end_date`       DATE                                 NULL,
-  `url`            VARCHAR(500)                         NOT NULL,
-  `location_id`    BIGINT                               NOT NULL,
-  `source`         VARCHAR(100)                         NULL,
-  `type`           VARCHAR(100) DEFAULT 'SELLING'       NULL, # Selling house, buying house, selling apartment, buying apartment
-  `property_type`  VARCHAR(100) DEFAULT 'HOUSE'         NULL,
+                   COLLATE utf8mb4_unicode_ci NULL,
+  `contact_name`   VARCHAR(200)               NULL,
+  `contact_number` VARCHAR(45)                NULL,
+  `contact_email`  VARCHAR(100)               NULL,
+  `acreage`        DECIMAL(13, 2)             NULL,
+  `price`          DECIMAL(13, 2)             NULL,
+  `publish_date`   DATE                       NULL,
+  `end_date`       DATE                       NULL,
+  `url`            VARCHAR(500)               NOT NULL,
+  `location_id`    BIGINT                     NOT NULL,
+  `source`         VARCHAR(100)               NULL,
+  `type`           VARCHAR(100)               NULL, # Selling house, buying house, selling apartment, buying apartment
+  `property_type`  VARCHAR(100)               NULL,
   #   `crawling_start` DATETIME                   NOT NULL,
   #   `crawling_end`   DATETIME                   NOT NULL,
   `created_at`     DATETIME DEFAULT NOW(),
-  `updated_at`     DATETIME                             NULL,
+  `updated_at`     DATETIME                   NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `crwlr_items_id` (`id`),
   UNIQUE KEY `crwlr_items_url` (`url`),

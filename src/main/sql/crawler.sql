@@ -13,7 +13,7 @@ CREATE TABLE `crwlr_crawling_tracking` (
   `name`          VARCHAR(200)
                   CHARACTER SET utf8mb4
                   COLLATE utf8mb4_unicode_ci NULL,
-  `url`           NVARCHAR(500)              NULL,
+  `url`           VARCHAR(500)               NOT NULL,
   `items_count`   INT                        NOT NULL,
   `items_crawled` INT                        NOT NULL,
   `items_added`   INT                        NOT NULL,
@@ -30,8 +30,8 @@ CREATE TABLE `crwlr_crawling_tracking` (
 DROP TABLE IF EXISTS `crwlr_locations`;
 CREATE TABLE `crwlr_locations` (
   `id`       BIGINT AUTO_INCREMENT,
-  `city`     NVARCHAR(100),
-  `district` NVARCHAR(100),
+  `city`     VARCHAR(100) NOT NULL,
+  `district` VARCHAR(100),
   PRIMARY KEY (`id`),
   UNIQUE KEY `crwlr_locations_city_district` (`city`, `district`)
 )
@@ -46,9 +46,9 @@ CREATE TABLE `crwlr_categories` (
   `id`            BIGINT   AUTO_INCREMENT,
   `name`          VARCHAR(200)
                   CHARACTER SET utf8mb4
-                  COLLATE utf8mb4_unicode_ci           NULL,
-  `url`           NVARCHAR(500)                        NULL,
-  `source`        NVARCHAR(100)                        NULL,
+                  COLLATE utf8mb4_unicode_ci           NOT NULL,
+  `url`           VARCHAR(500)                         NOT NULL,
+  `source`        VARCHAR(100)                         NOT NULL,
   `type`          VARCHAR(100) DEFAULT 'Selling'       NOT NULL, # Selling house, buying house, selling apartment, buying apartment
   `property_type` VARCHAR(100) DEFAULT 'House'         NOT NULL,
   `location_id`   BIGINT                               NULL,
@@ -83,7 +83,7 @@ CREATE TABLE `crwlr_items` (
   `price`          DECIMAL(13, 2)             NULL,
   `publish_date`   DATE                       NULL,
   `end_date`       DATE                       NULL,
-  `url`            NVARCHAR(500)              NULL,
+  `url`            VARCHAR(500)               NOT NULL,
   `location_id`    BIGINT                     NOT NULL,
   #   `source`
   #   `crawling_start` DATETIME                   NOT NULL,
@@ -121,13 +121,15 @@ CREATE TABLE `crwlr_categories_items_details` (
 DROP TABLE IF EXISTS `crwlr_contacts`;
 CREATE TABLE `crwlr_contacts` (
   `id`                    BIGINT   AUTO_INCREMENT,
-  `name`                  NVARCHAR(100),
-  `phone`                 NVARCHAR(15),
-  `email`                 NVARCHAR(150),
-  `type`                  NVARCHAR(20), #SALE or OWNER
-  `latest_item_posted_at` DATE     NOT NULL, # User will be notified if this contact is in the list again just in short period of time.
+  `name`                  VARCHAR(100)
+                          CHARACTER SET utf8mb4
+                          COLLATE utf8mb4_unicode_ci NULL,
+  `phone`                 VARCHAR(15),
+  `email`                 VARCHAR(150),
+  `type`                  VARCHAR(20), #SALE or OWNER
+  `latest_item_posted_at` DATE                       NOT NULL, # User will be notified if this contact is in the list again just in short period of time.
   `created_at`            DATETIME DEFAULT now(),
-  `updated_at`            DATETIME NULL,
+  `updated_at`            DATETIME                   NULL,
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
@@ -139,10 +141,10 @@ CREATE TABLE `crwlr_contacts` (
 DROP TABLE IF EXISTS `crwlr_contacts_backup`;
 CREATE TABLE `crwlr_contacts_backup` (
   `id`                    BIGINT AUTO_INCREMENT,
-  `name`                  NVARCHAR(100),
-  `phone`                 NVARCHAR(15),
-  `email`                 NVARCHAR(150),
-  `type`                  NVARCHAR(20), #SALE or OWNER
+  `name`                  VARCHAR(100),
+  `phone`                 VARCHAR(15),
+  `email`                 VARCHAR(150),
+  `type`                  VARCHAR(20), #SALE or OWNER
   `latest_item_posted_at` DATE     NOT NULL,
   `contact_id`            BIGINT   NOT NULL,
   `created_at`            DATETIME NOT NULL, # the same with updated_at in contacts table.
@@ -158,9 +160,9 @@ CREATE TABLE `crwlr_contacts_backup` (
 DROP TABLE IF EXISTS `crwlr_customers`;
 CREATE TABLE `crwlr_customers` (
   `id`               BIGINT   AUTO_INCREMENT,
-  `name`             NVARCHAR(100),
-  `phone`            NVARCHAR(15),
-  `email`            NVARCHAR(150),
+  `name`             VARCHAR(100),
+  `phone`            VARCHAR(15),
+  `email`            VARCHAR(150),
   `latest_export_at` DATETIME NOT NULL,
   `contact_id`       BIGINT   NOT NULL,
   `created_at`       DATETIME DEFAULT now(),

@@ -19,7 +19,6 @@ import wap.api.rest.crawling.bds.interfaces.ICrawlingService;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.Normalizer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;

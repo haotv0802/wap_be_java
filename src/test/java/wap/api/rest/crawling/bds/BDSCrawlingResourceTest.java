@@ -22,7 +22,7 @@ public class BDSCrawlingResourceTest extends TestBase {
 //    .param("link", "https://batdongsan.com.vn/ban-dat-dong-nai")
 //                .param("link", "https://batdongsan.com.vn/ban-dat-dat-nen-tp-hcm")
 
-            .param("link", "https://batdongsan.com.vn/ban-nha-rieng/-1/1/-1/-1/p27")
+            .param("link", "https://batdongsan.com.vn/ban-nha-rieng-tp-hcm/p821")
 //              .param("link", "https://batdongsan.com.vn/ban-can-ho-chung-cu-tp-hcm")
         )
         .andExpect(status().is(200))

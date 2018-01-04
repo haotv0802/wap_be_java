@@ -49,15 +49,6 @@ public class CrawlingResource {
     if (StringUtils.isEmpty(link)) {
       pages.add("https://batdongsan.com.vn/ban-nha-rieng-tp-hcm/p862");
       pages.add("https://batdongsan.com.vn/ban-nha-rieng-tp-hcm/p860");
-//      pages.add("https://www.lazada.sg/empire-13");
-//      pages.add("https://www.lazada.sg/boom_");
-//      pages.add("https://www.lazada.sg/the-bro-store");
-//      pages.add("https://www.lazada.sg/taka-jewellery1");
-//      pages.add("https://www.lazada.sg/crystalawaking");
-//      pages.add("https://www.lazada.sg/nicee-shop");
-//      pages.add("https://www.lazada.sg/itechcool");
-//      pages.add("https://www.lazada.sg/selffix-pte-ltd");
-//      pages.add("https://www.lazada.sg/originalfook");
     } else {
       pages.add(link);
     }

@@ -19,6 +19,7 @@ import wap.api.rest.crawling.bds.interfaces.ICrawlingService;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.Normalizer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -67,34 +68,34 @@ public class CrawlingService implements ICrawlingService {
           }
           item.setLocationId(locationId < 0 ? null : locationId);
           if (itemId > 0) {
-            crawlingDao.updateItem(item);
+            crawlingDao.updateItem(item, crawlingTracking.getCategory());
             item.setId(itemId);
           } else {
-            crawlingDao.addItem(item);
+            crawlingDao.addItem(item, crawlingTracking.getCategory());
             itemsAddedCount++;
           }
 
-          // Saving category.
-          Category category = crawlingTracking.getCategory();
-          Long categoryId = crawlingDao.isCategoryExisting(category.getUrl());
-          locationId = this.crawlingDao.isLocationExisting(category.getDistrict(), category.getCity());
-          if (StringUtils.isEmpty(category.getCity()) && StringUtils.isEmpty(category.getDistrict())) {
-            locationId = (long) -1;
-          } else if (locationId < 0) {
-            locationId = this.crawlingDao.addLocation(category.getDistrict(), category.getCity());
-          }
-          category.setLocationId(locationId < 0 ? null : locationId);
-          if (categoryId > 0) {
-            category.setId(categoryId);
-          } else {
-            crawlingDao.addCategory(category);
-          }
+//          // Saving category.
+//          Category category = crawlingTracking.getCategory();
+//          Long categoryId = crawlingDao.isCategoryExisting(category.getUrl());
+//          locationId = this.crawlingDao.isLocationExisting(category.getDistrict(), category.getCity());
+//          if (StringUtils.isEmpty(category.getCity()) && StringUtils.isEmpty(category.getDistrict())) {
+//            locationId = (long) -1;
+//          } else if (locationId < 0) {
+//            locationId = this.crawlingDao.addLocation(category.getDistrict(), category.getCity());
+//          }
+//          category.setLocationId(locationId < 0 ? null : locationId);
+//          if (categoryId > 0) {
+//            category.setId(categoryId);
+//          } else {
+//            crawlingDao.addCategory(category);
+//          }
 
-          // Add relationship between category & item.
-          Boolean itemLinkedToCategory = crawlingDao.isItemLinkedToCategory(item.getId(), category.getId());
-          if (!itemLinkedToCategory) {
-            crawlingDao.connectItemToCategory(category.getId(), item.getId());
-          }
+//          // Add relationship between category & item.
+//          Boolean itemLinkedToCategory = crawlingDao.isItemLinkedToCategory(item.getId(), category.getId());
+//          if (!itemLinkedToCategory) {
+//            crawlingDao.connectItemToCategory(category.getId(), item.getId());
+//          }
         }
 
         crawlingTracking.setItemsCount(crawlingTracking.getItems().size());

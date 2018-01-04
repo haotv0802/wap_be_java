@@ -188,8 +188,10 @@ public class CrawlingDao implements ICrawlingDao {
     paramsMap.addValue("price", item.getPrice());
     paramsMap.addValue("locationId", item.getLocationId());
     paramsMap.addValue("source", category.getSource());
-    paramsMap.addValue("type", category.getType());
-    paramsMap.addValue("property_type", category.getPropertyType());
+//    paramsMap.addValue("type", category.getType());
+//    paramsMap.addValue("property_type", category.getPropertyType());
+    paramsMap.addValue("type", "SELLING");
+    paramsMap.addValue("property_type", "HOUSE");
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
@@ -222,8 +224,10 @@ public class CrawlingDao implements ICrawlingDao {
     paramsMap.addValue("locationId", item.getLocationId());
     paramsMap.addValue("updated", new Date());
     paramsMap.addValue("source", category.getSource());
-    paramsMap.addValue("type", category.getType());
-    paramsMap.addValue("property_type", category.getPropertyType());
+//    paramsMap.addValue("type", category.getType());
+//    paramsMap.addValue("property_type", category.getPropertyType());
+    paramsMap.addValue("type", "SELLING");
+    paramsMap.addValue("property_type", "HOUSE");
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 

@@ -46,8 +46,9 @@ public class CrawlingResource {
   ) {
     List<String> pages = new ArrayList<>();
     if (StringUtils.isEmpty(link)) {
+        pages.add("https://batdongsan.com.vn/ban-nha-rieng-tp-hcm/p800");
 //      pages.add("https://batdongsan.com.vn/nha-dat-ban/p7243");
-      pages.add("https://batdongsan.com.vn/ban-can-ho-chung-cu/p1907");
+//      pages.add("https://batdongsan.com.vn/ban-can-ho-chung-cu/p1907");
 //      pages.add("https://batdongsan.com.vn/nha-dat-can-mua/p26");
 //      pages.add("https://batdongsan.com.vn/nha-dat-can-thue/p19");
     } else {

@@ -59,25 +59,6 @@ CREATE TABLE `crwlr_contacts` (
   DEFAULT CHARSET = utf8;
 
 --
--- Table structure for table `crwlr_contacts_backup`
---
-DROP TABLE IF EXISTS `crwlr_contacts_backup`;
-CREATE TABLE `crwlr_contacts_backup` (
-  `id`                    BIGINT AUTO_INCREMENT,
-  `name`                  VARCHAR(100),
-  `phone`                 VARCHAR(15),
-  `email`                 VARCHAR(150),
-  `type`                  VARCHAR(20), #SALE or OWNER
-  `latest_item_posted_on` DATE     NOT NULL,
-  `contact_id`            BIGINT   NOT NULL,
-  `created_at`            DATETIME NOT NULL, # the same with updated_at in contacts table.
-  PRIMARY KEY (`id`),
-  CONSTRAINT `crwlr_contacts_backup_contact_id` FOREIGN KEY (`contact_id`) REFERENCES `crwlr_contacts` (`id`)
-)
-  ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
-
---
 -- Table structure for table `crwlr_posts`
 --
 DROP TABLE IF EXISTS `crwlr_posts`;
@@ -106,15 +87,13 @@ CREATE TABLE `crwlr_posts` (
   #   `crawling_start` DATETIME                   NOT NULL,
   #   `crawling_end`   DATETIME                   NOT NULL,
   `contact_id`        BIGINT                               NOT NULL,
-  `contact_backup_id` BIGINT                               NULL,
   `created_at`        DATETIME DEFAULT NOW(),
   `updated_at`        DATETIME                             NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `crwlr_posts_id` (`id`),
   UNIQUE KEY `crwlr_posts_url` (`url`),
   CONSTRAINT `crwlr_posts_location_id` FOREIGN KEY (`location_id`) REFERENCES `crwlr_locations` (`id`),
-  CONSTRAINT `crwlr_posts_contact_id` FOREIGN KEY (`contact_id`) REFERENCES `crwlr_contacts` (`id`),
-  CONSTRAINT `crwlr_posts_contact_backup_id` FOREIGN KEY (`contact_backup_id`) REFERENCES `crwlr_contacts_backup` (`id`)
+  CONSTRAINT `crwlr_posts_contact_id` FOREIGN KEY (`contact_id`) REFERENCES `crwlr_contacts` (`id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;

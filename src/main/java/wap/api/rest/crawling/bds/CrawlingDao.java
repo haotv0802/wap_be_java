@@ -101,8 +101,8 @@ public class CrawlingDao implements ICrawlingDao {
   @Override
   public void addContact(Contact contact) {
     final String sql =
-              "INSERT INTO crwlr_contacts (name, phone, email, type, latest_item_posted_at)"
-            + " VALUE (:name, :phone, :email, :type, :latest_item_posted_at)               "
+              "INSERT INTO crwlr_contacts (name, phone, email, type, latest_item_posted_on)"
+            + " VALUE (:name, :phone, :email, :type, :latest_item_posted_on)               "
         ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
@@ -110,7 +110,7 @@ public class CrawlingDao implements ICrawlingDao {
     paramsMap.addValue("phone", contact.getPhone());
     paramsMap.addValue("email", contact.getEmail());
     paramsMap.addValue("type", contact.getType());
-    paramsMap.addValue("latest_item_posted_at", contact.getLatestItemPostedAt());
+    paramsMap.addValue("latest_item_posted_on", contact.getLatestItemPostedOn());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
@@ -145,7 +145,7 @@ public class CrawlingDao implements ICrawlingDao {
   public void updateContact(Contact contact) {
     final String sql =
         "UPDATE crwlr_contacts SET name = :name, phone = :phone, email = :email,"
-      + " type = :type, latest_item_posted_at = :latest_item_posted_at          "
+      + " type = :type, latest_item_posted_on = :latest_item_posted_on          "
       + " WHERE id = :id                                                        "
         ;
 
@@ -154,7 +154,7 @@ public class CrawlingDao implements ICrawlingDao {
     paramsMap.addValue("phone", contact.getPhone());
     paramsMap.addValue("email", contact.getEmail());
     paramsMap.addValue("type", contact.getType());
-    paramsMap.addValue("latest_item_posted_at", contact.getLatestItemPostedAt());
+    paramsMap.addValue("latest_item_posted_on", contact.getLatestItemPostedOn());
     paramsMap.addValue("id", contact.getId());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());

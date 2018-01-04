@@ -48,7 +48,7 @@ CREATE TABLE `crwlr_contacts` (
   `phone`                 VARCHAR(15)  NULL,
   `email`                 VARCHAR(150) NULL,
   `type`                  VARCHAR(20)  NOT NULL, #SALE or OWNER
-  `latest_item_posted_at` DATE         NOT NULL, # User will be notified if this contact is in the list again just in short period of time.
+  `latest_item_posted_on` DATE         NOT NULL, # User will be notified if this contact is in the list again just in short period of time.
   `created_at`            DATETIME DEFAULT now(),
   `updated_at`            DATETIME     NULL,
   PRIMARY KEY (`id`),
@@ -68,7 +68,7 @@ CREATE TABLE `crwlr_contacts_backup` (
   `phone`                 VARCHAR(15),
   `email`                 VARCHAR(150),
   `type`                  VARCHAR(20), #SALE or OWNER
-  `latest_item_posted_at` DATE     NOT NULL,
+  `latest_item_posted_on` DATE     NOT NULL,
   `contact_id`            BIGINT   NOT NULL,
   `created_at`            DATETIME NOT NULL, # the same with updated_at in contacts table.
   PRIMARY KEY (`id`),

@@ -74,7 +74,7 @@ public class CrawlingService implements ICrawlingService {
           contact.setEmail(item.getContactEmail());
           contact.setPhone(item.getContactNumber());
           contact.setType("OWNER"); // TODO need to work on this
-          contact.setLatestItemPostedAt(new Date());
+          contact.setLatestItemPostedOn(item.getPublishDate());
           Long contactId = this.crawlingDao.isContactExisting(item.getContactName(), item.getContactNumber(), item.getContactEmail());
           if (contactId > 0) {
             contact.setId(contactId);

@@ -8,7 +8,7 @@ public class Contact {
   private String phone;
   private String email;
   private String type;
-  private Date latestItemPostedAt;
+  private Date latestItemPostedOn;
 
   public Long getId() {
     return id;
@@ -50,11 +50,11 @@ public class Contact {
     this.type = type;
   }
 
-  public Date getLatestItemPostedAt() {
-    return latestItemPostedAt;
+  public Date getLatestItemPostedOn() {
+    return latestItemPostedOn;
   }
 
-  public void setLatestItemPostedAt(Date latestItemPostedAt) {
-    this.latestItemPostedAt = latestItemPostedAt;
+  public void setLatestItemPostedOn(Date latestItemPostedOn) {
+    this.latestItemPostedOn = latestItemPostedOn;
   }
 }

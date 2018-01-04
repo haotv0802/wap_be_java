@@ -132,8 +132,11 @@ public class CrawlingService implements ICrawlingService {
 
       String currentPage = pageLink;
       String nextPage = null;
+
+      Set<String> urls = new HashSet<>();
+
       do {
-        LOGGER.info(">>> Crawling on page: " + currentPage);
+        LOGGER.info(">>> Get links on page: " + currentPage);
         document = Jsoup.connect(currentPage).get();
         Elements hrefTagsPager = document.select("div.background-pager-right-controls").get(0).children();
 
@@ -142,8 +145,8 @@ public class CrawlingService implements ICrawlingService {
         for (Element element : itemsList) {
           Elements titleOfProduct = element.select("div.p-title");
           String link = titleOfProduct.get(0).select("a").attr("abs:href");
-
-          getItemDetails(link, crawlingTracking);
+          urls.add(link);
+//          getItemDetails(link, crawlingTracking);
         }
 
         for (int i = 0; i < hrefTagsPager.size(); i++) {
@@ -158,6 +161,22 @@ public class CrawlingService implements ICrawlingService {
         }
 
       } while (nextPage != null && nextPage.length() > 0);
+
+//      Iterator<String> iterator = urls.iterator();
+//      while (iterator.hasNext()) {
+//        String link = iterator.next();
+//        if (this.crawlingDao.isItemExisting(link) < 0) {
+//          iterator.remove();
+//        }
+//      }
+
+      Iterator<String> iterator = urls.iterator();
+      int i = 0;
+      while (iterator.hasNext()) {
+        String link = iterator.next();
+        LOGGER.info("post " + ++i + " / " + urls.size() + ", " + link);
+        getItemDetails(link, crawlingTracking);
+      }
 
     } catch (IOException e) {
       System.err.println("For '" + pageLink + "': " + e.getMessage());

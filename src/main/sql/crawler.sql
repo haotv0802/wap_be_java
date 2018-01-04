@@ -45,7 +45,7 @@ DROP TABLE IF EXISTS `crwlr_contacts`;
 CREATE TABLE `crwlr_contacts` (
   `id`                    BIGINT   AUTO_INCREMENT,
   `name`                  VARCHAR(100) NULL,
-  `phone`                 VARCHAR(15)  NULL,
+  `phone`                 VARCHAR(100)  NULL,
   `email`                 VARCHAR(150) NULL,
   `type`                  VARCHAR(20)  NOT NULL, #SALE or OWNER
   `latest_item_posted_on` DATE         NOT NULL, # User will be notified if this contact is in the list again just in short period of time.
@@ -105,7 +105,7 @@ DROP TABLE IF EXISTS `crwlr_customers`;
 CREATE TABLE `crwlr_customers` (
   `id`               BIGINT   AUTO_INCREMENT,
   `name`             VARCHAR(100),
-  `phone`            VARCHAR(15),
+  `phone`            VARCHAR(100),
   `email`            VARCHAR(150),
   `latest_export_at` DATETIME NOT NULL,
   `contact_id`       BIGINT   NOT NULL,

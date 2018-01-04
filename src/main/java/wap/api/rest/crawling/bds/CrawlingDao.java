@@ -100,7 +100,7 @@ public class CrawlingDao implements ICrawlingDao {
   @Override
   public Long isItemExisting(String url) {
     final String sql =
-    "SELECT i.id FROM crwlr_items i where i.url = :url";
+    "SELECT i.id FROM crwlr_posts i where i.url = :url";
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("url", url);
@@ -132,7 +132,7 @@ public class CrawlingDao implements ICrawlingDao {
   @Override
   public void addItem(Item item) {
     final String sql =
-    "INSERT INTO crwlr_items (name, description, address, contact_name, contact_number, contact_email, publish_date,  "
+    "INSERT INTO crwlr_posts (name, description, address, contact_name, contact_number, contact_email, publish_date,  "
   + "end_date, url, acreage, price, location_id, source, type, property_type)                                         "
   + " VALUE (:name, :description, :address, :contact_name, :contact_number, :contact_email, :publishDate,             "
   + " :endDate, :url, :acreage, :price, :locationId, :source, :type, :property_type)                                  "
@@ -181,7 +181,7 @@ public class CrawlingDao implements ICrawlingDao {
   @Override
   public void updateItem(Item item) {
     final String sql =
-        "UPDATE crwlr_items SET name = :name, description = :description, address = :address, contact_number = :contact_number, acreage = :acreage,"
+        "UPDATE crwlr_posts SET name = :name, description = :description, address = :address, contact_number = :contact_number, acreage = :acreage,"
       + " price = :price, location_id = :locationId, contact_name = :contact_name, source = :source, type = :type, property_type = :property_type, "
       + " contact_email = :contact_email, publish_date = :publish_date, end_date = :end_date, updated_at = :updated                                "
       + " WHERE url = :url                                                                                                                         "

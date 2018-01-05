@@ -14,6 +14,7 @@ public class BusinessService {
         || name.contains("team")
         || name.contains("celadon")
         || name.contains("kinh doanh")
+        || name.contains("đau tu")
         || name.contains("giao dich")
         || name.contains("bat đong san")
         ) {
@@ -22,6 +23,7 @@ public class BusinessService {
     if (email.contains("bds")
         || email.contains("batdongsan")
         || email.contains("real")
+        || email.contains("chungcu")
         || email.contains("diaocsaigon")
         || email.contains("nhadat")
         || email.contains("saigonhousecenter")

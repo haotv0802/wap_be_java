@@ -108,7 +108,7 @@ CREATE TABLE `crwlr_customers` (
   `phone`            VARCHAR(100),
   `email`            VARCHAR(150),
   `latest_export_at` DATETIME NOT NULL,
-  `contact_id`       BIGINT   NOT NULL,
+#   `contact_id`       BIGINT   NULL,
   `created_at`       DATETIME DEFAULT now(),
   `updated_at`       DATETIME NULL,
   PRIMARY KEY (`id`),
@@ -116,6 +116,15 @@ CREATE TABLE `crwlr_customers` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
+
+
+
+INSERT INTO crawler_db_180104.crwlr_customers (`name`, `phone`, `email`, `latest_export_at`)
+VALUES ('Phuc', '01235379247', 'hongphuc.vumai@gmail.com', now());
+
+
+INSERT INTO crawler_db_180104.crwlr_customers (`name`, `phone`, `email`, `latest_export_at`)
+VALUES ('Thanh', '01269679581', 'nguyenphuoc.thanh110795@gmail.com', now());
 
 --
 -- Table structure for table `crwlr_exports_tracking`

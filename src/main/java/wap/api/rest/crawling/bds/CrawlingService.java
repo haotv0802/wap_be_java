@@ -166,7 +166,7 @@ public class CrawlingService implements ICrawlingService {
         iterator = urls.iterator();
         while (iterator.hasNext()) {
           String link = iterator.next();
-          if (this.crawlingDao.isItemExisting(link) < 0) {
+          if (this.crawlingDao.isItemExisting(link) > 0) {
             iterator.remove();
           }
         }
@@ -182,6 +182,7 @@ public class CrawlingService implements ICrawlingService {
 
     } catch (IOException e) {
       System.err.println("For '" + pageLink + "': " + e.getMessage());
+      e.printStackTrace();
     }
   }
 
@@ -309,13 +310,14 @@ public class CrawlingService implements ICrawlingService {
 
       crawlingTracking.addItems(items);
       itemCrawled++;
+      crawlingTracking.setItemsCrawled(itemCrawled);
     } catch (IOException e) {
       e.printStackTrace();
     } catch (ParseException e) {
       e.printStackTrace();
+    } catch (IndexOutOfBoundsException e) {
+      e.printStackTrace();
     }
-
-    crawlingTracking.setItemsCrawled(itemCrawled);
   }
   
   private String getEmailFromCharaters(String[] charaters) {

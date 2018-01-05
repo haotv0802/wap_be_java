@@ -218,7 +218,10 @@ public class CrawlingService implements ICrawlingService {
       if (locationArray.length == 2) {
         city = StringUtils.stripAccents(locationArray[1].trim());
         if (typeAndPropertyTypeOriginal.indexOf("tai") > 0) { // sometimes district is not here (at position 2)
-          typeAndPropertyTypeOriginal = typeAndPropertyTypeOriginal.substring(typeAndPropertyTypeOriginal.indexOf("tai") + 7).trim();
+          typeAndPropertyTypeOriginal = typeAndPropertyTypeOriginal.substring(typeAndPropertyTypeOriginal.indexOf("tai") + 4).trim();
+          if (typeAndPropertyTypeOriginal.contains("Quan")) {
+            typeAndPropertyTypeOriginal = typeAndPropertyTypeOriginal.replace("Quan", "").trim();
+          }
           district = typeAndPropertyTypeOriginal;
         }
       } else if (locationArray.length == 3) {

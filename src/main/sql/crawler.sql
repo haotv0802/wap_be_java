@@ -1,8 +1,8 @@
-DROP DATABASE IF EXISTS `crawler_db_180104`;
-CREATE DATABASE IF NOT EXISTS `crawler_db_180104`
+DROP DATABASE IF EXISTS `crawler_db_spring_security`;
+CREATE DATABASE IF NOT EXISTS `crawler_db_spring_security`
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
-USE `crawler_db_180104`;
+USE `crawler_db_spring_security`;
 
 --
 -- Table structure for table `crwlr_crawling_tracking`

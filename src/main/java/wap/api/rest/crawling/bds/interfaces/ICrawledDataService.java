@@ -18,4 +18,6 @@ public interface ICrawledDataService {
   List<ItemPresenter> getAllItemsByCriterion(Criterion criterion);
 
   List<ItemPresenter> exportCrawledData(Criterion criterion) throws IOException;
+
+  List<String> getEmails();
 }

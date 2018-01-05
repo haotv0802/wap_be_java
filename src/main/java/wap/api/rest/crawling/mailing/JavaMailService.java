@@ -1,7 +1,5 @@
 package wap.api.rest.crawling.mailing;
 
-import org.springframework.stereotype.Service;
-
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -42,7 +40,7 @@ public class JavaMailService {
 
     generateMailMessage.setSubject("Cung cấp dữ liệu (data) khách hàng..");
     String emailBody = "Xin chào Anh/Chị, <br/> "
-        + "Em bên cung cấp dữ liệu được cập nhật thường xuyên trên các website bất động sản "
+        + "Em bên cung cấp dữ liệu được <b>cập nhật thường xuyên</b> trên các website bất động sản "
         + "Anh/Chị có nhu cầu chỉ cần phản hồi thư này để lại thông tin, "
         + "bên em sẽ giúp lấy dữ liệu khách hàng cho anh/chị phát triển kế hoạch sale của mình ạ."
 

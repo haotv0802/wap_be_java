@@ -14,4 +14,6 @@ public interface ICrawledDataDao {
   List<ItemPresenter> getAllItems();
 
   List<ItemPresenter> getAllItemsByCriterion(Criterion criterion);
+
+  List<String> getEmails();
 }

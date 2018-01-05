@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import wap.api.rest.crawling.bds.beans.Criterion;
 import wap.api.rest.crawling.bds.beans.ItemPresenter;
 import wap.api.rest.crawling.bds.interfaces.ICrawledDataService;
+import wap.api.rest.crawling.mailing.JavaMailService;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.List;
 
@@ -52,5 +54,20 @@ public class CrawledDataResource {
   ) throws IOException {
     return crawledDataService.exportCrawledData(criterion);
   }
+
+  @GetMapping("/crawler/sendAds")
+  public List<String> sendAds(
+  ) throws IOException, MessagingException {
+    List<String> emails = this.crawledDataService.getEmails();
+
+//    JavaMailService.sendMailOfAds("hoanhhao@gmail.com");
+    for(String email : emails) {
+      JavaMailService.sendMailOfAds(email);
+    }
+
+    return emails;
+  }
+
+
 
 }

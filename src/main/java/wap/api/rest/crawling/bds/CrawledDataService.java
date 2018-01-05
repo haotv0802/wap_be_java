@@ -198,4 +198,9 @@ public class CrawledDataService implements ICrawledDataService {
     return list;
   }
 
+  @Override
+  public List<String> getEmails() {
+    return this.crawledDataDao.getEmails();
+  }
+
 }

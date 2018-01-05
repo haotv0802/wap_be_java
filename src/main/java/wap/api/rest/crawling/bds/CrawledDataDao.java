@@ -153,4 +153,24 @@ public class CrawledDataDao implements ICrawledDataDao {
     });
   }
 
+  @Override
+  public List<String> getEmails() {
+    final String sql =
+              "SELECT                                                                               "
+            + "    email                                                                            "
+            + "FROM                                                                                 "
+            + "    crwlr_contacts                                                                   "
+            + "WHERE                                                                                "
+            + "    id IN ( SELECT DISTINCT (contact_id) FROM crwlr_posts WHERE location_id IN (     "
+            + "				SELECT id FROM crawler_db_180104.crwlr_locations WHERE city LIKE 'Đong Nai')  "
+            + "				AND property_type = 'APARTMENT')                                              "
+            + "    AND email <> ''                                                                  "
+        ;
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return namedTemplate.queryForList(sql, paramsMap, String.class);
+  }
+
 }

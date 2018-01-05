@@ -31,6 +31,15 @@ public class BDSCrawlingResourceTest extends TestBase {
   }
 
   @Test
+  public void testSendAds() throws Exception {
+    mockMvc
+        .perform(get("/svc/bds/crawler/sendAds")
+        )
+        .andExpect(status().is(200))
+    ;
+  }
+
+  @Test
   public void testGetCrawledData() throws Exception {
     Criterion criterion = new Criterion();
     criterion.setPersonName("HaoHo");

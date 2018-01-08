@@ -9,8 +9,8 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import wap.auth.Credentials;
 import wap.auth.UserTokenDetails;
-import wap.api.rest.auth.beans.Credentials;
 import wap.auth.exceptions.BadLoginPayloadException;
 
 import javax.servlet.ServletException;
@@ -44,7 +44,7 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
     }
 
     final UsernamePasswordAuthenticationToken loginToken =
-        new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+        new UsernamePasswordAuthenticationToken(user.getUserName(), user.getUserPass());
     loginToken.setDetails(new UserTokenDetails(request));
 
     return getAuthenticationManager().authenticate(loginToken);

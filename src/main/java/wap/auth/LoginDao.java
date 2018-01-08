@@ -13,7 +13,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.SerializationUtils;
-import wap.api.rest.auth.beans.Credentials;
 import wap.common.dao.DaoUtils;
 
 import java.sql.Blob;
@@ -37,11 +36,14 @@ public class LoginDao {
 
   public CredentialsResult checkCredentials(Credentials credentials) throws Exception {
     final String sql =
-        "SELECT user_name, password FROM user_table where user_name = :username and password = :password";
+        "SELECT user_name, password FROM crwlr_users where user_name = :username and password = :password";
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource()
-        .addValue("username", credentials.getUsername())
-        .addValue("password", credentials.getPassword());
+        .addValue("username", credentials.getUserName())
+        .addValue("password", credentials.getUserPass());
+
+    DaoUtils.debugQuery(log, sql, paramsMap.getValues());
+
     CredentialsResult result = null;
     try {
       result = namedTemplate.queryForObject(sql, paramsMap, (resultSet, i) -> {
@@ -57,7 +59,7 @@ public class LoginDao {
 
   public UserDetailsImpl findOneByUsername(String username) {
 
-    final String sql = "SELECT user_name, password FROM user_table where user_name = :username";
+    final String sql = "SELECT user_name, password FROM crwlr_users where user_name = :username";
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource()
         .addValue("username", username);
@@ -88,10 +90,10 @@ public class LoginDao {
     final String sql = "SELECT                                                     "
                      + "	r.ROLE_NAME                                              "
                      + "FROM                                                       "
-                     + "	(user_role r                                             "
-                     + "	INNER JOIN user_role_details d ON r.id = d.role_id)      "
+                     + "	(crwlr_user_roles r                                      "
+                     + "	INNER JOIN crwlr_user_role_details d ON r.id = d.role_id)"
                      + "		INNER JOIN                                             "
-                     + "	user_table u ON u.id = d.user_id                         "
+                     + "	crwlr_users u ON u.id = d.user_id                        "
                      + "WHERE                                                      "
                      + "	u.user_name = :username                                  "
         ;
@@ -112,14 +114,15 @@ public class LoginDao {
 //    final String getIdSql = "SELECT v9_auth_token_seq.nextval FROM DUAL";
 
     final String addTokenSql =
-              "INSERT INTO auth_token"
-            + "  (TOKEN_TYPE         "
-            + "  , AUTH_OBJECT       "
-            + "  , EXP_DATE)         "
-            + "VALUES                "
-            + "  ( ?                 "
-            + "  , ?                 "
-            + "  , ?)                ";
+              "INSERT INTO crwlr_auth_token"
+            + "  (TOKEN_TYPE               "
+            + "  , AUTH_OBJECT             "
+            + "  , EXP_DATE)               "
+            + "VALUES                      "
+            + "  ( ?                       "
+            + "  , ?                       "
+            + "  , ?)                      "
+        ;
 
 //    final Long id = jdbcTemplate.queryForObject(getIdSql, Long.class);
 
@@ -133,7 +136,7 @@ public class LoginDao {
         , new int[]{Types.VARCHAR, Types.BLOB, Types.TIMESTAMP}
     );
 
-    final String sql = "SELECT ID FROM AUTH_TOKEN ORDER BY ID DESC LIMIT 1";
+    final String sql = "SELECT ID FROM crwlr_auth_token ORDER BY ID DESC LIMIT 1";
     DaoUtils.debugQuery(log, sql);
 
     int id = namedTemplate.queryForObject(sql, new MapSqlParameterSource(), Integer.class);
@@ -154,7 +157,7 @@ public class LoginDao {
   }
 
   public UserDetails readUserDetailsFromToken(Integer id) {
-    final String getTokenSql = "SELECT TOKEN_TYPE, AUTH_OBJECT, EXP_DATE FROM AUTH_TOKEN WHERE ID = ?";
+    final String getTokenSql = "SELECT TOKEN_TYPE, AUTH_OBJECT, EXP_DATE FROM crwlr_auth_token WHERE ID = ?";
     final Object[] args = {id};
 
     DaoUtils.debugQuery(log, getTokenSql, args);

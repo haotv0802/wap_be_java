@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;
 import org.testng.annotations.Test;
 import wap.api.rest.TestBase;
+import wap.api.rest.crawling.DocumentationBase;
 import wap.api.rest.crawling.bds.beans.Criterion;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -13,12 +14,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Created by haho on 19/10/2017.
  */
-public class BDSCrawlingResourceTest extends TestBase {
+public class BDSCrawlingResourceTest extends DocumentationBase {
 
   @Test
   public void testCrawlingData() throws Exception {
     mockMvc
         .perform(get("/svc/bds/crawler/crawlingData")
+                .header("Accept-Language", "en")
+                .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
 //    .param("link", "https://batdongsan.com.vn/cho-thue-can-ho-chung-cu/p613")
 //                .param("link", "https://batdongsan.com.vn/ban-dat-dat-nen-tp-hcm")
 
@@ -28,6 +31,7 @@ public class BDSCrawlingResourceTest extends TestBase {
         )
         .andExpect(status().is(200))
     ;
+
   }
 
   @Test

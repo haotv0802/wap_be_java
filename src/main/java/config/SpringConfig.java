@@ -53,6 +53,7 @@ import wap.auth.encoders.MD5HalfPasswordEncoder;
 import wap.auth.encoders.MD5PasswordEncoder;
 import wap.auth.encoders.SHA1PasswordEncoder;
 import wap.auth.filters.*;
+import wap.transaction.TransactionFilter;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
@@ -96,7 +97,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 
   @Bean(name = "dataSource")
   public DataSource dataSource() throws SQLException {
-    final String databaseUrl = "jdbc:mysql://localhost:3306/crawler_db_180104?useUnicode=true&characterEncoding=UTF-8";
+    final String databaseUrl = "jdbc:mysql://localhost:3306/crawler_db_spring_security?useUnicode=true&characterEncoding=UTF-8";
     final String usr = "root";
     final String pass = "hoanhhao";
 
@@ -149,6 +150,11 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
       return new HeaderHttpSessionStrategy();
     }
 
+  }
+
+  @Bean
+  public TransactionFilter txFilter() {
+    return new TransactionFilter();
   }
 
   @Bean(name = "jdbcTemplate")

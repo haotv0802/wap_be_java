@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;
 import org.testng.annotations.Test;
 import wap.api.rest.TestBase;
-import wap.api.rest.auth.beans.Credentials;
+import wap.auth.Credentials;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -17,8 +17,8 @@ public class LoginResourceTest extends TestBase {
   @Test
   public void testLogin() throws Exception {
     Credentials c = new Credentials();
-    c.setUsername("haoho");
-    c.setPassword("admin");
+    c.setUserName("haoho");
+    c.setUserPass("admin");
 
     mockMvc
         .perform(post("/svc/login")

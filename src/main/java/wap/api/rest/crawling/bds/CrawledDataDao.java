@@ -201,7 +201,7 @@ public class CrawledDataDao implements ICrawledDataDao {
             + "    crwlr_contacts c INNER JOIN crwlr_posts p ON c.id = p.contact_id                 "
             + "WHERE                                                                                "
             + "    c.id IN ( SELECT DISTINCT (contact_id) FROM crwlr_posts WHERE location_id IN (   "
-            + "				SELECT id FROM crwlr_locations WHERE city LIKE 'Đong Nai')                    "
+            + "				SELECT id FROM crwlr_locations WHERE city = 'Ho Chi Minh' AND district = '12')"
             + "				AND property_type = 'APARTMENT')                                              "
             + " AND p.created_at = (SELECT MAX(created_at) FROM crwlr_posts WHERE contact_id = c.id)"
             + "    AND c.email <> ''                                                                "

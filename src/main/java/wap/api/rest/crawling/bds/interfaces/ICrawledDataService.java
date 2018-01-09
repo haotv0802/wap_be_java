@@ -1,5 +1,6 @@
 package wap.api.rest.crawling.bds.interfaces;
 
+import wap.api.rest.crawling.bds.beans.Contact;
 import wap.api.rest.crawling.bds.beans.Criterion;
 import wap.api.rest.crawling.bds.beans.ItemPresenter;
 
@@ -20,4 +21,6 @@ public interface ICrawledDataService {
   List<ItemPresenter> exportCrawledData(Criterion criterion) throws IOException;
 
   List<String> getEmails();
+
+  List<Contact> getContacts();
 }

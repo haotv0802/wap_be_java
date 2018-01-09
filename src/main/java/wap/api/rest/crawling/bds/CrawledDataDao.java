@@ -3,16 +3,20 @@ package wap.api.rest.crawling.bds;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
+import wap.api.rest.crawling.bds.beans.Contact;
 import wap.api.rest.crawling.bds.beans.Criterion;
 import wap.api.rest.crawling.bds.beans.ItemPresenter;
 import wap.api.rest.crawling.bds.interfaces.ICrawledDataDao;
 import wap.common.JdbcUtils;
 import wap.common.dao.DaoUtils;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -171,6 +175,56 @@ public class CrawledDataDao implements ICrawledDataDao {
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
     return namedTemplate.queryForList(sql, paramsMap, String.class);
+  }
+
+  @Override
+  public List<Contact> getContacts() {
+    // without URL
+//    final String sql =
+//              "SELECT                                                                               "
+//            + "    id, name, phone, email, type, latest_item_posted_on                              "
+//            + "FROM                                                                                 "
+//            + "    crwlr_contacts                                                                   "
+//            + "WHERE                                                                                "
+//            + "    id IN ( SELECT DISTINCT (contact_id) FROM crwlr_posts WHERE location_id IN (     "
+//            + "				SELECT id FROM crwlr_locations WHERE city LIKE 'Đong Nai')                    "
+//            + "				AND property_type = 'APARTMENT')                                              "
+//            + "    AND email <> ''                                                                  "
+        ;
+
+    // with URL
+
+        final String sql =
+              "SELECT                                                                               "
+            + "    c.id, c.name, c.phone, c.email, c.type, c.latest_item_posted_on, p.url           "
+            + "FROM                                                                                 "
+            + "    crwlr_contacts c INNER JOIN crwlr_posts p ON c.id = p.contact_id                 "
+            + "WHERE                                                                                "
+            + "    c.id IN ( SELECT DISTINCT (contact_id) FROM crwlr_posts WHERE location_id IN (   "
+            + "				SELECT id FROM crwlr_locations WHERE city LIKE 'Đong Nai')                    "
+            + "				AND property_type = 'APARTMENT')                                              "
+            + " AND p.created_at = (SELECT MAX(created_at) FROM crwlr_posts WHERE contact_id = c.id)"
+            + "    AND c.email <> ''                                                                "
+            ;
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return namedTemplate.query(sql, paramsMap, new RowMapper<Contact>() {
+      @Override
+      public Contact mapRow(ResultSet resultSet, int i) throws SQLException {
+        Contact contact = new Contact();
+        contact.setId(resultSet.getLong("id"));
+        contact.setName(resultSet.getString("name"));
+        contact.setPhone(resultSet.getString("phone"));
+        contact.setEmail(resultSet.getString("email"));
+        contact.setType(resultSet.getString("type"));
+        contact.setLatestItemPostedOn(resultSet.getDate("latest_item_posted_on"));
+        contact.setUrl(resultSet.getString("url"));
+
+        return contact;
+      }
+    });
   }
 
 }

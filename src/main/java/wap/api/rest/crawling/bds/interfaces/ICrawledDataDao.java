@@ -1,5 +1,6 @@
 package wap.api.rest.crawling.bds.interfaces;
 
+import wap.api.rest.crawling.bds.beans.Contact;
 import wap.api.rest.crawling.bds.beans.Criterion;
 import wap.api.rest.crawling.bds.beans.ItemPresenter;
 
@@ -16,4 +17,6 @@ public interface ICrawledDataDao {
   List<ItemPresenter> getAllItemsByCriterion(Criterion criterion);
 
   List<String> getEmails();
+
+  List<Contact> getContacts();
 }

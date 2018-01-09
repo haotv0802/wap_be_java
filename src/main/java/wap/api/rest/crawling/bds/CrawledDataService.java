@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
+import wap.api.rest.crawling.bds.beans.Contact;
 import wap.api.rest.crawling.bds.beans.Criterion;
 import wap.api.rest.crawling.bds.beans.ItemPresenter;
 import wap.api.rest.crawling.bds.interfaces.ICrawledDataDao;
@@ -201,6 +202,11 @@ public class CrawledDataService implements ICrawledDataService {
   @Override
   public List<String> getEmails() {
     return this.crawledDataDao.getEmails();
+  }
+
+  @Override
+  public List<Contact> getContacts() {
+    return this.crawledDataDao.getContacts();
   }
 
 }

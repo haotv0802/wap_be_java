@@ -17,6 +17,11 @@ public class BusinessService {
         || name.contains("đau tu")
         || name.contains("giao dich")
         || name.contains("bat đong san")
+        || name.contains("mua ban")
+        || name.contains("muaban")
+        || name.contains("tai san")
+        || name.contains("cong ty")
+        || name.contains("ktts")
         ) {
       return true;
     }
@@ -34,6 +39,9 @@ public class BusinessService {
         || email.contains("richgroup")
         || email.contains("sale")
         || email.contains("celadon")
+        || email.contains("muaban")
+        || email.contains("taisan")
+        || email.contains("giaodich")
         ) {
       return true;
     }

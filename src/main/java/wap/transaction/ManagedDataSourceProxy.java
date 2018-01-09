@@ -102,19 +102,19 @@ public class ManagedDataSourceProxy implements DataSource {
       cs = conn.prepareCall(sql);
 
       final String currentUserLogin = null != p ? p.getUsername() : null;
-      final Integer currentUserRefperso = null != p ? p.getRefPerson() : null;
-      final String currentLanguage = null != p ? p.getLang() : null;
+//      final Integer currentUserRefperso = null != p ? p.getRefPerson() : null;
+//      final String currentLanguage = null != p ? p.getLang() : null;
 
       cs.setString(1, currentUserLogin);
 
-      if (currentUserRefperso != null)
-        cs.setInt(2, currentUserRefperso);
-      else
-        cs.setObject(2, null);
-
-      cs.setString(3, currentLanguage);
-
-      log.debug(sql + "; bv{" + currentUserLogin + ", " + currentUserRefperso + ", " + currentLanguage + ", }");
+//      if (currentUserRefperso != null)
+//        cs.setInt(2, currentUserRefperso);
+//      else
+//        cs.setObject(2, null);
+//
+//      cs.setString(3, currentLanguage);
+//
+//      log.debug(sql + "; bv{" + currentUserLogin + ", " + currentUserRefperso + ", " + currentLanguage + ", }");
       cs.execute();
     } catch (Exception e) {
       log.warn("Can't set imx_session_params.setSessionDetails(): ", e);
@@ -124,110 +124,6 @@ public class ManagedDataSourceProxy implements DataSource {
           cs.close();
         } catch (Exception e) {
         }
-      }
-    }
-  }
-
-  private void setImxCurrentUserLang(Connection conn, UserDetailsImpl p) {
-    CallableStatement cs = null;
-    try {
-      String sql = "{ call imx_session_params.setCurrentLanguage(?)}";
-      cs = conn.prepareCall(sql);
-
-      final String userLang = null != p ? p.getLang() : null;
-      cs.setString(1, userLang);
-
-      log.debug(sql + "; bv{" + userLang + "}");
-      cs.execute();
-    } catch (Exception e) {
-      log.warn("Can't set imx_session_params.setCurrentLanguage(): ", e);
-    } finally {
-      try {
-        cs.close();
-      } catch (Exception e) {
-      }
-    }
-  }
-
-  private void startXa(Connection conn, UserDetailsImpl p) {
-    if (p == null) {
-      //todo: replace when the package is fixed
-      return;
-    }
-    CallableStatement pstm = null;
-    try {
-      String sql = "{ call service_bus.xa_start() }";
-      pstm = conn.prepareCall(sql);
-
-      log.debug(sql + "; bv{}");
-      pstm.execute();
-    } catch (Exception e) {
-      log.warn("startXa failed due to: ", e);
-    } finally {
-      if (null != pstm) {
-        try {
-          pstm.close();
-        } catch (Exception e) {
-          //NOP
-        }
-      }
-    }
-  }
-
-  private void setImxSessionCurrentUser(Connection conn, UserDetailsImpl p) {
-    if (p == null) {
-      //todo: replace when the package is fixed
-      return;
-    }
-    CallableStatement pstm = null;
-    try {
-      String sql = "{ call imx_session_params.setCurrentUserLogin(?)}";
-      pstm = conn.prepareCall(sql);
-
-      final String refperson = null != p ? p.getUsername() : null;
-      pstm.setString(1, refperson);
-
-      log.debug(sql + "; bv{" + refperson + "}");
-      pstm.execute();
-
-    } catch (Exception e) {
-      log.warn("Can't set imx_session_params.setCurrentUserLogin(): ", e);
-    } finally {
-      try {
-        pstm.close();
-      } catch (Exception e) {
-      }
-    }
-  }
-
-  private void setImxSessionRefPerson(Connection conn, UserDetailsImpl p) {
-    if (p == null) {
-      //todo: replace when the package is fixed
-      return;
-    }
-    CallableStatement pstm = null;
-
-    try {
-      String sql = "{ call imx_session_params.setCurrentUserRefperso(?)}";
-      pstm = conn.prepareCall(sql);
-
-      final Integer refperson = null != p ? p.getRefPerson() : null;
-
-      if (null != refperson) {
-        pstm.setInt(1, refperson);
-      } else {
-        pstm.setNull(1, Types.NUMERIC);
-      }
-
-      log.debug(sql + "; bv{" + refperson + "}");
-      pstm.execute();
-
-    } catch (Exception e) {
-      log.warn("Can't set imx_session_params.setCurrentUserRefperso(): ", e);
-    } finally {
-      try {
-        pstm.close();
-      } catch (Exception e) {
       }
     }
   }

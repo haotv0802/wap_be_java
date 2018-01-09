@@ -13,6 +13,12 @@ public class UserDetailsImpl implements UserDetails {
 
   private String password;
 
+  private String lang;
+
+  public String getLang() {
+    return lang;
+  }
+
   private final Set<GrantedAuthority> authorities;
 
   /**

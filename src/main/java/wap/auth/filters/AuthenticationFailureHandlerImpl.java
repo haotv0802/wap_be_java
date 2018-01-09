@@ -38,7 +38,7 @@ public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHa
 
     response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-    response.setHeader(HttpHeaders.WWW_AUTHENTICATE, "ImxAuth realm=\"imx\"");
+    response.setHeader(HttpHeaders.WWW_AUTHENTICATE, "HAOAuth realm=\"hao\"");
     final ServletOutputStream outputStream = response.getOutputStream();
 
     if (exception instanceof BadLoginPayloadException) {

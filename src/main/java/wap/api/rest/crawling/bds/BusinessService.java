@@ -22,11 +22,14 @@ public class BusinessService {
         || name.contains("tai san")
         || name.contains("cong ty")
         || name.contains("ktts")
+        || name.contains("cskh")
+        || name.contains("truhomes")
         ) {
       return true;
     }
     if (email.contains("bds")
         || email.contains("batdongsan")
+        || email.contains("diaoc")
         || email.contains("real")
         || email.contains("chungcu")
         || email.contains("diaocsaigon")
@@ -42,6 +45,8 @@ public class BusinessService {
         || email.contains("muaban")
         || email.contains("taisan")
         || email.contains("giaodich")
+        || email.contains("cskh")
+        || email.contains("truhomes")
         ) {
       return true;
     }

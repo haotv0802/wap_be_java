@@ -13,14 +13,6 @@ public class UserDetailsImpl implements UserDetails {
 
   private String password;
 
-  int refPerson;
-
-  String refIndividual;
-
-  String fullName;
-
-  String lang;
-
   private final Set<GrantedAuthority> authorities;
 
   /**
@@ -264,22 +256,6 @@ public class UserDetailsImpl implements UserDetails {
   @Override
   public boolean isEnabled() {
     return enabled;
-  }
-
-  public int getRefPerson() {
-    return refPerson;
-  }
-
-  public String getRefIndividual() {
-    return refIndividual;
-  }
-
-  public String getFullName() {
-    return fullName;
-  }
-
-  public String getLang() {
-    return lang;
   }
 
   public Date getBlockedTo() {

@@ -81,4 +81,28 @@ public class BDSCrawlingResourceTest extends TestBase {
         .andExpect(status().is(200))
     ;
   }
+
+
+  @Test
+  public void testExportCrawledDataManully() throws Exception {
+    Criterion criterion = new Criterion();
+    criterion.setPersonName("Thanh_BinhThanh");
+    criterion.setCity("Hồ Chí Minh");
+//    criterion.setDistrict("Quận Gò Vấp");
+//    criterion.setDistrict("Quận 12");
+    criterion.setDistrict("Quận Bình Thạnh");
+
+//    criterion.setAcreageLessThan("100");
+//    criterion.setAcreageLargerThan("80");
+//    criterion.setPriceLargerThan("1500000");
+//    criterion.setPriceLessThan("3000000");
+
+    mockMvc
+        .perform(post("/svc/bds/crawler/exportCrawledDataManually")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(new ObjectMapper().writeValueAsBytes(criterion))
+        )
+        .andExpect(status().is(200))
+    ;
+  }
 }

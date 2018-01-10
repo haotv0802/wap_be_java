@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import wap.api.rest.crawling.bds.beans.Contact;
+import wap.api.rest.crawling.bds.beans.ContactPresenter;
 import wap.api.rest.crawling.bds.beans.Criterion;
 import wap.api.rest.crawling.bds.beans.ItemPresenter;
 import wap.api.rest.crawling.bds.interfaces.ICrawledDataService;
@@ -55,6 +56,14 @@ public class CrawledDataResource {
       @RequestBody Criterion criterion
   ) throws IOException {
     return crawledDataService.exportCrawledData(criterion);
+  }
+
+
+  @PostMapping("/crawler/exportCrawledDataManually")
+  public List<ContactPresenter> exportCrawledDataManually(
+      @RequestBody Criterion criterion
+  ) throws IOException {
+    return crawledDataService.getPostsManually(criterion);
   }
 
   @GetMapping("/crawler/sendAds")

@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 import wap.api.rest.crawling.bds.beans.Contact;
+import wap.api.rest.crawling.bds.beans.ContactPresenter;
 import wap.api.rest.crawling.bds.beans.Criterion;
 import wap.api.rest.crawling.bds.beans.ItemPresenter;
 import wap.api.rest.crawling.bds.interfaces.ICrawledDataDao;
@@ -154,6 +155,39 @@ public class CrawledDataDao implements ICrawledDataDao {
       presenter.setPrice(rs.getBigDecimal("price"));
       presenter.setAcreage(rs.getBigDecimal("acreage"));
       return presenter;
+    });
+  }
+
+  @Override
+  public List<ContactPresenter> getPostsManually() {
+    final String sql =
+              "select c.id, c.name, c.phone, c.email, c.type, c.latest_item_posted_on from crwlr_contacts c where c.id in                             "
+            + "(                                                                                                                                      "
+            + "    select p.contact_id from crwlr_posts p inner join crwlr_locations l on l.id = p.location_id where p.property_type <> 'APARTMENT'   "
+            + "    and l.city = 'Ho Chi Minh' and l.district = '4'                                                                                    "
+            + ")                                                                                                                                      "
+            + "and c.type = 'OWNER' and email <> ''                                                                                                   "
+            + "and c.id = (select max(id) from crwlr_contacts where email = c.email group by email )                                                  "
+            + "#and c.email = (select email from crwlr_contacts where email = c.email group by email having count(id) > 1)                            "
+            + "order by email asc                                                                                                                     "
+        ;
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return namedTemplate.query(sql, paramsMap, new RowMapper<ContactPresenter>() {
+      @Override
+      public ContactPresenter mapRow(ResultSet resultSet, int i) throws SQLException {
+        ContactPresenter contact = new ContactPresenter();
+        contact.setId(resultSet.getLong("id"));
+        contact.setName(resultSet.getString("name"));
+        contact.setPhone(resultSet.getString("phone"));
+        contact.setEmail(resultSet.getString("email"));
+        contact.setType(resultSet.getString("type"));
+        contact.setLatestItemPostedOn(resultSet.getDate("latest_item_posted_on"));
+
+        return contact;
+      }
     });
   }
 

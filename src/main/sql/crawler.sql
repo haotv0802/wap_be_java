@@ -1,8 +1,8 @@
-DROP DATABASE IF EXISTS `crawler_db_180104`;
-CREATE DATABASE IF NOT EXISTS `crawler_db_180104`
+DROP DATABASE IF EXISTS `crawler_db_180111`;
+CREATE DATABASE IF NOT EXISTS `crawler_db_180111`
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
-USE `crawler_db_180104`;
+USE `crawler_db_180111`;
 
 --
 -- Table structure for table `crwlr_crawling_tracking`
@@ -43,16 +43,16 @@ CREATE TABLE `crwlr_locations` (
 --
 DROP TABLE IF EXISTS `crwlr_contacts`;
 CREATE TABLE `crwlr_contacts` (
-  `id`                          BIGINT   AUTO_INCREMENT,
-  `name`                        VARCHAR(100)         NULL,
-  `phone`                       VARCHAR(100)         NULL,
-  `email`                       VARCHAR(150)         NULL,
-  `type`                        VARCHAR(20)          NOT NULL, #SALE or OWNER
-  `manual_check`                VARCHAR(20)          NULL, #SALE or OWNER
-  `manual_email_existing_check` BOOLEAN DEFAULT TRUE NULL, #Exiting or not
-  `latest_item_posted_on`       DATE                 NOT NULL, # User will be notified if this contact is in the list again just in short period of time.
-  `created_at`                  DATETIME DEFAULT now(),
-  `updated_at`                  DATETIME             NULL,
+  `id`                    BIGINT   AUTO_INCREMENT,
+  `name`                  VARCHAR(100)         NULL,
+  `phone`                 VARCHAR(100)         NULL,
+  `email`                 VARCHAR(150)         NULL,
+  `type`                  VARCHAR(20)          NOT NULL, #SALE or OWNER
+  `manual_check`          VARCHAR(20)          NULL, #SALE or OWNER
+  `email_existing`        BOOLEAN DEFAULT TRUE NULL, #Exiting or not
+  `latest_item_posted_on` DATE                 NOT NULL, # User will be notified if this contact is in the list again just in short period of time.
+  `created_at`            DATETIME DEFAULT now(),
+  `updated_at`            DATETIME             NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `crwlr_contacts_name_phone_email` (`name`, `phone`, `email`)
 
@@ -100,6 +100,7 @@ CREATE TABLE `crwlr_posts` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
+
 --
 -- Table structure for table `crwlr_customers`
 --
@@ -109,7 +110,7 @@ CREATE TABLE `crwlr_customers` (
   `name`             VARCHAR(100),
   `phone`            VARCHAR(100),
   `email`            VARCHAR(150),
-  `latest_export_at` DATETIME NOT NULL,
+  `latest_export_at` DATETIME NULL,
   #   `contact_id`       BIGINT   NULL,
   `created_at`       DATETIME DEFAULT now(),
   `updated_at`       DATETIME NULL,
@@ -120,13 +121,14 @@ CREATE TABLE `crwlr_customers` (
   DEFAULT CHARSET = utf8;
 
 
-INSERT INTO crawler_db_180104.crwlr_customers (`name`, `phone`, `email`, `latest_export_at`)
+INSERT INTO crwlr_customers (`name`, `phone`, `email`, `latest_export_at`)
 VALUES ('Phuc', '01235379247', 'hongphuc.vumai@gmail.com', now());
 
 
-INSERT INTO crawler_db_180104.crwlr_customers (`name`, `phone`, `email`, `latest_export_at`)
+INSERT INTO crwlr_customers (`name`, `phone`, `email`, `latest_export_at`)
 VALUES ('Thanh', '01269679581', 'nguyenphuoc.thanh110795@gmail.com', now());
 
+insert into crwlr_customers (name, phone, email) values ('Duc Nguyen Doan', '0941179119', 'nguyendoanduc.up@gmail.com');
 --
 -- Table structure for table `crwlr_exports_tracking`
 --

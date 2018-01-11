@@ -68,7 +68,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 
   @Bean(name = "dataSource")
   public DataSource dataSource() throws SQLException {
-    final String databaseUrl = "jdbc:mysql://localhost:3306/crawler_db_180104?useUnicode=true&characterEncoding=UTF-8";
+    final String databaseUrl = "jdbc:mysql://localhost:3306/crawler_db_180111?useUnicode=true&characterEncoding=UTF-8";
     final String usr = "root";
     final String pass = "hoanhhao";
 

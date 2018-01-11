@@ -84,7 +84,8 @@ public class CrawlingDao implements ICrawlingDao {
   @Override
   public Contact getContactById(Long id) {
     final String sql =
-              "select c.id, c.name, c.phone, c.email, c.type, c.latest_item_posted_on, c.manual_check from crwlr_contacts c where c.id = :id"
+        "select c.id, c.name, c.phone, c.email, c.type, c.latest_item_posted_on, c.manual_check, c.email_existing "
+      + "  from crwlr_contacts c where c.id = :id                                                                 "
         ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
@@ -103,6 +104,7 @@ public class CrawlingDao implements ICrawlingDao {
         contact.setType(resultSet.getString("type"));
         contact.setLatestItemPostedOn(resultSet.getDate("latest_item_posted_on"));
         contact.setManualCheck(resultSet.getString("manual_check"));
+        contact.setEmailExisting(resultSet.getBoolean("email_existing"));
 
         return contact;
       }
@@ -151,16 +153,15 @@ public class CrawlingDao implements ICrawlingDao {
   }
 
   @Override
-  public Long isContactExisting(String name, String phone, String email) {
+  public Long isContactExisting(String phone, String email) {
     final String sql =
               "SELECT                                             "
             + "	id                                                "
             + "FROM  crwlr_contacts                               "
             + " WHERE                                             "
-            + "	name = :name AND phone = :phone AND email = :email"
+            + "   phone = :phone AND email = :email               "
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-    paramsMap.addValue("name", name);
     paramsMap.addValue("phone", phone);
     paramsMap.addValue("email", email);
 
@@ -174,7 +175,7 @@ public class CrawlingDao implements ICrawlingDao {
   @Override
   public void updateContact(Contact contact) {
     final String sql =
-        "UPDATE crwlr_contacts SET name = :name, phone = :phone, email = :email,           "
+        "UPDATE crwlr_contacts SET name = :name,                                           "
       + " type = :type, latest_item_posted_on = :latest_item_posted_on, updated_at = now() "
       + " WHERE id = :id                                                                   "
         ;
@@ -190,6 +191,22 @@ public class CrawlingDao implements ICrawlingDao {
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
     namedTemplate.update(sql, paramsMap);
+  }
+
+  @Override
+  public int contactEmailCount(String email) {
+    final String sql =
+        "SELECT count(*) FROM crwlr_contacts c where c.email = :email";
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("email", email);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+    try {
+      return namedTemplate.queryForObject(sql, paramsMap, Integer.class);
+    } catch (EmptyResultDataAccessException ex) {
+      return -1;
+    }
   }
 
   @Override

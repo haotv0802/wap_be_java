@@ -10,7 +10,7 @@ public class Contact {
   private String type;
   private String url;
   private String manualCheck;
-  private String manualEmailExistingCheck;
+  private boolean emailExisting;
   private Date latestItemPostedOn;
 
   public Long getId() {
@@ -77,11 +77,11 @@ public class Contact {
     this.manualCheck = manualCheck;
   }
 
-  public String getManualEmailExistingCheck() {
-    return manualEmailExistingCheck;
+  public boolean isEmailExisting() {
+    return emailExisting;
   }
 
-  public void setManualEmailExistingCheck(String manualEmailExistingCheck) {
-    this.manualEmailExistingCheck = manualEmailExistingCheck;
+  public void setEmailExisting(boolean emailExisting) {
+    this.emailExisting = emailExisting;
   }
 }

@@ -20,9 +20,11 @@ public interface ICrawlingDao {
 
   void addContact(Contact contact);
 
-  Long isContactExisting(String name, String phone, String email);
+  Long isContactExisting(String phone, String email);
 
   void updateContact(Contact contact);
+
+  int contactEmailCount(String email);
 
   Long isItemExisting(String url);
 

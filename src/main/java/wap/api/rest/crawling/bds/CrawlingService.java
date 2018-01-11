@@ -85,15 +85,17 @@ public class CrawlingService implements ICrawlingService {
           }
 
           contact.setLatestItemPostedOn(item.getPublishDate());
-          Long contactId = this.crawlingDao.isContactExisting(contact.getName(), contact.getPhone(), contact.getEmail());
+          Long contactId = this.crawlingDao.isContactExisting(contact.getPhone(), contact.getEmail());
           if (contactId > 0) {
             contact.setId(contactId);
             Contact contactTemp = this.crawlingDao.getContactById(contactId);
-            if (contactTemp.getManualCheck().equals("SALE")) {
+            if (contactTemp.getManualCheck().equals("SALE") || this.crawlingDao.contactEmailCount(contact.getEmail()) > 4) {
               contact.setType("SALE");
               contact.setManualCheck("SALE");
             }
-            this.crawlingDao.updateContact(contact);
+            if (contactTemp.isEmailExisting()) {
+              this.crawlingDao.updateContact(contact);
+            }
           } else {
             this.crawlingDao.addContact(contact);
           }

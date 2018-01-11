@@ -77,7 +77,7 @@ public class CrawlingService implements ICrawlingService {
           Contact contact = new Contact();
           contact.setName(item.getContactName() == null ? "" : StringUtils.stripAccents(item.getContactName()));
           contact.setEmail(item.getContactEmail() == null ? "" : item.getContactEmail());
-          contact.setPhone(item.getContactNumber() == null ? "" : item.getContactNumber().replace(" ", ""));
+          contact.setPhone(item.getContactNumber() == null ? "" : item.getContactNumber());
 
           contact.setType("OWNER");
           if (businessService.isSale(contact.getName(), contact.getEmail())) {
@@ -303,7 +303,7 @@ public class CrawlingService implements ICrawlingService {
       item.setDescription(description);
       item.setAddress(address);
       item.setContactName(contactName);
-      item.setContactNumber(contactMobile);
+      item.setContactNumber(contactMobile != null ? contactMobile.replace(" ", "") : null);
       item.setContactEmail(email);
       item.setPublishDate(spd.parse(publishDate));
       item.setEndDate(spd.parse(endDate));

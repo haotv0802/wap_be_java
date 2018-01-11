@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -18,6 +19,7 @@ import wap.api.rest.crawling.bds.interfaces.ICrawlingDao;
 import wap.common.JdbcUtils;
 import wap.common.dao.DaoUtils;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
@@ -77,6 +79,34 @@ public class CrawlingDao implements ICrawlingDao {
     } catch (EmptyResultDataAccessException ex) {
       return new Long(-1);
     }
+  }
+
+  @Override
+  public Contact getContactById(Long id) {
+    final String sql =
+              "select c.id, c.name, c.phone, c.email, c.type, c.latest_item_posted_on, c.manual_check from crwlr_contacts c where c.id = :id"
+        ;
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("id", id);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return namedTemplate.queryForObject(sql, paramsMap, new RowMapper<Contact>() {
+      @Override
+      public Contact mapRow(ResultSet resultSet, int i) throws SQLException {
+        Contact contact = new Contact();
+        contact.setId(resultSet.getLong("id"));
+        contact.setName(resultSet.getString("name"));
+        contact.setPhone(resultSet.getString("phone"));
+        contact.setEmail(resultSet.getString("email"));
+        contact.setType(resultSet.getString("type"));
+        contact.setLatestItemPostedOn(resultSet.getDate("latest_item_posted_on"));
+        contact.setManualCheck(resultSet.getString("manual_check"));
+
+        return contact;
+      }
+    });
   }
 
 

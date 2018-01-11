@@ -14,6 +14,8 @@ public interface ICrawlingDao {
 
   Long isLocationExisting(String district, String city);
 
+  Contact getContactById(Long id);
+
   Long addLocation(String district, String city);
 
   void addContact(Contact contact);

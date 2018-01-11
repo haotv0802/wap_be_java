@@ -49,6 +49,13 @@ public class BusinessService {
         || email.contains("truhomes")
         || email.contains("business")
         || email.contains("canho")
+        || email.contains("nhapho")
+        || email.contains("masteri")
+        || email.contains("sgdreamhouse")
+        || email.contains("vietinhouse")
+        || email.contains("nhathue")
+        || email.contains("nhaban")
+        || email.contains("thaodien")
         ) {
       return true;
     }

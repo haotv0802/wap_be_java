@@ -9,6 +9,8 @@ public class Contact {
   private String email;
   private String type;
   private String url;
+  private String manualCheck;
+  private String manualEmailExistingCheck;
   private Date latestItemPostedOn;
 
   public Long getId() {
@@ -65,5 +67,21 @@ public class Contact {
 
   public void setUrl(String url) {
     this.url = url;
+  }
+
+  public String getManualCheck() {
+    return manualCheck;
+  }
+
+  public void setManualCheck(String manualCheck) {
+    this.manualCheck = manualCheck;
+  }
+
+  public String getManualEmailExistingCheck() {
+    return manualEmailExistingCheck;
+  }
+
+  public void setManualEmailExistingCheck(String manualEmailExistingCheck) {
+    this.manualEmailExistingCheck = manualEmailExistingCheck;
   }
 }

@@ -78,14 +78,21 @@ public class CrawlingService implements ICrawlingService {
           contact.setName(item.getContactName() == null ? "" : StringUtils.stripAccents(item.getContactName()));
           contact.setEmail(item.getContactEmail() == null ? "" : item.getContactEmail());
           contact.setPhone(item.getContactNumber() == null ? "" : item.getContactNumber().replace(" ", ""));
+
           contact.setType("OWNER");
           if (businessService.isSale(contact.getName(), contact.getEmail())) {
             contact.setType("SALE");
           }
+
           contact.setLatestItemPostedOn(item.getPublishDate());
           Long contactId = this.crawlingDao.isContactExisting(contact.getName(), contact.getPhone(), contact.getEmail());
           if (contactId > 0) {
             contact.setId(contactId);
+            Contact contactTemp = this.crawlingDao.getContactById(contactId);
+            if (contactTemp.getManualCheck().equals("SALE")) {
+              contact.setType("SALE");
+              contact.setManualCheck("SALE");
+            }
             this.crawlingDao.updateContact(contact);
           } else {
             this.crawlingDao.addContact(contact);

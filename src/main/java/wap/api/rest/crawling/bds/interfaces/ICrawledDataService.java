@@ -5,6 +5,7 @@ import wap.api.rest.crawling.bds.beans.ContactPresenter;
 import wap.api.rest.crawling.bds.beans.Criterion;
 import wap.api.rest.crawling.bds.beans.ItemPresenter;
 
+import javax.mail.MessagingException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
@@ -28,4 +29,6 @@ public interface ICrawledDataService {
   List<Contact> getContacts();
 
   void exportOwnerContacts() throws IOException;
+
+  void testEmail() throws MessagingException;
 }

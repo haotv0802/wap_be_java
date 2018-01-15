@@ -23,4 +23,6 @@ public interface ICrawledDataDao {
   List<LocationPresenter> getAllLocations();
 
   List<ContactPresenter> getOwnerContactsByLocation(int locationId);
+
+  List<String> getAllEmails();
 }

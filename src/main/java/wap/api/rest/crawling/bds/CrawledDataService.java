@@ -13,7 +13,9 @@ import org.springframework.util.Assert;
 import wap.api.rest.crawling.bds.beans.*;
 import wap.api.rest.crawling.bds.interfaces.ICrawledDataDao;
 import wap.api.rest.crawling.bds.interfaces.ICrawledDataService;
+import wap.api.rest.crawling.mailing.JavaMailService;
 
+import javax.mail.MessagingException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -449,6 +451,12 @@ public class CrawledDataService implements ICrawledDataService {
     try (FileOutputStream outputStream = new FileOutputStream(String.format("%s/%s_%s.xlsx", dir.getName(), "Phuc", date))) {
       workbook.write(outputStream);
     }
+  }
+
+  @Override
+  public void testEmail() throws MessagingException {
+    List<String> emails = this.crawledDataDao.getAllEmails();
+    JavaMailService.testEmail(emails);
   }
 
 }

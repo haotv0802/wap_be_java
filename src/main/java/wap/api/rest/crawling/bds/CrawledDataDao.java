@@ -310,4 +310,15 @@ public class CrawledDataDao implements ICrawledDataDao {
     });
   }
 
+  @Override
+  public List<String> getAllEmails() {
+    final String sql =
+        "SELECT distinct email FROM crwlr_contacts where email <> ''";
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return namedTemplate.queryForList(sql, paramsMap, String.class);
+  }
+
 }

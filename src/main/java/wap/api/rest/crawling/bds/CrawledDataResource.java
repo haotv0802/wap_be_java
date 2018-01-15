@@ -69,6 +69,11 @@ public class CrawledDataResource {
     this.crawledDataService.exportOwnerContacts();
   }
 
+  @GetMapping("/crawler/testEmail")
+  public void testEmail() throws IOException, MessagingException {
+    this.crawledDataService.testEmail();
+  }
+
   @GetMapping("/crawler/sendAds")
   public List<Contact> sendAds(
   ) throws IOException, MessagingException {

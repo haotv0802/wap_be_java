@@ -30,13 +30,20 @@ import java.util.*;
 public class CrawledDataService implements ICrawledDataService {
   private final ICrawledDataDao crawledDataDao;
 
+  private final BusinessService businessService;
+
   private final Logger LOGGER = LogManager.getLogger(getClass());
 
   @Autowired
-  public CrawledDataService(@Qualifier("bdsCrawledDataDao") ICrawledDataDao crawledDataDao) {
+  public CrawledDataService(
+      @Qualifier("bdsCrawledDataDao") ICrawledDataDao crawledDataDao,
+      @Qualifier("bdsBusinessService") BusinessService businessService
+  ) {
     Assert.notNull(crawledDataDao);
+    Assert.notNull(businessService);
 
     this.crawledDataDao = crawledDataDao;
+    this.businessService = businessService;
   }
 
   @Override
@@ -386,6 +393,9 @@ public class CrawledDataService implements ICrawledDataService {
       for (ContactPresenter contact : list) {
         row = sheet.createRow(++rowCount);
 
+        if (this.businessService.isSale(contact.getName(), contact.getEmail())) {
+          continue;
+        }
         columnCount = 0;
         cell = row.createCell(columnCount);
         cell.setCellValue(rowCount);

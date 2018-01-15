@@ -3,6 +3,7 @@ package wap.api.rest.crawling.bds;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -191,6 +192,9 @@ public class CrawlingService implements ICrawlingService {
         getItemDetails(link, crawlingTracking);
       }
 
+    } catch (HttpStatusException e) {
+      System.err.println("For '" + pageLink + "': " + e.getMessage());
+      e.printStackTrace();
     } catch (IOException e) {
       System.err.println("For '" + pageLink + "': " + e.getMessage());
       e.printStackTrace();

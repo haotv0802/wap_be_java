@@ -89,9 +89,11 @@ public class CrawlingService implements ICrawlingService {
           if (contactId > 0) {
             contact.setId(contactId);
             Contact contactTemp = this.crawlingDao.getContactById(contactId);
-            if (contactTemp.getManualCheck().equals("SALE") || this.crawlingDao.contactEmailCount(contact.getEmail()) > 4) {
-              contact.setType("SALE");
-              contact.setManualCheck("SALE");
+            if (!contact.getType().equals("SALE")) {
+              if ((contactTemp.getManualCheck() != null && contactTemp.getManualCheck().equals("SALE"))
+                  || (!contact.getEmail().equals("") && this.crawlingDao.contactEmailCount(contact.getEmail()) > 5)) {
+                contact.setType("SALE");
+              }
             }
             if (contactTemp.isEmailExisting()) {
               this.crawlingDao.updateContact(contact);

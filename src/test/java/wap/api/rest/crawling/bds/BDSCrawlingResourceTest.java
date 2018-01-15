@@ -24,7 +24,7 @@ public class BDSCrawlingResourceTest extends TestBase {
 
 //            .param("link", "https://batdongsan.com.vn/ban-nha-rieng-tp-hcm")
 //              .param("link", "https://batdongsan.com.vn/ban-can-ho-chung-cu-tp-hcm")
-            .param("recrawl", "true")
+            .param("recrawl", "false")
         )
         .andExpect(status().is(200))
     ;

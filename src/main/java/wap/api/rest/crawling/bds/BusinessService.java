@@ -57,6 +57,7 @@ public class BusinessService {
         || email.contains("nhaban")
         || email.contains("thaodien")
         || email.contains("giahungphat")
+        || email.contains("savills")
         ) {
       return true;
     }

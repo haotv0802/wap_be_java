@@ -58,12 +58,16 @@ public class CrawledDataResource {
     return crawledDataService.exportCrawledData(criterion);
   }
 
-
   @PostMapping("/crawler/exportCrawledDataManually")
   public List<ContactPresenter> exportCrawledDataManually(
       @RequestBody Criterion criterion
   ) throws IOException {
     return crawledDataService.getPostsManually(criterion);
+  }
+
+  @GetMapping("/crawler/exportOwnerContacts")
+  public void exportOwnerContacts() throws IOException {
+    this.crawledDataService.exportOwnerContacts();
   }
 
   @GetMapping("/crawler/sendAds")

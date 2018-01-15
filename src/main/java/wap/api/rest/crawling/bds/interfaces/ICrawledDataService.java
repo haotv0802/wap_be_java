@@ -5,6 +5,7 @@ import wap.api.rest.crawling.bds.beans.ContactPresenter;
 import wap.api.rest.crawling.bds.beans.Criterion;
 import wap.api.rest.crawling.bds.beans.ItemPresenter;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -25,4 +26,6 @@ public interface ICrawledDataService {
   List<ContactPresenter> getPostsManually(Criterion criterion) throws IOException ;
 
   List<Contact> getContacts();
+
+  void exportOwnerContacts() throws IOException;
 }

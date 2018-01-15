@@ -14,7 +14,6 @@ import wap.api.rest.crawling.mailing.JavaMailService;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 /**

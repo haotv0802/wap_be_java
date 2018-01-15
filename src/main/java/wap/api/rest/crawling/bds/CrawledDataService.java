@@ -15,14 +15,11 @@ import wap.api.rest.crawling.bds.interfaces.ICrawledDataDao;
 import wap.api.rest.crawling.bds.interfaces.ICrawledDataService;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * Date: 10/20/2017 Time: 10:19 AM
@@ -317,8 +314,21 @@ public class CrawledDataService implements ICrawledDataService {
     List<LocationPresenter> locations = this.crawledDataDao.getAllLocations();
     XSSFWorkbook workbook = new XSSFWorkbook();
 
+    Map<String, Integer> summary = new HashMap<>();
+
+
+
+    int total = 0;
     for (LocationPresenter location : locations) {
-      XSSFSheet sheet = workbook.createSheet(location.getDistrict());
+      List<ContactPresenter> list = this.crawledDataDao.getOwnerContactsByLocation(location.getId());
+
+      if (list.size() == 0) {
+        continue;
+      }
+      total += list.size();
+      summary.put(location.getDistrict(), list.size());
+
+      XSSFSheet sheet = workbook.createSheet(location.getDistrict() + " (" + list.size() + ")");
       sheet.autoSizeColumn(0);
       sheet.setColumnWidth(1, 5000);
       sheet.setColumnWidth(2, 3000);
@@ -371,7 +381,7 @@ public class CrawledDataService implements ICrawledDataService {
       cell.setCellValue("Link");
       cell.setCellStyle(headerStyle);
 
-      List<ContactPresenter> list = this.crawledDataDao.getOwnerContactsByLocation(location.getId());
+
 
       for (ContactPresenter contact : list) {
         row = sheet.createRow(++rowCount);
@@ -393,6 +403,33 @@ public class CrawledDataService implements ICrawledDataService {
         cell.setCellStyle(hlinkstyle);
       }
     }
+
+    XSSFSheet sheet = workbook.createSheet("Tổng kết");
+    sheet.setColumnWidth(0, 5000);
+    sheet.setColumnWidth(2, 3000);
+
+    Set<String> keys = summary.keySet();
+    Iterator<String> it = keys.iterator();
+    int rowCount = 0;
+
+    while (it.hasNext()) {
+      int columnCount = 0;
+      String key = it.next();
+      int value = summary.get(key);
+      Row row = sheet.createRow(rowCount++);
+      Cell cell = row.createCell(columnCount++);
+      cell.setCellValue(key);
+      cell = row.createCell(columnCount++);
+      cell.setCellValue(value);
+    }
+    Row row = sheet.createRow(rowCount++);
+    row = sheet.createRow(rowCount++);
+    Cell cell = row.createCell(0);
+    cell.setCellValue("Tổng");
+    cell = row.createCell(1);
+    cell.setCellValue(total);
+
+
     File dir = new File ("exports");
     if (!dir.exists() || !dir.isDirectory()) {
       dir.mkdir();

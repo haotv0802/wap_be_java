@@ -8,6 +8,7 @@ public class ContactPresenter {
   private String phone;
   private String email;
   private String type;
+  private String postUrl;
   private Date latestItemPostedOn;
 
   public Long getId() {
@@ -56,5 +57,13 @@ public class ContactPresenter {
 
   public void setLatestItemPostedOn(Date latestItemPostedOn) {
     this.latestItemPostedOn = latestItemPostedOn;
+  }
+
+  public String getPostUrl() {
+    return postUrl;
+  }
+
+  public void setPostUrl(String postUrl) {
+    this.postUrl = postUrl;
   }
 }

@@ -8,10 +8,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
-import wap.api.rest.crawling.bds.beans.Contact;
-import wap.api.rest.crawling.bds.beans.ContactPresenter;
-import wap.api.rest.crawling.bds.beans.Criterion;
-import wap.api.rest.crawling.bds.beans.ItemPresenter;
+import wap.api.rest.crawling.bds.beans.*;
 import wap.api.rest.crawling.bds.interfaces.ICrawledDataDao;
 import wap.common.JdbcUtils;
 import wap.common.dao.DaoUtils;
@@ -258,6 +255,58 @@ public class CrawledDataDao implements ICrawledDataDao {
 
         return contact;
       }
+    });
+  }
+
+  @Override
+  public List<LocationPresenter> getAllLocations() {
+    final String sql =
+        "SELECT id, city, district FROM crwlr_locations ORDER BY city, district"
+        ;
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return namedTemplate.query(sql, paramsMap, new RowMapper<LocationPresenter>() {
+      @Override
+      public LocationPresenter mapRow(ResultSet resultSet, int i) throws SQLException {
+        LocationPresenter location = new LocationPresenter();
+        location.setId(resultSet.getInt("id"));
+        location.setCity(resultSet.getString("city"));
+        location.setDistrict(resultSet.getString("district"));
+
+        return location;
+      }
+    });
+  }
+
+  @Override
+  public List<ContactPresenter> getOwnerContactsByLocation(int locationId) {
+    final String sql =
+      "SELECT c.id, c.name, c.phone, c.email, c.type, c.latest_item_posted_on                                                                    "
+    + "    ,(SELECT count(*) FROM crwlr_posts WHERE contact_id = c.id AND property_type = 'HOUSE' AND location_id = :locationId) as posts_count  "
+    + "    ,(SELECT URL FROM crwlr_posts WHERE contact_id = c.id  order by id desc  LIMIT 0,1) url                                               "
+    + "FROM crwlr_contacts c                                                                                                                     "
+    + "WHERE c.email <> '' AND manual_check IS NULL AND TYPE = 'OWNER'                                                                           "
+    + "    AND (SELECT count(*) FROM crwlr_posts WHERE contact_id = c.id AND property_type = 'HOUSE' AND location_id = :locationId) > 0          "
+    + "    AND (SELECT count(*) FROM crwlr_posts WHERE contact_id = c.id AND property_type = 'HOUSE' AND location_id = :locationId) < 2          "
+    + "        ORDER BY posts_count desc                                                                                                         "
+        ;
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("locationId", locationId);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return namedTemplate.query(sql, paramsMap, (resultSet, i) -> {
+      ContactPresenter contact = new ContactPresenter();
+      contact.setId(resultSet.getLong("id"));
+      contact.setName(resultSet.getString("name"));
+      contact.setPhone(resultSet.getString("phone"));
+      contact.setEmail(resultSet.getString("email"));
+      contact.setType(resultSet.getString("type"));
+      contact.setLatestItemPostedOn(resultSet.getDate("latest_item_posted_on"));
+      contact.setPostUrl(resultSet.getString("url"));
+      return contact;
     });
   }
 

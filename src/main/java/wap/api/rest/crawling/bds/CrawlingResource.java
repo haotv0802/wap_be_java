@@ -52,7 +52,7 @@ public class CrawlingResource {
 //      pages.add("https://batdongsan.com.vn/ban-nha-mat-pho-tp-hcm");
 
 //      pages.add("https://batdongsan.com.vn/ban-can-ho-chung-cu-tp-hcm");
-      pages.add("https://batdongsan.com.vn/ban-dat-tp-hcm");
+      pages.add("https://batdongsan.com.vn/nha-dat-ban-tp-hcm");
 
 
 //      pages.add("https://batdongsan.com.vn/nha-dat-ban/p7243");

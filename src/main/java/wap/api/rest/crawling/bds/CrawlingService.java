@@ -305,8 +305,10 @@ public class CrawlingService implements ICrawlingService {
       item.setDescription(description);
       item.setAddress(address);
       item.setContactName(contactName);
-      item.setContactNumber(contactMobile != null ? contactMobile.replace(" ", "") : null);
-      item.setContactEmail(email);
+      item.setContactNumber(
+          contactMobile != null ? contactMobile.replace(" ", "").replace(".", "") : null
+      );
+      item.setContactEmail(email.toLowerCase());
       item.setPublishDate(spd.parse(publishDate));
       item.setEndDate(spd.parse(endDate));
       item.setPrice(priceInBigDecimal);

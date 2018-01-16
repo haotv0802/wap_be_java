@@ -103,8 +103,8 @@ public class JavaMailService {
 //        System.out.println("Sleeping");
 //        Thread.sleep(1000 * 60 * 2);  // 2 mins
 //      }
-//      transport.connect("smtp.gmail.com", "emailtest180115@gmail.com", "wfuynbpmxjylscgo");
-    transport.connect("smtp.gmail.com", "salomon3000@gmail.com", "vswauhzfgslzowmv");
+      transport.connect("smtp.gmail.com", "emailtest180115@gmail.com", "wfuynbpmxjylscgo");
+//    transport.connect("smtp.gmail.com", "salomon3000@gmail.com", "vswauhzfgslzowmv");
       Thread.sleep(1000 * 2);  // 2 secs
       count++;
       transport.sendMessage(generateMailMessage, generateMailMessage.getAllRecipients());

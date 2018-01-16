@@ -9,6 +9,7 @@ public class BusinessService {
     email = email.toLowerCase();
     if (name.contains("real")
         || name.contains("land")
+        || name.contains("moi gioi")
         || name.contains("bds")
         || name.contains("bđs")
         || name.contains("sale")
@@ -62,6 +63,7 @@ public class BusinessService {
         || email.contains("datxanhgroup")
         || email.contains("khangdien")
         || email.contains("khaihoanland")
+        || email.contains("gamuda")
         ) {
       return true;
     }

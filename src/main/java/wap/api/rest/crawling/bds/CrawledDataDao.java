@@ -287,9 +287,9 @@ public class CrawledDataDao implements ICrawledDataDao {
     + "    ,(SELECT count(*) FROM crwlr_posts WHERE contact_id = c.id AND property_type = 'HOUSE' AND location_id = :locationId) as posts_count  "
     + "    ,(SELECT URL FROM crwlr_posts WHERE contact_id = c.id  order by id desc  LIMIT 0,1) url                                               "
     + "FROM crwlr_contacts c                                                                                                                     "
-    + "WHERE c.email <> '' AND manual_check IS NULL AND TYPE = 'OWNER'                                                                           "
-    + "    AND (SELECT count(*) FROM crwlr_posts WHERE contact_id = c.id AND property_type = 'HOUSE' AND location_id = :locationId) > 0          "
-    + "    AND (SELECT count(*) FROM crwlr_posts WHERE contact_id = c.id AND property_type = 'HOUSE' AND location_id = :locationId) < 2          "
+    + "WHERE c.email = '' AND manual_check IS NULL AND TYPE = 'OWNER'                                                                           "
+    + "    AND (SELECT count(*) FROM crwlr_posts WHERE contact_id = c.id AND property_type = 'HOUSE' AND location_id = :locationId) = 1          "
+//    + "    AND (SELECT count(*) FROM crwlr_posts WHERE contact_id = c.id AND property_type = 'HOUSE' AND location_id = :locationId) < 3          "
     + "        ORDER BY posts_count desc                                                                                                         "
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();

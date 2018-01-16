@@ -210,6 +210,16 @@ public class CrawledDataService implements ICrawledDataService {
   }
 
   @Override
+  public void sendAdsToCustomers() throws MessagingException {
+    List<String> temps = new ArrayList<>();
+    temps.add("hoanhhao@gmail.com");
+    temps.add("nguyenminhyennhi94@gmail.com");
+    for (String email : temps) {
+      JavaMailService.sendAdsToCustomer(email);
+    }
+  }
+
+  @Override
   public List<ContactPresenter> getPostsManually(Criterion criterion) throws IOException {
 
     XSSFWorkbook workbook = new XSSFWorkbook();

@@ -74,6 +74,11 @@ public class CrawledDataResource {
     this.crawledDataService.testEmail();
   }
 
+  @GetMapping("/crawler/sendAdsToCustomers")
+  public void sendAdsToCustomers() throws MessagingException, InterruptedException {
+    this.crawledDataService.sendAdsToCustomers();
+  }
+
   @GetMapping("/crawler/sendAds")
   public List<Contact> sendAds(
   ) throws IOException, MessagingException {

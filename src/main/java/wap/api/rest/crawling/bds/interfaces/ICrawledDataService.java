@@ -30,5 +30,5 @@ public interface ICrawledDataService {
 
   void exportOwnerContacts() throws IOException;
 
-  void testEmail() throws MessagingException;
+  void testEmail() throws MessagingException, InterruptedException;
 }

@@ -311,14 +311,27 @@ public class CrawledDataDao implements ICrawledDataDao {
   }
 
   @Override
-  public List<String> getAllEmails() {
+  public List<String> getAllEmailsNotCheckedYet() {
     final String sql =
-        "SELECT distinct email FROM crwlr_contacts where email <> ''";
+        "SELECT distinct email FROM crwlr_contacts where email <> '' AND email_existing IS NULL";
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
     return namedTemplate.queryForList(sql, paramsMap, String.class);
+  }
+
+  @Override
+  public void updateEmailExisting(String email, boolean existing) {
+    final String sql =
+        "UPDATE crwlr_contacts SET email_existing = :existing where email = :email";
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+    paramsMap.addValue("existing", existing);
+    paramsMap.addValue("email", email);
+
+    namedTemplate.update(sql, paramsMap);
   }
 
 }

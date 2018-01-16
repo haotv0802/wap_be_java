@@ -1,5 +1,6 @@
 package wap.api.rest.crawling.bds;
 
+import com.sun.mail.smtp.SMTPSendFailedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -454,9 +455,14 @@ public class CrawledDataService implements ICrawledDataService {
   }
 
   @Override
-  public void testEmail() throws MessagingException {
-    List<String> emails = this.crawledDataDao.getAllEmails();
-    JavaMailService.testEmail(emails);
+  public void testEmail() throws MessagingException, InterruptedException {
+    List<String> emails = this.crawledDataDao.getAllEmailsNotCheckedYet();
+    List<String> temps = new ArrayList<>();
+    temps.add("hoanhhao@gmail.com");
+    for (String email : emails) {
+        JavaMailService.testEmail(email);
+        this.crawledDataDao.updateEmailExisting(email, true);
+    }
   }
 
 }

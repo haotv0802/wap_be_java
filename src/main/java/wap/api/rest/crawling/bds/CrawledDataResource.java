@@ -70,7 +70,7 @@ public class CrawledDataResource {
   }
 
   @GetMapping("/crawler/testEmail")
-  public void testEmail() throws IOException, MessagingException {
+  public void testEmail() throws IOException, MessagingException, InterruptedException {
     this.crawledDataService.testEmail();
   }
 

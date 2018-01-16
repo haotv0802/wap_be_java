@@ -9,13 +9,13 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.util.List;
 import java.util.Properties;
 
 public class JavaMailService {
   static Properties mailServerProperties;
   static Session getMailSession;
   static MimeMessage generateMailMessage;
+  static int count = 1;
 
   public static void main(String args[]) throws AddressException, MessagingException {
 //    generateAndSendEmail();
@@ -66,8 +66,7 @@ public class JavaMailService {
     transport.close();
   }
 
-  public static void testEmail(List<String> emails) throws MessagingException {
-    for(String email : emails) {
+  public static void testEmail(String email) throws MessagingException, InterruptedException {
       // Step1
       System.out.println("\n 1st ===> setup Mail Server Properties..");
       mailServerProperties = System.getProperties();
@@ -95,10 +94,21 @@ public class JavaMailService {
 
       // Enter your correct gmail UserID and Password
       // if you have 2FA enabled then provide App Specific Password
-      transport.connect("smtp.gmail.com", "emailtest180115@gmail.com", "wfuynbpmxjylscgo");
+//      if (count >= 0 && count <= 100) {
+//        transport.connect("smtp.gmail.com", "salomon3000@gmail.com", "vswauhzfgslzowmv");
+//      } else  if (count > 100 && count <= 200) {
+//        transport.connect("smtp.gmail.com", "emailtest180115@gmail.com", "wfuynbpmxjylscgo");
+//      }
+//      if (count % 100 == 0) {
+//        System.out.println("Sleeping");
+//        Thread.sleep(1000 * 60 * 2);  // 2 mins
+//      }
+//      transport.connect("smtp.gmail.com", "emailtest180115@gmail.com", "wfuynbpmxjylscgo");
+    transport.connect("smtp.gmail.com", "salomon3000@gmail.com", "vswauhzfgslzowmv");
+      Thread.sleep(1000 * 2);  // 2 secs
+      count++;
       transport.sendMessage(generateMailMessage, generateMailMessage.getAllRecipients());
       transport.close();
-    }
   }
 
   public static void sendMailOfAds(String email) throws AddressException, MessagingException {

@@ -10,6 +10,7 @@ public class BusinessService {
     if (name.contains("real")
         || name.contains("land")
         || name.contains("bds")
+        || name.contains("bđs")
         || name.contains("sale")
         || name.contains("team")
         || name.contains("celadon")
@@ -59,6 +60,7 @@ public class BusinessService {
         || email.contains("giahungphat")
         || email.contains("savills")
         || email.contains("datxanhgroup")
+        || email.contains("khangdien")
         ) {
       return true;
     }

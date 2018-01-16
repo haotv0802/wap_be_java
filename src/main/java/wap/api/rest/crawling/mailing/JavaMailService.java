@@ -129,7 +129,7 @@ public class JavaMailService {
 //      generateMailMessage.addRecipient(Message.RecipientType.BCC, new InternetAddress("nhinguyen130905@gmail.com"));
 //    generateMailMessage.addRecipient(Message.RecipientType.CC, new InternetAddress("test2@crunchify.com"));
 
-    generateMailMessage.setSubject("XUÂN SANG HÁI LỘC LÊN ĐẾN NỬA TỲ ĐỒNG !!!!!!");
+    generateMailMessage.setSubject("XUÂN SANG HÁI LỘC LÊN ĐẾN NỬA TỶ ĐỒNG !!!");
     String emailBody = "Xin chào Anh/Chị, <br/> "
         + "GAMUDA LAND triển khai chương trình “XUÂN SANG HÁI LỘC” nhằm tri ân khách hàng. <br><br>"
 

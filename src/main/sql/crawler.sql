@@ -119,6 +119,22 @@ CREATE TABLE `crwlr_customers` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
+--
+-- Table structure for table `crwlr_customers`
+--
+DROP TABLE IF EXISTS `crwlr_sent_emails_tracking`;
+CREATE TABLE `crwlr_sent_emails_tracking` (
+  `id`         BIGINT   AUTO_INCREMENT,
+  `from_email` VARCHAR(100),
+  `title`      VARCHAR(200),
+  `to_email`   VARCHAR(100),
+  `content`    TEXT,
+  `created_at` DATETIME DEFAULT now(),
+  PRIMARY KEY (`id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
 
 INSERT INTO crwlr_customers (`name`, `phone`, `email`, `latest_export_at`)
 VALUES ('Phuc', '01235379247', 'hongphuc.vumai@gmail.com', now());

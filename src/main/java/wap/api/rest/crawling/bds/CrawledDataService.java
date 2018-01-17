@@ -211,11 +211,41 @@ public class CrawledDataService implements ICrawledDataService {
 
   @Override
   public void sendAdsToCustomers() throws MessagingException {
-    List<String> temps = new ArrayList<>();
-    temps.add("hoanhhao@gmail.com");
-    temps.add("nguyenminhyennhi94@gmail.com");
-    for (String email : temps) {
-      JavaMailService.sendAdsToCustomer(email);
+
+//    List<ContactPresenter> list = this.crawledDataDao.getOwnerContactsByLocation(14);
+//    List<ContactPresenter> list = this.crawledDataDao.getOwnerContactsByLocation(7);
+//    List<ContactPresenter> list = this.crawledDataDao.getOwnerContactsByLocation(9);
+    List<ContactPresenter> list = this.crawledDataDao.getOwnerContactsByLocation(3);
+//
+//    List<String> temps = new ArrayList<>();
+//    temps.add("hoanhhao@gmail.com");
+//    temps.add("nguyenminhyennhi94@gmail.com");
+
+    String from = "yennhi.gamuda@gmail.com";
+
+    String fromPass = "hpzitbyzeslypetm";
+
+    String title = "XUÂN SANG HÁI LỘC LÊN ĐẾN NỬA TỶ ĐỒNG !!!";
+
+    String emailBody = "Xin chào Anh/Chị, <br/> "
+        + "GAMUDA LAND triển khai chương trình “XUÂN SANG HÁI LỘC” nhằm tri ân khách hàng. <br><br>"
+
+        + "<img src=\"https://lh3.googleusercontent.com/OEMTb7gnnFdaySb4BLARZVfbRmy8JsCPEIdQMLN1FIeeHqdMHdNsopviRLFLf3Y7XVnxSz_mB-PQ2D3GWhhko7cvCW6-Y2WdeObj5wUplrDTQBvafpyAegWo2IDKIaaw0PQazy1X9GvVZpYp1e7ODFPTTBLnv3KI6Scq_xhf_advrAsavuDMymo8oUsfzErFqrLZduBmrsQ6onTtvVeuxPnecDSunO02XxCVQ-K1Bn5VlDnODN_OPwkZ0Bcyxzto_Y9tWd3j0h99QwXqXkD_InTrXr3uzj0ktWR0CVgaldCTgUH0F-OlF-lKP23zGucIP_kISV8NVaW0Y4L5hfbCLd_iqm90-EMG3sa-voia5wnkM00ad0H8WCIJLwhOF_k2JWfhLzkIlUq_rXn9nGLYIwm9ATFzc6bH99ZLFjtrBnPYWzyu9Jwap_xiVJ1JcmeKP_oaHAoS1dzOEa48FWuNUmsX2R89_1c5uFQQ87NQhm6DkAMEshv7wLO8oLSBOzg8mU00g-Hi4_5pUqEWmgAL_e-mNJsdrRyZS5fZD7Bqi_m2lO7j1EHNdmBfF3ghEOMQUlqSioM5tUA6cruw3DgMFktv0hcHo8fIL6tIXh2l=w961-h503-no\">"
+        + "Khi quý vị sở hữu 1 căn hộ sẽ có cơ hội hái được 1 lộc có trị giá từ 200tr đến 500tr <br><br>"
+        + "  Hãy để GAMUDA LAND gửi đến quý khách niềm vui trọn vẹn hơn trong dịp tết này khi có trong tay căn hộ với những tiện ích,thiết kế nội thất thông minh sang trọng và trải nghiệm cuộc sống đẳng cấp nơi khu ĐÔ THỊ XANH CELEDON CITY mang lại. <br><br>"
+        + "  Trong trường hợp quý vị có nhu cầu sở hữu căn hộ để ở hoặc đầu tư vui lòng liên hệ thông tin sau: <br><br>"
+        + "   Điện thoại: 0906996169 <br>"
+        + "   Email: "
+        + "yennhi.gamuda@gmail.com <br>"
+        + "Kính chúc khách hàng 1 năm mới với nhiều niềm vui và may mắn."
+        + "<br><br> Trân trọng, <br>";
+
+    for (ContactPresenter contactPresenter : list) {
+      System.out.println(">>>>> " + contactPresenter.getEmail());
+      if (!this.crawledDataDao.checkEmailSentOrNot(from, contactPresenter.getEmail())) {
+        JavaMailService.sendAdsToCustomer(from, fromPass, contactPresenter.getEmail(), title, emailBody);
+        this.crawledDataDao.trackEmailSent(from, contactPresenter.getEmail(), title, emailBody);
+      }
     }
   }
 
@@ -335,8 +365,6 @@ public class CrawledDataService implements ICrawledDataService {
     XSSFWorkbook workbook = new XSSFWorkbook();
 
     Map<String, Integer> summary = new HashMap<>();
-
-
 
     int total = 0;
     for (LocationPresenter location : locations) {
@@ -469,10 +497,14 @@ public class CrawledDataService implements ICrawledDataService {
     List<String> emails = this.crawledDataDao.getAllEmailsNotCheckedYet();
     List<String> temps = new ArrayList<>();
     temps.add("hoanhhao@gmail.com");
+    int count = 0;
     for (String email : emails) {
+        if (count > 150) {
+          break;
+        }
+        count++;
         JavaMailService.testEmail(email);
         this.crawledDataDao.updateEmailExisting(email, true);
     }
   }
-
 }

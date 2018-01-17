@@ -287,7 +287,7 @@ public class CrawledDataDao implements ICrawledDataDao {
     + "    ,(SELECT count(*) FROM crwlr_posts WHERE contact_id = c.id AND property_type = 'HOUSE' AND location_id = :locationId) as posts_count  "
     + "    ,(SELECT URL FROM crwlr_posts WHERE contact_id = c.id  order by id desc  LIMIT 0,1) url                                               "
     + "FROM crwlr_contacts c                                                                                                                     "
-    + "WHERE c.email = '' AND manual_check IS NULL AND TYPE = 'OWNER'                                                                           "
+    + "WHERE c.email <> '' AND manual_check IS NULL AND TYPE = 'OWNER'                                                                           "
     + "    AND (SELECT count(*) FROM crwlr_posts WHERE contact_id = c.id AND property_type = 'HOUSE' AND location_id = :locationId) = 1          "
 //    + "    AND (SELECT count(*) FROM crwlr_posts WHERE contact_id = c.id AND property_type = 'HOUSE' AND location_id = :locationId) < 3          "
     + "        ORDER BY posts_count desc                                                                                                         "
@@ -332,6 +332,34 @@ public class CrawledDataDao implements ICrawledDataDao {
     paramsMap.addValue("email", email);
 
     namedTemplate.update(sql, paramsMap);
+  }
+
+  @Override
+  public void trackEmailSent(String from, String to, String title, String content) {
+    final String sql =
+        "INSERT INTO crwlr_sent_emails_tracking (from_email, to_email, title, content) VALUES (:from_email, :to_email, :title, :content)";
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+
+    paramsMap.addValue("from_email", from);
+    paramsMap.addValue("to_email", to);
+    paramsMap.addValue("title", title);
+    paramsMap.addValue("content", content);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+    namedTemplate.update(sql, paramsMap);
+  }
+
+  @Override
+  public boolean checkEmailSentOrNot(String from, String to) {
+    final String sql =
+        "SELECT COUNT(*) FROM crwlr_sent_emails_tracking WHERE from_email = :from_email and to_email = :to_email";
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+
+    paramsMap.addValue("from_email", from);
+    paramsMap.addValue("to_email", to);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+    return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0;
   }
 
 }

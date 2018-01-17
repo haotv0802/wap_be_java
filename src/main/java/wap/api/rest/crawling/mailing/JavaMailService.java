@@ -105,14 +105,13 @@ public class JavaMailService {
 //      }
       transport.connect("smtp.gmail.com", "emailtest180115@gmail.com", "wfuynbpmxjylscgo");
 //    transport.connect("smtp.gmail.com", "salomon3000@gmail.com", "vswauhzfgslzowmv");
-      Thread.sleep(1000 * 2);  // 2 secs
+      Thread.sleep(1000);  // 2 secs
       count++;
       transport.sendMessage(generateMailMessage, generateMailMessage.getAllRecipients());
       transport.close();
   }
 
-
-  public static void sendAdsToCustomer(String email) throws MessagingException {
+  public static void sendAdsToCustomer(String from, String fromPass, String to, String title, String content) throws MessagingException {
     // Step1
     System.out.println("\n 1st ===> setup Mail Server Properties..");
     mailServerProperties = System.getProperties();
@@ -125,24 +124,13 @@ public class JavaMailService {
     System.out.println("\n\n 2nd ===> get Mail Session..");
     getMailSession = Session.getDefaultInstance(mailServerProperties, null);
     generateMailMessage = new MimeMessage(getMailSession);
-    generateMailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
+    generateMailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 //      generateMailMessage.addRecipient(Message.RecipientType.BCC, new InternetAddress("nhinguyen130905@gmail.com"));
 //    generateMailMessage.addRecipient(Message.RecipientType.CC, new InternetAddress("test2@crunchify.com"));
 
-    generateMailMessage.setSubject("XUÂN SANG HÁI LỘC LÊN ĐẾN NỬA TỶ ĐỒNG !!!");
-    String emailBody = "Xin chào Anh/Chị, <br/> "
-        + "GAMUDA LAND triển khai chương trình “XUÂN SANG HÁI LỘC” nhằm tri ân khách hàng. <br><br>"
+    generateMailMessage.setSubject(title);
 
-        + "<img src=\"https://lh3.googleusercontent.com/OEMTb7gnnFdaySb4BLARZVfbRmy8JsCPEIdQMLN1FIeeHqdMHdNsopviRLFLf3Y7XVnxSz_mB-PQ2D3GWhhko7cvCW6-Y2WdeObj5wUplrDTQBvafpyAegWo2IDKIaaw0PQazy1X9GvVZpYp1e7ODFPTTBLnv3KI6Scq_xhf_advrAsavuDMymo8oUsfzErFqrLZduBmrsQ6onTtvVeuxPnecDSunO02XxCVQ-K1Bn5VlDnODN_OPwkZ0Bcyxzto_Y9tWd3j0h99QwXqXkD_InTrXr3uzj0ktWR0CVgaldCTgUH0F-OlF-lKP23zGucIP_kISV8NVaW0Y4L5hfbCLd_iqm90-EMG3sa-voia5wnkM00ad0H8WCIJLwhOF_k2JWfhLzkIlUq_rXn9nGLYIwm9ATFzc6bH99ZLFjtrBnPYWzyu9Jwap_xiVJ1JcmeKP_oaHAoS1dzOEa48FWuNUmsX2R89_1c5uFQQ87NQhm6DkAMEshv7wLO8oLSBOzg8mU00g-Hi4_5pUqEWmgAL_e-mNJsdrRyZS5fZD7Bqi_m2lO7j1EHNdmBfF3ghEOMQUlqSioM5tUA6cruw3DgMFktv0hcHo8fIL6tIXh2l=w961-h503-no\">"
-        + "Khi quý vị sở hữu 1 căn hộ sẽ có cơ hội hái được 1 lộc có trị giá từ 200tr đến 500tr <br><br>"
-        + "  Hãy để GAMUDA LAND gửi đến quý khách niềm vui trọn vẹn hơn trong dịp tết này khi có trong tay căn hộ với những tiện ích,thiết kế nội thất thông minh sang trọng và trải nghiệm cuộc sống đẳng cấp nơi khu ĐÔ THỊ XANH CELEDON CITY mang lại. <br><br>"
-        + "  Trong trường hợp quý vị có nhu cầu sở hữu căn hộ để ở hoặc đầu tư vui lòng liên hệ thông tin sau: <br><br>"
-        + "   Điện thoại: 0906996169 <br>"
-        + "   Email: "
-        + "yennhi.gamuda@gmail.com <br>"
-        + "Kính chúc khách hàng 1 năm mới với nhiều niềm vui và may mắn."
-        + "<br><br> Trân trọng, <br>";
-    generateMailMessage.setContent(emailBody, "text/html; charset=utf-8");
+    generateMailMessage.setContent(content, "text/html; charset=utf-8");
     System.out.println("Mail Session has been created successfully..");
 
     // Step3
@@ -152,7 +140,7 @@ public class JavaMailService {
     // Enter your correct gmail UserID and Password
     // if you have 2FA enabled then provide App Specific Password
 
-    transport.connect("smtp.gmail.com", "yennhi.gamuda@gmail.com", "hpzitbyzeslypetm");
+    transport.connect("smtp.gmail.com", from, fromPass);
     count++;
     transport.sendMessage(generateMailMessage, generateMailMessage.getAllRecipients());
     transport.close();

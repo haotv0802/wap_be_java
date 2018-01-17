@@ -27,4 +27,8 @@ public interface ICrawledDataDao {
   List<String> getAllEmailsNotCheckedYet();
 
   void updateEmailExisting(String email, boolean existing);
+
+  void trackEmailSent(String from, String to, String title, String content);
+
+  boolean checkEmailSentOrNot(String from, String to);
 }

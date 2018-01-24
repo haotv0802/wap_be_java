@@ -327,9 +327,10 @@ public class CrawledDataDao implements ICrawledDataDao {
         "UPDATE crwlr_contacts SET email_existing = :existing where email = :email";
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
 
-    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
     paramsMap.addValue("existing", existing);
     paramsMap.addValue("email", email);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
     namedTemplate.update(sql, paramsMap);
   }

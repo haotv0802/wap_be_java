@@ -215,15 +215,21 @@ public class CrawledDataService implements ICrawledDataService {
 //    List<ContactPresenter> list = this.crawledDataDao.getOwnerContactsByLocation(14);
 //    List<ContactPresenter> list = this.crawledDataDao.getOwnerContactsByLocation(7);
 //    List<ContactPresenter> list = this.crawledDataDao.getOwnerContactsByLocation(9);
-    List<ContactPresenter> list = this.crawledDataDao.getOwnerContactsByLocation(3);
-//
+//    List<ContactPresenter> list = this.crawledDataDao.getOwnerContactsByLocation(16);
+//      List<ContactPresenter> list = this.crawledDataDao.getOwnerContactsByLocation(23);
+//    List<ContactPresenter> list = this.crawledDataDao.getOwnerContactsByLocation(17);
+//    List<ContactPresenter> list = this.crawledDataDao.getOwnerContactsByLocation(10);
+//    List<ContactPresenter> list = this.crawledDataDao.getOwnerContactsByLocation(4);
+    List<ContactPresenter> list = this.crawledDataDao.getOwnerContactsByLocation(22);
 //    List<String> temps = new ArrayList<>();
 //    temps.add("hoanhhao@gmail.com");
 //    temps.add("nguyenminhyennhi94@gmail.com");
 
-    String from = "yennhi.gamuda@gmail.com";
+//    String from = "yennhi.gamuda@gmail.com";
+//    String fromPass = "hpzitbyzeslypetm";
 
-    String fromPass = "hpzitbyzeslypetm";
+    String from = "vanthuc82@gmail.com";
+    String fromPass = "ljkcsnbudkviblaz";
 
     String title = "XUÂN SANG HÁI LỘC LÊN ĐẾN NỬA TỶ ĐỒNG !!!";
 
@@ -245,6 +251,7 @@ public class CrawledDataService implements ICrawledDataService {
       if (!this.crawledDataDao.checkEmailSentOrNot(from, contactPresenter.getEmail())) {
         JavaMailService.sendAdsToCustomer(from, fromPass, contactPresenter.getEmail(), title, emailBody);
         this.crawledDataDao.trackEmailSent(from, contactPresenter.getEmail(), title, emailBody);
+        this.crawledDataDao.updateEmailExisting(contactPresenter.getEmail(), true);
       }
     }
   }
@@ -499,9 +506,9 @@ public class CrawledDataService implements ICrawledDataService {
     temps.add("hoanhhao@gmail.com");
     int count = 0;
     for (String email : emails) {
-        if (count > 150) {
-          break;
-        }
+//        if (count > 150) {
+//          break;
+//        }
         count++;
         JavaMailService.testEmail(email);
         this.crawledDataDao.updateEmailExisting(email, true);

@@ -392,6 +392,8 @@ public class CrawledDataService implements ICrawledDataService {
       sheet.setColumnWidth(5, 5000);
       sheet.setColumnWidth(6, 4000);
       sheet.setColumnWidth(7, 4000);
+      sheet.setColumnWidth(8, 4000);
+      sheet.setColumnWidth(9, 4000);
       sheet.createFreezePane(0, 1);
 //    sheet.setDefaultColumnWidth(20);
 
@@ -431,12 +433,17 @@ public class CrawledDataService implements ICrawledDataService {
       cell.setCellValue("Email");
       cell.setCellStyle(headerStyle);
 
+      cell = row.createCell(++columnCount);
+      cell.setCellValue("Price");
+      cell.setCellStyle(headerStyle);
+
+      cell = row.createCell(++columnCount);
+      cell.setCellValue("No of Posts");
+      cell.setCellStyle(headerStyle);
 
       cell = row.createCell(++columnCount);
       cell.setCellValue("Link");
       cell.setCellStyle(headerStyle);
-
-
 
       for (ContactPresenter contact : list) {
         row = sheet.createRow(++rowCount);
@@ -454,8 +461,12 @@ public class CrawledDataService implements ICrawledDataService {
         cell = row.createCell(++columnCount);
         cell.setCellValue(contact.getEmail());
         cell = row.createCell(++columnCount);
+        cell.setCellValue(contact.getPrice() != null ? contact.getPrice().toString() : null);
+        cell = row.createCell(++columnCount);
+        cell.setCellValue(contact.getCount());
+        cell = row.createCell(++columnCount);
         XSSFHyperlink link = (XSSFHyperlink)createHelper.createHyperlink(Hyperlink.LINK_URL);
-        link.setAddress(contact.getPostUrl());
+        link.setAddress(contact.getPostUrl() != null ? contact.getPostUrl() : "");
         cell.setCellValue(contact.getPostUrl());
         cell.setHyperlink((XSSFHyperlink) link);
         cell.setCellStyle(hlinkstyle);

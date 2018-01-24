@@ -1,5 +1,6 @@
 package wap.api.rest.crawling.bds.beans;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class ContactPresenter {
@@ -8,6 +9,8 @@ public class ContactPresenter {
   private String phone;
   private String email;
   private String type;
+  private BigDecimal price;
+  private int count;
   private String postUrl;
   private Date latestItemPostedOn;
 
@@ -65,5 +68,21 @@ public class ContactPresenter {
 
   public void setPostUrl(String postUrl) {
     this.postUrl = postUrl;
+  }
+
+  public BigDecimal getPrice() {
+    return price;
+  }
+
+  public void setPrice(BigDecimal price) {
+    this.price = price;
+  }
+
+  public int getCount() {
+    return count;
+  }
+
+  public void setCount(int count) {
+    this.count = count;
   }
 }

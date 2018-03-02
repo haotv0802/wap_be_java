@@ -21,6 +21,8 @@ public class ItemPresenter {
   private String url;
   private String district;
   private String city;
+  private String type;
+  private String propertyType;
   private BigDecimal acreage;
   private BigDecimal price;
 
@@ -141,5 +143,21 @@ public class ItemPresenter {
 
   public void setPrice(BigDecimal price) {
     this.price = price;
+  }
+
+  public String getType() {
+    return type;
+  }
+
+  public void setType(String type) {
+    this.type = type;
+  }
+
+  public String getPropertyType() {
+    return propertyType;
+  }
+
+  public void setPropertyType(String propertyType) {
+    this.propertyType = propertyType;
   }
 }

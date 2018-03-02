@@ -39,18 +39,29 @@ public class CrawledDataDao implements ICrawledDataDao {
   @Override
   public List<ItemPresenter> getAllItems() {
     final String sql =
-                    "SELECT                                        "
-                  + "    i.name,                                   "
-                  + "    i.address,                                "
-                  + "    i.contact_name,                            "
-                  + "    i.contact_number,                          "
-                  + "    i.contact_email,                           "
-                  + "    i.publish_date,                           "
-                  + "    i.end_date,                               "
-                  + "    i.url                                     "
-                  + "FROM                                          "
-                  + "    crwlr_items i                             "
-        ;
+              "SELECT                                                    "
+            + "    p.name,                                               "
+            + "    p.address,                                            "
+            + "    p.description,                                        "
+            + "    l.city,                                               "
+            + "    l.district,                                           "
+            + "    c.name contact_name,                                  "
+            + "    c.phone contact_number,                               "
+            + "    c.email contact_email,                                "
+            + "    p.acreage,                                            "
+            + "    p.price,                                              "
+            + "    p.publish_date,                                       "
+            + "    p.end_date,                                           "
+            + "    p.url,                                                "
+            + "    p.type,                                               "
+            + "    p.property_type                                       "
+            + "FROM                                                      "
+            + "    (crwlr_posts p                                        "
+            + "    INNER JOIN crwlr_locations l ON p.location_id = l.id) "
+            + "        INNER JOIN                                        "
+            + "    crwlr_contacts c ON c.id = p.contact_id               "
+            + "    LIMIT 500                                             "
+                      ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
@@ -59,12 +70,19 @@ public class CrawledDataDao implements ICrawledDataDao {
       ItemPresenter presenter = new ItemPresenter();
       presenter.setTitle(rs.getString("name"));
       presenter.setAddress(rs.getString("address"));
+      presenter.setDescription(rs.getString("description"));
+      presenter.setCity(rs.getString("city"));
+      presenter.setDistrict(rs.getString("district"));
+      presenter.setPrice(rs.getBigDecimal("price"));
+      presenter.setAcreage(rs.getBigDecimal("acreage"));
       presenter.setContactName(rs.getString("contact_name"));
       presenter.setContactEmail(rs.getString("contact_email"));
       presenter.setContactNumber(rs.getString("contact_number"));
       presenter.setPublishDate(JdbcUtils.toUtilDate(rs.getDate("publish_date")));
       presenter.setEndDate(JdbcUtils.toUtilDate(rs.getDate("end_date")));
       presenter.setUrl(rs.getString("url"));
+      presenter.setType(rs.getString("type"));
+      presenter.setPropertyType(rs.getString("property_type"));
 
       return presenter;
     });

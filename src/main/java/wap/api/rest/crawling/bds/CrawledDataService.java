@@ -14,6 +14,7 @@ import org.springframework.util.Assert;
 import wap.api.rest.crawling.bds.beans.*;
 import wap.api.rest.crawling.bds.interfaces.ICrawledDataDao;
 import wap.api.rest.crawling.bds.interfaces.ICrawledDataService;
+import wap.api.rest.crawling.bds.interfaces.IEmailAccountService;
 import wap.api.rest.crawling.mailing.JavaMailService;
 
 import javax.mail.MessagingException;
@@ -35,16 +36,21 @@ public class CrawledDataService implements ICrawledDataService {
 
   private final BusinessService businessService;
 
+  private final IEmailAccountService emailAccountService;
+
   private final Logger LOGGER = LogManager.getLogger(getClass());
 
   @Autowired
   public CrawledDataService(
       @Qualifier("bdsCrawledDataDao") ICrawledDataDao crawledDataDao,
-      @Qualifier("bdsBusinessService") BusinessService businessService
-  ) {
+      @Qualifier("bdsBusinessService") BusinessService businessService,
+      @Qualifier("bdsEmailAccountService") IEmailAccountService emailAccountService) {
+
     Assert.notNull(crawledDataDao);
     Assert.notNull(businessService);
+    Assert.notNull(emailAccountService);
 
+    this.emailAccountService = emailAccountService;
     this.crawledDataDao = crawledDataDao;
     this.businessService = businessService;
   }
@@ -286,9 +292,14 @@ public class CrawledDataService implements ICrawledDataService {
 //    String from = "quangcaobds180300@gmail.com";
 //    String fromPass = "ovdnnklpkxwxeocr";
 
-    String from = "quangcaobds180301@gmail.com";
-    String fromPass = "xrztwxsjasjzjayg";
+//    String from = "quangcaobds180301@gmail.com";
+//    String fromPass = "xrztwxsjasjzjayg";
 
+    Map<String, String> emailAccounts = emailAccountService.getEmailsInfo();
+
+
+    Set<String> keys = emailAccounts.keySet();
+    Iterator<String> iterator = keys.iterator();
 
     String title = "Ưu đãi cực lớn Block cuối cùng và đẹp nhất khu EMERALD dự án Celadon city !!!";
 
@@ -318,15 +329,33 @@ public class CrawledDataService implements ICrawledDataService {
         + "<img src=\"https://lh3.googleusercontent.com/oYb03oG2aIeDF0jdIiR30jgfhgePxsi9XNHHn0vXaMbjYCsNixlmBNcaclJ61ZB8tH1c4xwtJYzJK8HOhGgM4twsVBONRbGJpPRgRr5xFyq8S-ZathzfB9rc9H7d7aK_7E3KFHyULlE2wgiXLRtVNmKpevtZdXcNziXetSd0H-LJcxQdfZs5EDm-QmrcIppMQxNaFoJ6tyPt_IiwP1HVfQZV6AEmMuzXKoC6wZHphqBI1CYdk698p8r0XNkSe8pBm5uLs6XInAQ-XDXaMhs6kQNlHLe6BJWjWoDKzCFr_GCenNd5tXphFD-1wYZpSCxMJ556wn55y9mAb4JuRTWA_m7Azx6EqFAiCkD-3ezHzbd2ojGHu7x7LVIrihmiC4tfuYzGKMVNwsNlSyqX3nkdDw3fWppkrIx5yecvssi4zqF9AqdTugooNKMVGOAJ6qDdhbpcF1a9dfdGLoIMna8P-3s-sLSH_UHpsUllsRPV2j-kOdCazZ6fSy0yxxvVS62q8iMVJ-0cKkafN9-PHfHAoKAjl6IO4iTVorF6LqVd4gws4fn6YLABwldLK3W_NMkIRtSN5mPGGRFTj4X9xSY1ys98piXEgW0=w960-h719-no\">"
         + "<img src=\"https://lh3.googleusercontent.com/1mqEC5AGyKuuaj-s9b_dBF5svEDN_QwT60faGQxEoXVGKq9IKqComRixPnB4zklQn4FuGc2uU3NHBoWCRTDrIRH9AXl97fgYtjLN7YgNmUdFCKRFT_EIuttlh4h0yoDDjWQ0RN-7NOWT5uMktOmXIt8jxaevmEcNvtmI5XgfyN1_s3OJalyO2-bNgYu8vOJYec-Hxlzc9iwF9BiPolzhjmUNPgtY_uVucNPF3FVIKGKf77Pywd1sBOATBqpk9gQZek-cm-0lh5Anu_Sv6mKnkCxZsXvEIGZcEHI7V4IRyXWaY-eoQo0_tLQZ_ViurKgJ5AED4BOV1c57wSke4c18IRAHskGpR6rwSL7rOoAuwOzFhnDksTZ0mlgZZkVS1tqoouR3W27m-sTOCyqFtZe12PyJUlkV6qTAnci5iXtAsvP_vOwfoK6oBVkuvZKiUNRO7b-T3essFQzOl3hfakFsbd_8fiqOuEYiehzRGkBVcZ1LDcaNJEY5PxeMqArSQ_IwiJm0_Ysc31PKcHR6kS2SYoKH4bClqCpt0aKsg6tAp5Xe-Zz8ai5wkzseKCvb1kjuTTy_ZNSaeCsi8kPtctC3uMCjt19AC-A=w800-h533-no\">"
         ;
+    String from;
+    String fromPass;
+    if (iterator.hasNext()) {
+      from = iterator.next();
+      fromPass = emailAccounts.get(from);
 
-    for (ContactPresenter contactPresenter : list) {
-      System.out.println(">>>>> " + contactPresenter.getEmail());
-      if (!this.crawledDataDao.checkEmailSentOrNotWithTitle(title, contactPresenter.getEmail())) {
-        JavaMailService.sendAdsToCustomer(from, fromPass, contactPresenter.getEmail(), title, emailBody);
-        this.crawledDataDao.trackEmailSent(from, contactPresenter.getEmail(), title, emailBody);
-        this.crawledDataDao.updateEmailExisting(contactPresenter.getEmail(), true);
+      for (ContactPresenter contactPresenter : list) {
+        System.out.println("..... " + from + "  >>>>> " + contactPresenter.getEmail());
+        if (!this.crawledDataDao.checkEmailSentOrNotWithTitle(title, contactPresenter.getEmail())) {
+          try {
+            JavaMailService.sendAdsToCustomer(from, fromPass, contactPresenter.getEmail(), title, emailBody);
+            this.crawledDataDao.trackEmailSent(from, contactPresenter.getEmail(), title, emailBody);
+            this.crawledDataDao.updateEmailExisting(contactPresenter.getEmail(), true);
+          } catch (SMTPSendFailedException ex) {
+            ex.printStackTrace();
+            if (iterator.hasNext()) {
+              from = iterator.next();
+              fromPass = emailAccounts.get(from);
+            } else {
+              break;
+            }
+          }
+        }
       }
+
     }
+
   }
 
   @Override

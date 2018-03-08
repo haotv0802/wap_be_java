@@ -230,6 +230,8 @@ public class CrawledDataService implements ICrawledDataService {
 
     String from = "vanthuc82@gmail.com";
     String fromPass = "ljkcsnbudkviblaz";
+//quangcaobds180300@gmail.com
+//    ovdnnklpkxwxeocr
 
     String title = "XUÂN SANG HÁI LỘC LÊN ĐẾN NỬA TỶ ĐỒNG !!!";
 
@@ -249,6 +251,77 @@ public class CrawledDataService implements ICrawledDataService {
     for (ContactPresenter contactPresenter : list) {
       System.out.println(">>>>> " + contactPresenter.getEmail());
       if (!this.crawledDataDao.checkEmailSentOrNot(from, contactPresenter.getEmail())) {
+        JavaMailService.sendAdsToCustomer(from, fromPass, contactPresenter.getEmail(), title, emailBody);
+        this.crawledDataDao.trackEmailSent(from, contactPresenter.getEmail(), title, emailBody);
+        this.crawledDataDao.updateEmailExisting(contactPresenter.getEmail(), true);
+      }
+    }
+  }
+
+
+  @Override
+  public void sendAdsBlockEToCustomers() throws MessagingException {
+
+    List<ContactPresenter> list = this.crawledDataDao.getOwnerContactsByLocation(14); // Tan Binh
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(7));
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(9));
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(16));
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(23));
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(17));
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(10));
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(4));
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(22));
+
+//    List<ContactPresenter> list = new ArrayList<>();
+//    ContactPresenter cp = new ContactPresenter();
+//    cp.setEmail("hoanhhao@gmail.com");
+//    list.add(cp);
+//    cp = new ContactPresenter();
+//    cp.setEmail("nguyenminhyennhi94@gmail.com");
+//    list.add(cp);
+
+//    String from = "yennhi.gamuda@gmail.com";
+//    String fromPass = "hpzitbyzeslypetm";
+
+//    String from = "quangcaobds180300@gmail.com";
+//    String fromPass = "ovdnnklpkxwxeocr";
+
+    String from = "quangcaobds180301@gmail.com";
+    String fromPass = "xrztwxsjasjzjayg";
+
+
+    String title = "Ưu đãi cực lớn Block cuối cùng và đẹp nhất khu EMERALD dự án Celadon city !!!";
+
+    String emailBody = "Xin chào Anh/Chị, <br/> "
+        + "Celadon city thông báo đến quý khách hàng chương trình bán hàng block E ngày 18/3/2018; là block cuối cùng của Emerald. <br><br>"
+        + "****Nhận giữ chổ ngày 10/3/2018, 50tr/ giữ chổ.<br>"
+        + "** Chiếc khấu : 5% trên giá bán.<br>"
+        + "** Kết nối cộng đồng: ck 1%<br>"
+        + "** Tri ân khách hàng: ck 1%<br>"
+        + "** Voucher mừng xuân: 25tr<br>"
+        + "** Gói chăm sóc sức khoẻ Hoàn Mỹ cho gia đình trong 1 năm.<br>"
+        + "** Bốc thăm iphone X, ipad, note 8<br>"
+        + "Quý khách hàng đăng ký tham gia chương trình báo e book ngay cho Pkd nhé vì số lượng có hạn ạ!<br>"
+        + "<b>Hotline: 0906 99 61 69 (viber/zalo)</b><br>"
+        + "   Email: yennhi.gamudaland@gmail.com <br>"
+        + "*** Phương thức thanh toán :<br>"
+        + "- Ký hợp đồng 15%<br>"
+        + "- 4 tháng sau 15%<br>"
+        + "- Cất nóc 15%<br>"
+        + "- Nhận nhà 30%<br>"
+        + "- Sau 3 tháng nhận nhà 20%<br>"
+        + "- Cấp sổ 5%<br>"
+        + "Trân trọng!<br>"
+
+        + "<img src=\"https://lh3.googleusercontent.com/BjIF5JRmU87nS5mHMbmac_JoZg-EP0e1JveEe4ARc00Un4LgFEpQ3RXwRu3lq6tD_nIvJK-336xNVVHuTeHSspuVb1g8TKFmjfVNnqaaiQ5W8jS64Hjrm9sX9Nvhs6jt5xrR8ALEcu-KeLqWuektJIshnuaQ1KuzLumb9BkaNs-CCgxSqSCMiXxQPfaTIOfTHdftGOhShDLzVrC2THn7OE-fPMxnJAnSQlW6v_VbdZjqyDkRC8iFD-k9WMSsOXTRm823D3__z_C_p9hK7_95R0MAdVrClIKm0FXdZtyvhOtXM4ZBpbViJM6BNyVr1quHjIi6qKAVLob5R7u0EeErmACvyJ8W1Htd4z8p1y7GTvEc5BYAlV91iqb9E39ys-4MQHXlWB4-diICOtFg-RpFA7ZQbBFsfECNSvgQXDB5Dz3fZmrYzWLguF72J-YRk3fY-YEcSxLabcpCPy8sEK3AT0PJKvSKIQ-nMOn-DeLx5JVfDfTcM_CV-0PRhTumjgnDrG5Uvm_kDpR-FaCUcQ0QG_VAHFGmjToXoq-m1J4He5d2fQd-tK58xfXGymc6ByNrplSnzuUI2LDo_1vl2x2PG0WDKT_9T38=w960-h668-no\">"
+        + "<img src=\"https://lh3.googleusercontent.com/gj0htd3Rpub_H9OMCovUNmW16OUSVX2MirFjSjH_5sYOg0lN5ht7LJntlnxem34OZptY8_owVm8SL1KmT6sWKiNyfEnigiLqZ9b88DfNhwpkI42J6Qb0Rro-cFycrJFJU-YM_roQbhAtv5ebY1jAugELW_006Jd8LagUD6LXyxf4mJAdBmVNVB5yI4ecrr5GIJpbFF7U_DhOFEEyqCUyHMhST6yH0WL9ugvRUoUSew-xjNU3bjjzqKwGS80CLCptAxz7RNQpltWPdBnAUO5SnPORKJ1BfNBMmj3ypVYrvj9QvrAwcDMJ-IiyA1Bw-KeI7CJaguYV3YCDZafZWR_-X5_ofWKo4FcXoCUkB_BMNxDbWvdavnfRBMMr8nS-5S7AhCyIj5uu_fc5YIpxX2PpmlA5KxwF3MiIvggzbIAuEn3NIsUABl3ODjtZdXJM3pD4bi-s5pLxdtlYnTIjKMreX2Tx5gJ1uUDthYxbuM5ndqgJaKItWkGv5Y-GS749I816-vh6lNk5-lmj4PEIzlKMQIVRYDWPzK67b3cSXAfoJSl8WSkl_gLG8kxqIa8N3Y4XyYi4tvDc7z5GTbpEfWnOt6aS7sqPG20=w894-h696-no\">"
+        + "<img src=\"https://lh3.googleusercontent.com/oYb03oG2aIeDF0jdIiR30jgfhgePxsi9XNHHn0vXaMbjYCsNixlmBNcaclJ61ZB8tH1c4xwtJYzJK8HOhGgM4twsVBONRbGJpPRgRr5xFyq8S-ZathzfB9rc9H7d7aK_7E3KFHyULlE2wgiXLRtVNmKpevtZdXcNziXetSd0H-LJcxQdfZs5EDm-QmrcIppMQxNaFoJ6tyPt_IiwP1HVfQZV6AEmMuzXKoC6wZHphqBI1CYdk698p8r0XNkSe8pBm5uLs6XInAQ-XDXaMhs6kQNlHLe6BJWjWoDKzCFr_GCenNd5tXphFD-1wYZpSCxMJ556wn55y9mAb4JuRTWA_m7Azx6EqFAiCkD-3ezHzbd2ojGHu7x7LVIrihmiC4tfuYzGKMVNwsNlSyqX3nkdDw3fWppkrIx5yecvssi4zqF9AqdTugooNKMVGOAJ6qDdhbpcF1a9dfdGLoIMna8P-3s-sLSH_UHpsUllsRPV2j-kOdCazZ6fSy0yxxvVS62q8iMVJ-0cKkafN9-PHfHAoKAjl6IO4iTVorF6LqVd4gws4fn6YLABwldLK3W_NMkIRtSN5mPGGRFTj4X9xSY1ys98piXEgW0=w960-h719-no\">"
+        + "<img src=\"https://lh3.googleusercontent.com/1mqEC5AGyKuuaj-s9b_dBF5svEDN_QwT60faGQxEoXVGKq9IKqComRixPnB4zklQn4FuGc2uU3NHBoWCRTDrIRH9AXl97fgYtjLN7YgNmUdFCKRFT_EIuttlh4h0yoDDjWQ0RN-7NOWT5uMktOmXIt8jxaevmEcNvtmI5XgfyN1_s3OJalyO2-bNgYu8vOJYec-Hxlzc9iwF9BiPolzhjmUNPgtY_uVucNPF3FVIKGKf77Pywd1sBOATBqpk9gQZek-cm-0lh5Anu_Sv6mKnkCxZsXvEIGZcEHI7V4IRyXWaY-eoQo0_tLQZ_ViurKgJ5AED4BOV1c57wSke4c18IRAHskGpR6rwSL7rOoAuwOzFhnDksTZ0mlgZZkVS1tqoouR3W27m-sTOCyqFtZe12PyJUlkV6qTAnci5iXtAsvP_vOwfoK6oBVkuvZKiUNRO7b-T3essFQzOl3hfakFsbd_8fiqOuEYiehzRGkBVcZ1LDcaNJEY5PxeMqArSQ_IwiJm0_Ysc31PKcHR6kS2SYoKH4bClqCpt0aKsg6tAp5Xe-Zz8ai5wkzseKCvb1kjuTTy_ZNSaeCsi8kPtctC3uMCjt19AC-A=w800-h533-no\">"
+        ;
+
+    for (ContactPresenter contactPresenter : list) {
+      System.out.println(">>>>> " + contactPresenter.getEmail());
+      if (!this.crawledDataDao.checkEmailSentOrNotWithTitle(title, contactPresenter.getEmail())) {
         JavaMailService.sendAdsToCustomer(from, fromPass, contactPresenter.getEmail(), title, emailBody);
         this.crawledDataDao.trackEmailSent(from, contactPresenter.getEmail(), title, emailBody);
         this.crawledDataDao.updateEmailExisting(contactPresenter.getEmail(), true);

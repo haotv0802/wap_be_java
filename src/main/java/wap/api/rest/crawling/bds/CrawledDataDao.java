@@ -60,7 +60,7 @@ public class CrawledDataDao implements ICrawledDataDao {
             + "    INNER JOIN crwlr_locations l ON p.location_id = l.id) "
             + "        INNER JOIN                                        "
             + "    crwlr_contacts c ON c.id = p.contact_id               "
-            + "    LIMIT 500                                             "
+            + "  WHERE c.email <> '' AND c.name <> ''   LIMIT 500        "
                       ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
 
@@ -302,13 +302,12 @@ public class CrawledDataDao implements ICrawledDataDao {
   public List<ContactPresenter> getOwnerContactsByLocation(int locationId) {
     final String sql =
       "SELECT c.id, c.name, c.phone, c.email, c.type, c.latest_item_posted_on                                                                    "
-    + "    ,(SELECT count(*) FROM crwlr_posts WHERE contact_id = c.id AND property_type = 'APARTMENT' AND location_id = :locationId) as posts_count  "
+    + "    ,(SELECT count(*) FROM crwlr_posts WHERE contact_id = c.id AND property_type = 'HOUSE' AND location_id = :locationId) as posts_count  "
     + "    ,(SELECT URL FROM crwlr_posts WHERE contact_id = c.id  order by id desc  LIMIT 0,1) url                                               "
     + "    ,(SELECT price FROM crwlr_posts WHERE contact_id = c.id  order by id desc  LIMIT 0,1) price                                           "
     + "FROM crwlr_contacts c                                                                                                                     "
-        + "WHERE c.email <> '' AND manual_check IS NULL                                                                           "
-        + "    AND (SELECT count(*) FROM crwlr_posts WHERE contact_id = c.id AND property_type = 'APARTMENT' AND location_id = :locationId) > 1          "
-//    + "    AND (SELECT count(*) FROM crwlr_posts WHERE contact_id = c.id AND property_type = 'HOUSE' AND location_id = :locationId) < 3          "
+    + "WHERE c.email <> '' AND manual_check IS NULL    AND TYPE = 'OWNER'                                                                        "
+    + "    AND (SELECT count(*) FROM crwlr_posts WHERE contact_id = c.id AND property_type = 'HOUSE' AND location_id = :locationId) = 1         "
     + "        ORDER BY posts_count desc                                                                                                         "
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
@@ -378,6 +377,20 @@ public class CrawledDataDao implements ICrawledDataDao {
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
 
     paramsMap.addValue("from_email", from);
+    paramsMap.addValue("to_email", to);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+    return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0;
+  }
+
+
+  @Override
+  public boolean checkEmailSentOrNotWithTitle(String title, String to) {
+    final String sql =
+        "SELECT COUNT(*) FROM crwlr_sent_emails_tracking WHERE title = :title and to_email = :to_email";
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+
+    paramsMap.addValue("title", title);
     paramsMap.addValue("to_email", to);
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());

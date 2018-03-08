@@ -26,6 +26,8 @@ public interface ICrawledDataService {
 
   void sendAdsToCustomers() throws MessagingException;
 
+  void sendAdsBlockEToCustomers() throws MessagingException;
+
   List<ContactPresenter> getPostsManually(Criterion criterion) throws IOException ;
 
   List<Contact> getContacts();

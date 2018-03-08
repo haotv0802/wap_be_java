@@ -41,4 +41,14 @@ public class BDSExportingResourceTest extends TestBase {
         .andExpect(status().is(200))
     ;
   }
+
+  @Test
+  public void testSendAdsBlockEToCustomers() throws Exception {
+    mockMvc
+        .perform(get("/svc/bds/crawler/sendAdsBlockEToCustomers")
+            .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().is(200))
+    ;
+  }
 }

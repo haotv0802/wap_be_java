@@ -31,4 +31,6 @@ public interface ICrawledDataDao {
   void trackEmailSent(String from, String to, String title, String content);
 
   boolean checkEmailSentOrNot(String from, String to);
+
+  boolean checkEmailSentOrNotWithTitle(String title, String to);
 }

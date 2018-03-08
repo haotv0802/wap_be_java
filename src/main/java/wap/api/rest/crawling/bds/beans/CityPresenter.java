@@ -1,10 +1,11 @@
 package wap.api.rest.crawling.bds.beans;
 
-import java.util.Map;
+import java.util.List;
 
-public class Location {
+public class CityPresenter {
   private String city;
-  private Map<Integer, String> districts;
+
+  private List<District> districts;
 
   public String getCity() {
     return city;
@@ -14,11 +15,12 @@ public class Location {
     this.city = city;
   }
 
-  public Map<Integer, String> getDistricts() {
+  public List<District> getDistricts() {
     return districts;
   }
 
-  public void setDistricts(Map<Integer, String> districts) {
+  public void setDistricts(List<District> districts) {
     this.districts = districts;
   }
+
 }

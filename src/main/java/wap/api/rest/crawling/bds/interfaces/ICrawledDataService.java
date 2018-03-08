@@ -1,12 +1,8 @@
 package wap.api.rest.crawling.bds.interfaces;
 
-import wap.api.rest.crawling.bds.beans.Contact;
-import wap.api.rest.crawling.bds.beans.ContactPresenter;
-import wap.api.rest.crawling.bds.beans.Criterion;
-import wap.api.rest.crawling.bds.beans.ItemPresenter;
+import wap.api.rest.crawling.bds.beans.*;
 
 import javax.mail.MessagingException;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -36,4 +32,5 @@ public interface ICrawledDataService {
 
   void testEmail() throws MessagingException, InterruptedException;
 
+  List<CityPresenter> getCitiesAndDistricts();
 }

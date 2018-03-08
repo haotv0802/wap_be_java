@@ -33,4 +33,6 @@ public interface ICrawledDataDao {
   boolean checkEmailSentOrNot(String from, String to);
 
   boolean checkEmailSentOrNotWithTitle(String title, String to);
+
+  List<CityPresenter> getCitiesAndDistricts();
 }

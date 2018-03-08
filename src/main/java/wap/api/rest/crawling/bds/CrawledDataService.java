@@ -632,4 +632,9 @@ public class CrawledDataService implements ICrawledDataService {
         this.crawledDataDao.updateEmailExisting(email, true);
     }
   }
+
+  @Override
+  public List<CityPresenter> getCitiesAndDistricts() {
+    return this.crawledDataDao.getCitiesAndDistricts();
+  }
 }

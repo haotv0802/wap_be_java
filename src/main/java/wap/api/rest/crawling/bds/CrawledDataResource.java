@@ -5,10 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
-import wap.api.rest.crawling.bds.beans.Contact;
-import wap.api.rest.crawling.bds.beans.ContactPresenter;
-import wap.api.rest.crawling.bds.beans.Criterion;
-import wap.api.rest.crawling.bds.beans.ItemPresenter;
+import wap.api.rest.crawling.bds.beans.*;
 import wap.api.rest.crawling.bds.interfaces.ICrawledDataService;
 import wap.api.rest.crawling.mailing.JavaMailService;
 
@@ -96,5 +93,8 @@ public class CrawledDataResource {
     return contacts;
   }
 
-//  @GetMapping("/crawler/citiesAndDistricts")
+  @GetMapping("/crawler/citiesAndDistricts")
+  public List<CityPresenter> getCitiesAndDistricts() {
+    return this.crawledDataService.getCitiesAndDistricts();
+  }
 }

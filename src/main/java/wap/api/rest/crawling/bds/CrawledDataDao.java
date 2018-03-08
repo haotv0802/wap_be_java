@@ -15,6 +15,7 @@ import wap.common.dao.DaoUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -395,6 +396,45 @@ public class CrawledDataDao implements ICrawledDataDao {
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
     return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0;
+  }
+
+  @Override
+  public List<CityPresenter> getCitiesAndDistricts() {
+    String sql = "SELECT distinct city FROM crwlr_locations";
+
+    MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    List<String> cities = namedTemplate.queryForList(sql, paramsMap, String.class);
+
+    List<CityPresenter> locations = new ArrayList<>();
+
+    for (String city : cities) {
+      CityPresenter location = new CityPresenter();
+      location.setCity(city);
+      sql = "SELECT id, district FROM crwlr_locations WHERE city = :city";
+
+      paramsMap = new MapSqlParameterSource();
+      paramsMap.addValue("city", city);
+
+      DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+      List<District> districts = namedTemplate.query(sql, paramsMap, new RowMapper<District>() {
+        @Override
+        public District mapRow(ResultSet resultSet, int i) throws SQLException {
+          String name = resultSet.getString("district");
+          Integer id = resultSet.getInt("id");
+          District dist = new District(id, name);
+          return dist;
+        }
+      });
+
+      location.setDistricts(districts);
+      locations.add(location);
+    }
+
+    return locations;
   }
 
 }

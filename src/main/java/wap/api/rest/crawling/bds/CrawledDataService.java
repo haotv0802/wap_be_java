@@ -269,14 +269,19 @@ public class CrawledDataService implements ICrawledDataService {
   public void sendAdsBlockEToCustomers() throws MessagingException {
 
     List<ContactPresenter> list = this.crawledDataDao.getOwnerContactsByLocation(14); // Tan Binh
-    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(7));
-    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(9));
-    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(16));
-    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(23));
-    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(17));
-    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(10));
-    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(4));
-    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(22));
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(7)); // Tan Phu
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(9)); // Thu Duc
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(16)); // Quan 7
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(23)); // Quan 2
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(17)); // Quan 1
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(10)); // Binh Tan
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(4)); // Phu Nhuan
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(22)); // Quan 3
+
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(5)); // Quan 10
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(3)); // Quan Go Vap
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(6)); // Quan 4
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(1)); // Quan 12
 
 //    List<ContactPresenter> list = new ArrayList<>();
 //    ContactPresenter cp = new ContactPresenter();

@@ -19,6 +19,8 @@ public class EmailAccountService implements IEmailAccountService {
 
     Map<String, String> emailAccounts = new HashMap<>();
     emailAccounts.put("vanthuc82@gmail.com", "ljkcsnbudkviblaz");
+    emailAccounts.put("quangcaobds180303@gmail.com", "gwswsjdfidpnbpge");
+    emailAccounts.put("quangcaobds180304@gmail.com", "rupkcdyagxzmsopm");
     emailAccounts.put("quangcaobds180300@gmail.com", "ovdnnklpkxwxeocr");
     emailAccounts.put("quangcaobds180301@gmail.com", "xrztwxsjasjzjayg");
     emailAccounts.put("quangcaobds180302@gmail.com", "xuyaxdhgmuofgyfo");

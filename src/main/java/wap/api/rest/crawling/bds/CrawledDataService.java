@@ -306,34 +306,37 @@ public class CrawledDataService implements ICrawledDataService {
     Set<String> keys = emailAccounts.keySet();
     Iterator<String> iterator = keys.iterator();
 
-    String title = "Ưu đãi cực lớn Block cuối cùng và đẹp nhất khu EMERALD dự án Celadon city !!!";
+    String title = "Ưu đãi cực lớn Block cuối cùng và đẹp nhất khu EMERALD dự án Celadon city !!!900px";
 
-    String emailBody = "Xin chào Anh/Chị, <br/> "
-        + "Celadon city thông báo đến quý khách hàng chương trình bán hàng block E ngày 18/3/2018; là block cuối cùng của Emerald. <br><br>"
-        + "****Nhận giữ chổ ngày 10/3/2018, 50tr/ giữ chổ.<br>"
-        + "** Chiếc khấu : 5% trên giá bán.<br>"
-        + "** Kết nối cộng đồng: ck 1%<br>"
-        + "** Tri ân khách hàng: ck 1%<br>"
-        + "** Voucher mừng xuân: 25tr<br>"
-        + "** Gói chăm sóc sức khoẻ Hoàn Mỹ cho gia đình trong 1 năm.<br>"
-        + "** Bốc thăm iphone X, ipad, note 8<br>"
-        + "Quý khách hàng đăng ký tham gia chương trình báo e book ngay cho Pkd nhé vì số lượng có hạn ạ!<br>"
-        + "<b>Hotline: 0906 99 61 69 (viber/zalo)</b><br>"
-        + "   Email: yennhi.gamudaland@gmail.com <br>"
-        + "*** Phương thức thanh toán :<br>"
-        + "- Ký hợp đồng 15%<br>"
-        + "- 4 tháng sau 15%<br>"
-        + "- Cất nóc 15%<br>"
-        + "- Nhận nhà 30%<br>"
-        + "- Sau 3 tháng nhận nhà 20%<br>"
-        + "- Cấp sổ 5%<br>"
-        + "Trân trọng!<br>"
+    StringBuilder email = new StringBuilder();
 
-        + "<img src=\"https://lh3.googleusercontent.com/BjIF5JRmU87nS5mHMbmac_JoZg-EP0e1JveEe4ARc00Un4LgFEpQ3RXwRu3lq6tD_nIvJK-336xNVVHuTeHSspuVb1g8TKFmjfVNnqaaiQ5W8jS64Hjrm9sX9Nvhs6jt5xrR8ALEcu-KeLqWuektJIshnuaQ1KuzLumb9BkaNs-CCgxSqSCMiXxQPfaTIOfTHdftGOhShDLzVrC2THn7OE-fPMxnJAnSQlW6v_VbdZjqyDkRC8iFD-k9WMSsOXTRm823D3__z_C_p9hK7_95R0MAdVrClIKm0FXdZtyvhOtXM4ZBpbViJM6BNyVr1quHjIi6qKAVLob5R7u0EeErmACvyJ8W1Htd4z8p1y7GTvEc5BYAlV91iqb9E39ys-4MQHXlWB4-diICOtFg-RpFA7ZQbBFsfECNSvgQXDB5Dz3fZmrYzWLguF72J-YRk3fY-YEcSxLabcpCPy8sEK3AT0PJKvSKIQ-nMOn-DeLx5JVfDfTcM_CV-0PRhTumjgnDrG5Uvm_kDpR-FaCUcQ0QG_VAHFGmjToXoq-m1J4He5d2fQd-tK58xfXGymc6ByNrplSnzuUI2LDo_1vl2x2PG0WDKT_9T38=w960-h668-no\">"
-        + "<img src=\"https://lh3.googleusercontent.com/gj0htd3Rpub_H9OMCovUNmW16OUSVX2MirFjSjH_5sYOg0lN5ht7LJntlnxem34OZptY8_owVm8SL1KmT6sWKiNyfEnigiLqZ9b88DfNhwpkI42J6Qb0Rro-cFycrJFJU-YM_roQbhAtv5ebY1jAugELW_006Jd8LagUD6LXyxf4mJAdBmVNVB5yI4ecrr5GIJpbFF7U_DhOFEEyqCUyHMhST6yH0WL9ugvRUoUSew-xjNU3bjjzqKwGS80CLCptAxz7RNQpltWPdBnAUO5SnPORKJ1BfNBMmj3ypVYrvj9QvrAwcDMJ-IiyA1Bw-KeI7CJaguYV3YCDZafZWR_-X5_ofWKo4FcXoCUkB_BMNxDbWvdavnfRBMMr8nS-5S7AhCyIj5uu_fc5YIpxX2PpmlA5KxwF3MiIvggzbIAuEn3NIsUABl3ODjtZdXJM3pD4bi-s5pLxdtlYnTIjKMreX2Tx5gJ1uUDthYxbuM5ndqgJaKItWkGv5Y-GS749I816-vh6lNk5-lmj4PEIzlKMQIVRYDWPzK67b3cSXAfoJSl8WSkl_gLG8kxqIa8N3Y4XyYi4tvDc7z5GTbpEfWnOt6aS7sqPG20=w894-h696-no\">"
-        + "<img src=\"https://lh3.googleusercontent.com/oYb03oG2aIeDF0jdIiR30jgfhgePxsi9XNHHn0vXaMbjYCsNixlmBNcaclJ61ZB8tH1c4xwtJYzJK8HOhGgM4twsVBONRbGJpPRgRr5xFyq8S-ZathzfB9rc9H7d7aK_7E3KFHyULlE2wgiXLRtVNmKpevtZdXcNziXetSd0H-LJcxQdfZs5EDm-QmrcIppMQxNaFoJ6tyPt_IiwP1HVfQZV6AEmMuzXKoC6wZHphqBI1CYdk698p8r0XNkSe8pBm5uLs6XInAQ-XDXaMhs6kQNlHLe6BJWjWoDKzCFr_GCenNd5tXphFD-1wYZpSCxMJ556wn55y9mAb4JuRTWA_m7Azx6EqFAiCkD-3ezHzbd2ojGHu7x7LVIrihmiC4tfuYzGKMVNwsNlSyqX3nkdDw3fWppkrIx5yecvssi4zqF9AqdTugooNKMVGOAJ6qDdhbpcF1a9dfdGLoIMna8P-3s-sLSH_UHpsUllsRPV2j-kOdCazZ6fSy0yxxvVS62q8iMVJ-0cKkafN9-PHfHAoKAjl6IO4iTVorF6LqVd4gws4fn6YLABwldLK3W_NMkIRtSN5mPGGRFTj4X9xSY1ys98piXEgW0=w960-h719-no\">"
-        + "<img src=\"https://lh3.googleusercontent.com/1mqEC5AGyKuuaj-s9b_dBF5svEDN_QwT60faGQxEoXVGKq9IKqComRixPnB4zklQn4FuGc2uU3NHBoWCRTDrIRH9AXl97fgYtjLN7YgNmUdFCKRFT_EIuttlh4h0yoDDjWQ0RN-7NOWT5uMktOmXIt8jxaevmEcNvtmI5XgfyN1_s3OJalyO2-bNgYu8vOJYec-Hxlzc9iwF9BiPolzhjmUNPgtY_uVucNPF3FVIKGKf77Pywd1sBOATBqpk9gQZek-cm-0lh5Anu_Sv6mKnkCxZsXvEIGZcEHI7V4IRyXWaY-eoQo0_tLQZ_ViurKgJ5AED4BOV1c57wSke4c18IRAHskGpR6rwSL7rOoAuwOzFhnDksTZ0mlgZZkVS1tqoouR3W27m-sTOCyqFtZe12PyJUlkV6qTAnci5iXtAsvP_vOwfoK6oBVkuvZKiUNRO7b-T3essFQzOl3hfakFsbd_8fiqOuEYiehzRGkBVcZ1LDcaNJEY5PxeMqArSQ_IwiJm0_Ysc31PKcHR6kS2SYoKH4bClqCpt0aKsg6tAp5Xe-Zz8ai5wkzseKCvb1kjuTTy_ZNSaeCsi8kPtctC3uMCjt19AC-A=w800-h533-no\">"
-        ;
+    email.append("Xin chào Anh/Chị, <br/> ");
+    email.append("Celadon city thông báo đến quý khách hàng chương trình bán hàng block E ngày 18/3/2018; là block cuối cùng của Emerald. <br><br>");
+    email.append("****Nhận giữ chổ ngày 10/3/2018, 50tr/ giữ chổ.<br>");
+    email.append("** Chiếc khấu : 5% trên giá bán.<br>");
+    email.append("** Kết nối cộng đồng: ck 1%<br>");
+    email.append("** Tri ân khách hàng: ck 1%<br>");
+    email.append("** Voucher mừng xuân: 25tr<br>");
+    email.append("** Gói chăm sóc sức khoẻ Hoàn Mỹ cho gia đình trong 1 năm.<br>");
+    email.append("** Bốc thăm iphone X, ipad, note 8<br>");
+    email.append("Quý khách hàng đăng ký tham gia chương trình báo em book ngay cho Pkd nhé vì số lượng có hạn ạ!<br>");
+    email.append("<b>Hotline: 0906 99 61 69 (viber/zalo)</b><br>");
+    email.append("   Email: yennhi.gamudaland@gmail.com <br>");
+    email.append("*** Phương thức thanh toán :<br>");
+    email.append("- Ký hợp đồng 15%<br>");
+    email.append("- 4 tháng sau 15%<br>");
+    email.append("- Cất nóc 15%<br>");
+    email.append("- Nhận nhà 30%<br>");
+    email.append("- Sau 3 tháng nhận nhà 20%<br>");
+    email.append("- Cấp sổ 5%<br>");
+    email.append("Trân trọng!<br>");
+    email.append("<img width='600px' src=\"https://photos-1.dropbox.com/t/2/AAD-lmJCVtfUDro8CpF1OWkCfM0KQD0X2F88E18B79FMzQ/12/64513069/jpeg/32x32/3/1520928000/0/2/IMG_0897.JPG/EM6lhTIYv4gPIAIoAg/xXvsypG8v1nYts9C2VCnS-fHEEAC_qHe3h1lUeQXXBk?dl=0&size=2048x1536&size_mode=3\"><br>");
+    email.append("<img width='900px'  src=\"https://photos-4.dropbox.com/t/2/AABQ1YnOb2PfnWaUzcjLdOitdhU8sAbFckUkQ-bA7yetBw/12/64513069/jpeg/32x32/3/1520928000/0/2/IMG_0898.JPG/EM6lhTIYv4gPIAIoAg/QYAvfzymfaz6FMIdrLCBxone1KyrvRbr9Jvcmju8Fow?dl=0&size=2048x1536&size_mode=3\"><br>");
+    email.append("<img width='900px'  src=\"https://photos-2.dropbox.com/t/2/AACVD-43mvFlsl3yYoUiQBAfbIJGN1Z7WF3xCLzohIhRlg/12/64513069/jpeg/32x32/3/1520928000/0/2/IMG_0899.JPG/EM6lhTIYv4gPIAIoAg/AujQcOYNDvdvLl81ZAWeJsd5frH-ZNQDUBj9q9cFzJU?dl=0&size=2048x1536&size_mode=3\"><br>");
+    email.append("<img width='900px'  src=\"https://photos-6.dropbox.com/t/2/AAAvjZdJPWDVAAGTIyJ346xUsiQBkM3r0xu039q_Dsbu1g/12/64513069/jpeg/32x32/3/1520928000/0/2/IMG_0900.JPG/EM6lhTIYv4gPIAIoAg/1MyZ0B1jxzovAO7JCnzzuCXKpJEVqEJk5Bx9WhILgFc?dl=0&size=2048x1536&size_mode=3\"><br>");
+
+    email.append("<img width='900px'  src=\"https://photos-1.dropbox.com/t/2/AACEgfNlRn_HSwrQy7m-7TTFu3tz7pHifu_mRsanbwP6tQ/12/64513069/png/32x32/3/1520928000/0/2/Screen%20Shot%202018-03-13%20at%2010.41.19%20copy.png/EM6lhTIYw4gPIAIoAg/FwT6Dzxqh6OWXIQOHUktDAbf18t3U1j2OTKNmas8Tig?dl=0&preserve_transparency=1&size=2048x1536&size_mode=3\"><br>");
+    email.append("<img width='900px'  src=\"https://photos-4.dropbox.com/t/2/AAAhHwVRz8buHqRrr--xRn6nNGrDRFjCygwJxhhDhel1kg/12/64513069/png/32x32/3/1520928000/0/2/Screen%20Shot%202018-03-13%20at%2010.45.35%20copy.png/EM6lhTIYw4gPIAIoAg/ZRYDEfxcYIWsP4IMh-UDCRcgXrdWuw-wy5GNrIxHngg%2C0HIEd0Ti713IirTJ13kOL3QY_A6dX_ocieNDF18w8M0?dl=0&preserve_transparency=1&size=2048x1536&size_mode=3\"><br>");
     String from;
     String fromPass;
     if (iterator.hasNext()) {
@@ -344,8 +347,8 @@ public class CrawledDataService implements ICrawledDataService {
         System.out.println("..... " + from + "  >>>>> " + contactPresenter.getEmail());
         if (!this.crawledDataDao.checkEmailSentOrNotWithTitle(title, contactPresenter.getEmail())) {
           try {
-            JavaMailService.sendAdsToCustomer(from, fromPass, contactPresenter.getEmail(), title, emailBody);
-            this.crawledDataDao.trackEmailSent(from, contactPresenter.getEmail(), title, emailBody);
+            JavaMailService.sendAdsToCustomer(from, fromPass, contactPresenter.getEmail(), title, email.toString());
+            this.crawledDataDao.trackEmailSent(from, contactPresenter.getEmail(), title, email.toString());
             this.crawledDataDao.updateEmailExisting(contactPresenter.getEmail(), true);
           } catch (SMTPSendFailedException ex) {
             ex.printStackTrace();

@@ -268,25 +268,25 @@ public class CrawledDataService implements ICrawledDataService {
   @Override
   public void sendAdsBlockEToCustomers() throws MessagingException {
 
-//    List<ContactPresenter> list = this.crawledDataDao.getOwnerContactsByLocation(14); // Tan Binh
-//    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(7)); // Tan Phu
-//    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(9)); // Thu Duc
-//    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(16)); // Quan 7
-//    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(23)); // Quan 2
-//    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(17)); // Quan 1
-//    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(10)); // Binh Tan
-//    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(4)); // Phu Nhuan
-//    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(22)); // Quan 3
-//
-//    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(5)); // Quan 10
-//    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(3)); // Quan Go Vap
-//    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(6)); // Quan 4
-//    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(1)); // Quan 12
-
     List<ContactPresenter> list = new ArrayList<>();
-    ContactPresenter cp = new ContactPresenter();
-    cp.setEmail("hoanhhao@gmail.com");
-    list.add(cp);
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(14)); // Tan Binh
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(7)); // Tan Phu
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(9)); // Thu Duc
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(16)); // Quan 7
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(23)); // Quan 2
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(17)); // Quan 1
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(10)); // Binh Tan
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(4)); // Phu Nhuan
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(22)); // Quan 3
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(5)); // Quan 10
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(3)); // Quan Go Vap
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(6)); // Quan 4
+    list.addAll(this.crawledDataDao.getOwnerContactsByLocation(1)); // Quan 12
+
+//    List<ContactPresenter> list = new ArrayList<>();
+//    ContactPresenter cp = new ContactPresenter();
+//    cp.setEmail("hoanhhao@gmail.com");
+//    list.add(cp);
 //    cp = new ContactPresenter();
 //    cp.setEmail("nguyenminhyennhi94@gmail.com");
 //    list.add(cp);
@@ -306,10 +306,11 @@ public class CrawledDataService implements ICrawledDataService {
     Set<String> keys = emailAccounts.keySet();
     Iterator<String> iterator = keys.iterator();
 
-    String title = "Ưu đãi cực lớn Block cuối cùng và đẹp nhất khu EMERALD dự án Celadon city !!!456";
+//    String title = "Ưu đãi cực lớn Block cuối cùng và đẹp nhất khu EMERALD dự án Celadon city !!!";
+    String title = "Cơ hội cuối cùng sở hữu căn hộ khu Emerald tại Celadon City (AEON Mall Tân Phú) !!!";
 
     StringBuilder email = new StringBuilder();
-
+    email.append("<img width='100%'  src=\"https://i.imgur.com/8x50AC8.png\"><br>");
     email.append("Xin chào Anh/Chị, <br/> ");
     email.append("Celadon city thông báo đến quý khách hàng chương trình bán hàng block E ngày 18/3/2018; là block cuối cùng của Emerald. <br><br>");
     email.append("****Nhận giữ chổ ngày 10/3/2018, 50tr/ giữ chổ.<br>");
@@ -319,7 +320,7 @@ public class CrawledDataService implements ICrawledDataService {
     email.append("** Voucher mừng xuân: 25tr<br>");
     email.append("** Gói chăm sóc sức khoẻ Hoàn Mỹ cho gia đình trong 1 năm.<br>");
     email.append("** Bốc thăm iphone X, ipad, note 8<br>");
-    email.append("Quý khách hàng đăng ký tham gia chương trình báo em book ngay cho Pkd nhé vì số lượng có hạn ạ!<br>");
+    email.append("Quý khách hàng đăng ký tham gia chương trình vui lòng liên hệ em book ngay cho PKD nhé vì số lượng có hạn ạ!<br>");
     email.append("<b>Hotline: 0906 99 61 69 (viber/zalo)</b><br>");
     email.append("   Email: yennhi.gamudaland@gmail.com <br>");
     email.append("*** Phương thức thanh toán :<br>");
@@ -336,7 +337,6 @@ public class CrawledDataService implements ICrawledDataService {
     email.append("<img width='100%'  src=\"https://i.imgur.com/FaI82Sm.jpg\"><br>");
     email.append("<img width='100%'  src=\"https://i.imgur.com/8vkSUY2.jpg\"><br>");
     email.append("<img width='100%'  src=\"https://i.imgur.com/xkg4F7D.png\"><br>");
-
 
 //    String title = "Cơ hội cuối cùng sở hữu căn hộ khu Emerald tại Celadon City (AEON Mall Tân Phú) !!!";
 //

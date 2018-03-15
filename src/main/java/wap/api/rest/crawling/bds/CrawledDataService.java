@@ -264,7 +264,6 @@ public class CrawledDataService implements ICrawledDataService {
     }
   }
 
-
   @Override
   public void sendAdsBlockEToCustomers() throws MessagingException {
 
@@ -306,12 +305,12 @@ public class CrawledDataService implements ICrawledDataService {
     Set<String> keys = emailAccounts.keySet();
     Iterator<String> iterator = keys.iterator();
 
-    String title = "Ưu đãi cực lớn Block cuối cùng và đẹp nhất khu EMERALD dự án Celadon city !!!";
+    String title = "Ưu đãi cực lớn Block cuối cùng và đẹp nhất khu EMERALD dự án Celadon city !!!1231231231";
 
     StringBuilder email = new StringBuilder();
 
     email.append("Xin chào Anh/Chị, <br/> ");
-    email.append("Celadon city thông báo đến quý khách hàng chương trình bán hàng block E ngày 18/3/2018; là block cuối cùng của Emerald. <br><br>");
+    email.append("Celadon city thông báo đến quý khách hàng chương trình bán hàng block E ngày 18/3/2018; là block cuối cùng khu Emerald. <br><br>");
     email.append("****Nhận giữ chổ ngày 10/3/2018, 50tr/ giữ chổ.<br>");
     email.append("** Chiếc khấu : 5% trên giá bán.<br>");
     email.append("** Kết nối cộng đồng: ck 1%<br>");
@@ -319,9 +318,10 @@ public class CrawledDataService implements ICrawledDataService {
     email.append("** Voucher mừng xuân: 25tr<br>");
     email.append("** Gói chăm sóc sức khoẻ Hoàn Mỹ cho gia đình trong 1 năm.<br>");
     email.append("** Bốc thăm iphone X, ipad, note 8<br>");
-    email.append("Quý khách hàng đăng ký tham gia chương trình báo em book ngay cho Pkd nhé vì số lượng có hạn ạ!<br>");
+    email.append("Quý khách hàng đăng ký tham gia chương trình vui lòng liên hệ em book ngay cho PKD nhé vì số lượng có hạn ạ!<br>");
     email.append("<b>Hotline: 0906 99 61 69 (viber/zalo)</b><br>");
     email.append("   Email: yennhi.gamudaland@gmail.com <br>");
+    email.append("   Facebook: https://www.facebook.com/tuvandautubatdongsanhochiminh <br>");
     email.append("*** Phương thức thanh toán :<br>");
     email.append("- Ký hợp đồng 15%<br>");
     email.append("- 4 tháng sau 15%<br>");
@@ -330,12 +330,12 @@ public class CrawledDataService implements ICrawledDataService {
     email.append("- Sau 3 tháng nhận nhà 20%<br>");
     email.append("- Cấp sổ 5%<br>");
     email.append("Trân trọng!<br>");
-    email.append("<img width='100%' src=\"https://photos-1.dropbox.com/t/2/AAD-lmJCVtfUDro8CpF1OWkCfM0KQD0X2F88E18B79FMzQ/12/64513069/jpeg/32x32/3/1520928000/0/2/IMG_0897.JPG/EM6lhTIYv4gPIAIoAg/xXvsypG8v1nYts9C2VCnS-fHEEAC_qHe3h1lUeQXXBk?dl=0&size=2048x1536&size_mode=3\"><br>");
-    email.append("<img width='100%'  src=\"https://photos-4.dropbox.com/t/2/AABQ1YnOb2PfnWaUzcjLdOitdhU8sAbFckUkQ-bA7yetBw/12/64513069/jpeg/32x32/3/1520928000/0/2/IMG_0898.JPG/EM6lhTIYv4gPIAIoAg/QYAvfzymfaz6FMIdrLCBxone1KyrvRbr9Jvcmju8Fow?dl=0&size=2048x1536&size_mode=3\"><br>");
-    email.append("<img width='100%'  src=\"https://photos-2.dropbox.com/t/2/AACVD-43mvFlsl3yYoUiQBAfbIJGN1Z7WF3xCLzohIhRlg/12/64513069/jpeg/32x32/3/1520928000/0/2/IMG_0899.JPG/EM6lhTIYv4gPIAIoAg/AujQcOYNDvdvLl81ZAWeJsd5frH-ZNQDUBj9q9cFzJU?dl=0&size=2048x1536&size_mode=3\"><br>");
-    email.append("<img width='100%'  src=\"https://photos-6.dropbox.com/t/2/AAAvjZdJPWDVAAGTIyJ346xUsiQBkM3r0xu039q_Dsbu1g/12/64513069/jpeg/32x32/3/1520928000/0/2/IMG_0900.JPG/EM6lhTIYv4gPIAIoAg/1MyZ0B1jxzovAO7JCnzzuCXKpJEVqEJk5Bx9WhILgFc?dl=0&size=2048x1536&size_mode=3\"><br>");
-    email.append("<img width='100%'  src=\"https://photos-1.dropbox.com/t/2/AACEgfNlRn_HSwrQy7m-7TTFu3tz7pHifu_mRsanbwP6tQ/12/64513069/png/32x32/3/1520928000/0/2/Screen%20Shot%202018-03-13%20at%2010.41.19%20copy.png/EM6lhTIYw4gPIAIoAg/FwT6Dzxqh6OWXIQOHUktDAbf18t3U1j2OTKNmas8Tig?dl=0&preserve_transparency=1&size=2048x1536&size_mode=3\"><br>");
-    email.append("<img width='100%'  src=\"https://photos-4.dropbox.com/t/2/AAAhHwVRz8buHqRrr--xRn6nNGrDRFjCygwJxhhDhel1kg/12/64513069/png/32x32/3/1520928000/0/2/Screen%20Shot%202018-03-13%20at%2010.45.35%20copy.png/EM6lhTIYw4gPIAIoAg/ZRYDEfxcYIWsP4IMh-UDCRcgXrdWuw-wy5GNrIxHngg%2C0HIEd0Ti713IirTJ13kOL3QY_A6dX_ocieNDF18w8M0?dl=0&preserve_transparency=1&size=2048x1536&size_mode=3\"><br>");
+    email.append("<img width='100%' src=\"https://i.imgur.com/PGMqVRD.jpg\"><br>");
+    email.append("<img width='100%'  src=\"https://i.imgur.com/yIDaoIH.jpg\"><br>");
+    email.append("<img width='100%'  src=\"https://i.imgur.com/yFwry1g.jpg\"><br>");
+    email.append("<img width='100%'  src=\"https://i.imgur.com/FaI82Sm.jpg\"><br>");
+    email.append("<img width='100%'  src=\"https://i.imgur.com/8vkSUY2.jpg\"><br>");
+    email.append("<img width='100%'  src=\"https://i.imgur.com/xkg4F7D.png\"><br>");
 
 
 //    String title = "Cơ hội cuối cùng sở hữu căn hộ khu Emerald tại Celadon City (AEON Mall Tân Phú) !!!";
@@ -345,7 +345,7 @@ public class CrawledDataService implements ICrawledDataService {
 //    email.append("<img width='100%' src=\"https://photos-6.dropbox.com/t/2/AABz1fl_uDFmBd6QjhupOGZuAhwIm0VeiKe7qFAI_MzJlw/12/64513069/png/32x32/3/1520931600/0/2/28424938_582155312127136_3338800246953675692_o.png/EM6lhTIYxogPIAIoAg/H3s87-nPMGhlZSV1M8lSlb93c8Fj9HY8ee8rrHAdjW8?dl=0&preserve_transparency=1&size=2048x1536&size_mode=3\"><br>");
 //
 //    email.append("Xin chào Anh/Chị, <br/> ");
-//    email.append("Celadon city thông báo đến quý khách hàng chương trình bán hàng block E ngày 18/3/2018; là block cuối cùng của Emerald. <br><br>");
+//    email.append("Celadon city thông báo đến quý khách hàng chương trình bán hàng block E ngày 18/3/2018; là block cuối cùng khu Emerald. <br><br>");
 //    email.append("****Nhận giữ chổ ngày 10/3/2018, 50tr/ giữ chổ.<br>");
 //    email.append("** Chiếc khấu : 5% trên giá bán.<br>");
 //    email.append("** Kết nối cộng đồng: ck 1%<br>");
@@ -353,9 +353,10 @@ public class CrawledDataService implements ICrawledDataService {
 //    email.append("** Voucher mừng xuân: 25tr<br>");
 //    email.append("** Gói chăm sóc sức khoẻ Hoàn Mỹ cho gia đình trong 1 năm.<br>");
 //    email.append("** Bốc thăm iphone X, ipad, note 8<br>");
-//    email.append("Quý khách hàng đăng ký tham gia chương trình báo em book ngay cho Pkd nhé vì số lượng có hạn ạ!<br>");
+//    email.append("Quý khách hàng đăng ký tham gia chương trình vui lòng liên hệ em book ngay cho PKD nhé vì số lượng có hạn ạ!<br>");
 //    email.append("<b>Hotline: 0906 99 61 69 (viber/zalo)</b><br>");
 //    email.append("   Email: yennhi.gamudaland@gmail.com <br>");
+//    email.append("   Facebook: https://www.facebook.com/tuvandautubatdongsanhochiminh <br>");
 //    email.append("*** Phương thức thanh toán :<br>");
 //    email.append("- Ký hợp đồng 15%<br>");
 //    email.append("- 4 tháng sau 15%<br>");

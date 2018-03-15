@@ -115,9 +115,13 @@ public class JavaMailService {
     // Step1
     System.out.println("\n 1st ===> setup Mail Server Properties..");
     mailServerProperties = System.getProperties();
-    mailServerProperties.put("mail.smtp.port", "587");
+    mailServerProperties.put("mail.smtp.host", "smtp.mail.yahoo.com");
+    mailServerProperties.put("mail.smtp.socketFactory.port", "465");
     mailServerProperties.put("mail.smtp.auth", "true");
-    mailServerProperties.put("mail.smtp.starttls.enable", "true");
+//    mailServerProperties.put("mail.transport.protocol", "smtp");
+//    mailServerProperties.put("mail.smtp.starttls.enable", "true");
+    mailServerProperties.put("mail.smtp.port", "25");
+
     System.out.println("Mail Server Properties have been setup successfully..");
 
     // Step2
@@ -140,7 +144,7 @@ public class JavaMailService {
     // Enter your correct gmail UserID and Password
     // if you have 2FA enabled then provide App Specific Password
 
-    transport.connect("smtp.gmail.com", from, fromPass);
+    transport.connect("pop.mail.yahoo.com", from, fromPass);
     count++;
     transport.sendMessage(generateMailMessage, generateMailMessage.getAllRecipients());
     transport.close();

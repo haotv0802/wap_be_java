@@ -22,6 +22,8 @@ public interface ICrawledDataDao {
 
   List<LocationPresenter> getAllLocations();
 
+  List<LocationPresenter> getAllLocationsByCity(String city);
+
   List<ContactPresenter> getOwnerContactsByLocation(int locationId);
 
   List<String> getAllEmailsNotCheckedYet();

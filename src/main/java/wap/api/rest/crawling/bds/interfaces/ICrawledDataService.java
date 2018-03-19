@@ -31,7 +31,7 @@ public interface ICrawledDataService {
 
   void exportOwnerContacts() throws IOException;
 
-  void exportContacts(String email, Boolean onlyNewData) throws IOException;
+  void exportContacts(String email, String city, Boolean onlyNewData) throws IOException;
 
   void testEmail() throws MessagingException, InterruptedException;
 

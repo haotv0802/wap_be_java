@@ -28,7 +28,8 @@ public class BDSExportingResourceTest extends TestBase {
         .perform(get("/svc/bds/crawler/exportContacts")
             .contentType(MediaType.APPLICATION_JSON)
             .param("email", "hongphuc.vumai@gmail.com")
-            .param("onlyNewData", "true")
+            .param("city", "Ho Chi Minh")
+            .param("onlyNewData", "false")
         )
         .andExpect(status().is(200))
     ;

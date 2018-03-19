@@ -69,9 +69,10 @@ public class CrawledDataResource {
   @GetMapping("/crawler/exportContacts")
   public void exportContacts(
       @RequestParam(value = "email", required = false) String email,
+      @RequestParam(value = "city", required = false) String city,
       @RequestParam(value = "onlyNewData", required = false) Boolean onlyNewData
   ) throws IOException {
-    this.crawledDataService.exportContacts(email, onlyNewData);
+    this.crawledDataService.exportContacts(email, city, onlyNewData);
   }
 
   @GetMapping("/crawler/testEmail")

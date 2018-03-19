@@ -649,7 +649,7 @@ public class CrawledDataService implements ICrawledDataService {
   }
 
   @Override
-  public void exportContacts(String email, Boolean onlyNewData) throws IOException {
+  public void exportContacts(String email, String city, Boolean onlyNewData) throws IOException {
 
     Customer customer = this.crawledDataDao.getCustomerByEmail(email);
     Set<Long> contactIdList = new HashSet<>();
@@ -658,7 +658,7 @@ public class CrawledDataService implements ICrawledDataService {
       return;
     }
 
-    List<LocationPresenter> locations = this.crawledDataDao.getAllLocations();
+    List<LocationPresenter> locations = this.crawledDataDao.getAllLocationsByCity(city);
     XSSFWorkbook workbook = new XSSFWorkbook();
 
     Map<String, Integer> summary = new HashMap<>();
@@ -809,7 +809,8 @@ public class CrawledDataService implements ICrawledDataService {
     }
     SimpleDateFormat spd = new SimpleDateFormat("yyyyMMdd_HHmmss");
     String date = spd.format(new Date());
-    try (FileOutputStream outputStream = new FileOutputStream(String.format("%s/%s_%s.xlsx", dir.getName(), "Phuc", date))) {
+    try (FileOutputStream outputStream = new FileOutputStream(
+        String.format("%s/%s_%s_%s.xlsx", dir.getName(), customer.getName(), date, city.replace(" ", "_")))) {
       workbook.write(outputStream);
     }
 

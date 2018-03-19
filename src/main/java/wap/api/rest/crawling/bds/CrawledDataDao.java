@@ -301,6 +301,29 @@ public class CrawledDataDao implements ICrawledDataDao {
   }
 
   @Override
+  public List<LocationPresenter> getAllLocationsByCity(String city) {
+    final String sql =
+        "SELECT id, city, district FROM crwlr_locations WHERE city = :city ORDER BY city, district"
+        ;
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("city", city);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return namedTemplate.query(sql, paramsMap, new RowMapper<LocationPresenter>() {
+      @Override
+      public LocationPresenter mapRow(ResultSet resultSet, int i) throws SQLException {
+        LocationPresenter location = new LocationPresenter();
+        location.setId(resultSet.getInt("id"));
+        location.setCity(resultSet.getString("city"));
+        location.setDistrict(resultSet.getString("district"));
+
+        return location;
+      }
+    });
+  }
+
+  @Override
   public List<ContactPresenter> getOwnerContactsByLocation(int locationId) {
     final String sql =
       "SELECT c.id, c.name, c.phone, c.email, c.type, c.latest_item_posted_on                                                                    "

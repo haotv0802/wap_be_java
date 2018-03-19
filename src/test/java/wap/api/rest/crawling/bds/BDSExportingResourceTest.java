@@ -29,7 +29,8 @@ public class BDSExportingResourceTest extends TestBase {
             .contentType(MediaType.APPLICATION_JSON)
             .param("email", "hongphuc.vumai@gmail.com")
             .param("city", "Ho Chi Minh")
-            .param("onlyNewData", "false")
+            .param("noOfPosts", "2")
+            .param("onlyNewData", "true")
         )
         .andExpect(status().is(200))
     ;

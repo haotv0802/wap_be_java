@@ -324,6 +324,40 @@ public class CrawledDataDao implements ICrawledDataDao {
   }
 
   @Override
+  public List<ContactPresenter> getOwnerContactsByLocation(int locationId, int noOfPosts) {
+    final String sql =
+        "SELECT c.id, c.name, c.phone, c.email, c.type, c.latest_item_posted_on                                                                    "
+      + "    ,(SELECT count(*) FROM crwlr_posts WHERE contact_id = c.id AND property_type = 'HOUSE' AND location_id = :locationId) as posts_count  "
+      + "    ,(SELECT URL FROM crwlr_posts WHERE contact_id = c.id  order by id desc  LIMIT 0,1) url                                               "
+      + "    ,(SELECT price FROM crwlr_posts WHERE contact_id = c.id  order by id desc  LIMIT 0,1) price                                           "
+      + "FROM crwlr_contacts c                                                                                                                     "
+      + "WHERE c.email <> '' AND manual_check IS NULL AND TYPE = 'OWNER' AND c.email LIKE '%gmail.com'                                             "
+      + "    AND (email_existing IS NULL OR email_existing = TRUE)                                                                                 "
+      + "    AND (SELECT count(*) FROM crwlr_posts WHERE contact_id = c.id AND property_type = 'HOUSE' AND location_id = :locationId) = :noOfPosts          "
+      + "        ORDER BY posts_count desc                                                                                                         "
+        ;
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("locationId", locationId);
+    paramsMap.addValue("noOfPosts", noOfPosts);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return namedTemplate.query(sql, paramsMap, (resultSet, i) -> {
+      ContactPresenter contact = new ContactPresenter();
+      contact.setId(resultSet.getLong("id"));
+      contact.setName(resultSet.getString("name"));
+      contact.setPhone(resultSet.getString("phone"));
+      contact.setEmail(resultSet.getString("email"));
+      contact.setType(resultSet.getString("type"));
+      contact.setPrice(resultSet.getBigDecimal("price"));
+      contact.setCount(resultSet.getInt("posts_count"));
+      contact.setLatestItemPostedOn(resultSet.getDate("latest_item_posted_on"));
+      contact.setPostUrl(resultSet.getString("url"));
+      return contact;
+    });
+  }
+
+  @Override
   public List<ContactPresenter> getOwnerContactsByLocation(int locationId) {
     final String sql =
       "SELECT c.id, c.name, c.phone, c.email, c.type, c.latest_item_posted_on                                                                    "

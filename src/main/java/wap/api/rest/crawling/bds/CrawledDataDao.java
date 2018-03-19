@@ -522,13 +522,14 @@ public class CrawledDataDao implements ICrawledDataDao {
   }
 
   @Override
-  public void trackExport(Long customerId, Long contactId) {
+  public void trackExport(Long customerId, Long contactId, String fileName) {
     final String sql =
-        "INSERT INTO crwlr_exports_tracking (customer_id, contact_id) VALUE(:customerId, :contactId);";
+        "INSERT INTO crwlr_exports_tracking (customer_id, contact_id, file_name) VALUE(:customerId, :contactId, :fileName);";
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
 
     paramsMap.addValue("customerId", customerId);
     paramsMap.addValue("contactId", contactId);
+    paramsMap.addValue("fileName", fileName);
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 

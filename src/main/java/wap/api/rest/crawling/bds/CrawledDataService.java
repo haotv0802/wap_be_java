@@ -723,11 +723,11 @@ public class CrawledDataService implements ICrawledDataService {
       cell.setCellStyle(headerStyle);
 
       cell = row.createCell(++columnCount);
-      cell.setCellValue("Price");
+      cell.setCellValue("Giá");
       cell.setCellStyle(headerStyle);
 
       cell = row.createCell(++columnCount);
-      cell.setCellValue("No of Posts");
+      cell.setCellValue("Số lượng tin");
       cell.setCellStyle(headerStyle);
 
       cell = row.createCell(++columnCount);
@@ -809,14 +809,15 @@ public class CrawledDataService implements ICrawledDataService {
     }
     SimpleDateFormat spd = new SimpleDateFormat("yyyyMMdd_HHmmss");
     String date = spd.format(new Date());
-    try (FileOutputStream outputStream = new FileOutputStream(
-        String.format("%s/%s_%s_%s_%s_%s_%s.xlsx",
-            dir.getName(), customer.getName(), date, city.replace(" ", "_"), onlyNewData ? "New" : "ALL", noOfPosts, total))) {
+    String fileName = String.format("%s/%s_%s_%s_%s_%s_%s.xlsx",
+        dir.getName(), customer.getName(), date, city.replace(" ", "_"), onlyNewData ? "New" : "ALL", noOfPosts, total);
+
+    try (FileOutputStream outputStream = new FileOutputStream(fileName)) {
       workbook.write(outputStream);
     }
 
     for(Long id : contactIdList) {
-      this.crawledDataDao.trackExport(customer.getId(), id);
+      this.crawledDataDao.trackExport(customer.getId(), id, fileName);
     }
   }
 

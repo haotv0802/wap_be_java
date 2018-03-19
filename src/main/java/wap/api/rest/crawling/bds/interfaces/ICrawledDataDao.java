@@ -42,7 +42,7 @@ public interface ICrawledDataDao {
 
   Customer getCustomerByEmail(String email);
 
-  void trackExport(Long customerId, Long contactId);
+  void trackExport(Long customerId, Long contactId, String fileName);
 
   boolean isContactExported(Long customerId, Long contactId);
 }

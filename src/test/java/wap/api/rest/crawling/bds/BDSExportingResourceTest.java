@@ -23,6 +23,18 @@ public class BDSExportingResourceTest extends TestBase {
   }
 
   @Test
+  public void testExportContacts() throws Exception {
+    mockMvc
+        .perform(get("/svc/bds/crawler/exportContacts")
+            .contentType(MediaType.APPLICATION_JSON)
+            .param("email", "hongphuc.vumai@gmail.com")
+            .param("onlyNewData", "true")
+        )
+        .andExpect(status().is(200))
+    ;
+  }
+
+  @Test
   public void testEmail() throws Exception {
     mockMvc
         .perform(get("/svc/bds/crawler/testEmail")

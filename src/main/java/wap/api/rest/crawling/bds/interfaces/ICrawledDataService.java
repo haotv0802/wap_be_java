@@ -1,5 +1,6 @@
 package wap.api.rest.crawling.bds.interfaces;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import wap.api.rest.crawling.bds.beans.*;
 
 import javax.mail.MessagingException;
@@ -29,6 +30,8 @@ public interface ICrawledDataService {
   List<Contact> getContacts();
 
   void exportOwnerContacts() throws IOException;
+
+  void exportContacts(String email, Boolean onlyNewData) throws IOException;
 
   void testEmail() throws MessagingException, InterruptedException;
 

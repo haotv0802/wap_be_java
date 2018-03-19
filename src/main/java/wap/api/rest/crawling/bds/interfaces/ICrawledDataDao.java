@@ -35,4 +35,10 @@ public interface ICrawledDataDao {
   boolean checkEmailSentOrNotWithTitle(String title, String to);
 
   List<CityPresenter> getCitiesAndDistricts();
+
+  Customer getCustomerByEmail(String email);
+
+  void trackExport(Long customerId, Long contactId);
+
+  boolean isContactExported(Long customerId, Long contactId);
 }

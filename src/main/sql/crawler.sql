@@ -73,7 +73,7 @@ CREATE TABLE `crwlr_posts` (
                    CHARACTER SET utf8mb4
                    COLLATE utf8mb4_unicode_ci           NULL,
   `description`    LONGTEXT CHARACTER SET utf8mb4
-                   COLLATE utf8mb4_unicode_ci           NULL,
+  COLLATE utf8mb4_unicode_ci                            NULL,
   `contact_name`   VARCHAR(200)                         NULL,
   `contact_number` VARCHAR(45)                          NULL,
   `contact_email`  VARCHAR(100)                         NULL,
@@ -153,6 +153,7 @@ CREATE TABLE `crwlr_exports_tracking` (
   `customer_id` BIGINT NOT NULL,
   `contact_id`  BIGINT NOT NULL,
   `exported_at` DATETIME DEFAULT now(),
+  `file_name`   VARCHAR(200),
   `criterion`   TEXT   NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `crwlr_exports_tracking_customer_id` FOREIGN KEY (`customer_id`) REFERENCES `crwlr_customers` (`id`),

@@ -3,6 +3,7 @@ package wap.api.rest.crawling.bds;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -385,7 +386,6 @@ public class CrawledDataDao implements ICrawledDataDao {
     return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0;
   }
 
-
   @Override
   public boolean checkEmailSentOrNotWithTitle(String title, String to) {
     final String sql =
@@ -438,4 +438,56 @@ public class CrawledDataDao implements ICrawledDataDao {
     return locations;
   }
 
+  @Override
+  public Customer getCustomerByEmail(String email) {
+    final String sql =
+        "SELECT id, name, phone, email, latest_export_at, created_at, updated_at FROM crwlr_customers WHERE email = :email";
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+
+    paramsMap.addValue("email", email);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    try {
+      return namedTemplate.queryForObject(sql, paramsMap, (rs, i) -> {
+        Customer customer = new Customer();
+        customer.setEmail(rs.getString("email"));
+        customer.setName(rs.getString("name"));
+        customer.setId(rs.getLong("id"));
+        customer.setLatestExportAt(rs.getDate("latest_export_at"));
+        customer.setPhone(rs.getString("phone"));
+        customer.setUpdatedAt(rs.getDate("updated_at"));
+        return customer;
+      });
+    } catch (EmptyResultDataAccessException ex) {
+      return null;
+    }
+  }
+
+  @Override
+  public void trackExport(Long customerId, Long contactId) {
+    final String sql =
+        "INSERT INTO crwlr_exports_tracking (customer_id, contact_id) VALUE(:customerId, :contactId);";
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+
+    paramsMap.addValue("customerId", customerId);
+    paramsMap.addValue("contactId", contactId);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    namedTemplate.update(sql, paramsMap);
+  }
+
+  @Override
+  public boolean isContactExported(Long customerId, Long contactId) {
+    final String sql =
+        "SELECT COUNT(*) FROM crwlr_exports_tracking WHERE customer_id = :customerId AND contact_id = :contactId";
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+
+    paramsMap.addValue("customerId", customerId);
+    paramsMap.addValue("contactId", contactId);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+    return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0;
+  }
 }

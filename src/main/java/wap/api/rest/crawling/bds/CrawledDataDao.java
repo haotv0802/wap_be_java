@@ -324,21 +324,26 @@ public class CrawledDataDao implements ICrawledDataDao {
   }
 
   @Override
-  public List<ContactPresenter> getOwnerContactsByLocation(int locationId, int noOfPosts) {
+  public List<ContactPresenter> getOwnerContactsByLocation(int locationId, int noOfPosts, int year, int month) {
     final String sql =
         "SELECT c.id, c.name, c.phone, c.email, c.type, c.latest_item_posted_on                                                                    "
-      + "    ,(SELECT count(*) FROM crwlr_posts WHERE contact_id = c.id AND property_type = 'HOUSE' AND location_id = :locationId) as posts_count  "
+      + "    ,(SELECT count(*) FROM crwlr_posts WHERE contact_id = c.id AND property_type = 'HOUSE' AND location_id = :locationId                  "
+      + "           AND year(publish_date) = :year AND month(publish_date) = :month) as posts_count                                                "
       + "    ,(SELECT URL FROM crwlr_posts WHERE contact_id = c.id  order by id desc  LIMIT 0,1) url                                               "
       + "    ,(SELECT price FROM crwlr_posts WHERE contact_id = c.id  order by id desc  LIMIT 0,1) price                                           "
       + "FROM crwlr_contacts c                                                                                                                     "
       + "WHERE c.email <> '' AND manual_check IS NULL AND TYPE = 'OWNER' AND c.email LIKE '%gmail.com'                                             "
       + "    AND (email_existing IS NULL OR email_existing = TRUE)                                                                                 "
-      + "    AND (SELECT count(*) FROM crwlr_posts WHERE contact_id = c.id AND property_type = 'HOUSE' AND location_id = :locationId) = :noOfPosts          "
+      + "    AND (SELECT count(*) FROM crwlr_posts WHERE contact_id = c.id AND property_type = 'HOUSE' AND location_id = :locationId               "
+      + "           AND year(publish_date) = :year AND month(publish_date) = :month) = :noOfPosts                                                  "
       + "        ORDER BY posts_count desc                                                                                                         "
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("locationId", locationId);
     paramsMap.addValue("noOfPosts", noOfPosts);
+    paramsMap.addValue("noOfPosts", noOfPosts);
+    paramsMap.addValue("year", year);
+    paramsMap.addValue("month", month);
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 

@@ -649,7 +649,7 @@ public class CrawledDataService implements ICrawledDataService {
   }
 
   @Override
-  public void exportContacts(String email, String city, Integer noOfPosts, Boolean onlyNewData) throws IOException {
+  public void exportContacts(String email, String city, Integer noOfPosts, Boolean onlyNewData, int year, int month) throws IOException {
 
     Customer customer = this.crawledDataDao.getCustomerByEmail(email);
     Set<Long> contactIdList = new HashSet<>();
@@ -665,7 +665,7 @@ public class CrawledDataService implements ICrawledDataService {
 
     int total = 0;
     for (LocationPresenter location : locations) {
-      List<ContactPresenter> list = this.crawledDataDao.getOwnerContactsByLocation(location.getId(), noOfPosts);
+      List<ContactPresenter> list = this.crawledDataDao.getOwnerContactsByLocation(location.getId(), noOfPosts, year, month);
       if (list.size() == 0) {
         continue;
       }
@@ -809,8 +809,16 @@ public class CrawledDataService implements ICrawledDataService {
     }
     SimpleDateFormat spd = new SimpleDateFormat("yyyyMMdd_HHmmss");
     String date = spd.format(new Date());
-    String fileName = String.format("%s/%s_%s_%s_%s_%s_%s.xlsx",
-        dir.getName(), customer.getName(), date, city.replace(" ", "_"), onlyNewData ? "New" : "ALL", noOfPosts, total);
+    String fileName = String.format("%s/%s_%s_%s_%s%s_%s_%s_%s.xlsx",
+        dir.getName(),
+        customer.getName(),
+        city.replace(" ", "_"),
+        onlyNewData ? "New" : "ALL",
+        year,
+        month < 10 ? "0" + month : month,
+        date,
+        noOfPosts,
+        total);
 
     try (FileOutputStream outputStream = new FileOutputStream(fileName)) {
       workbook.write(outputStream);

@@ -649,7 +649,7 @@ public class CrawledDataService implements ICrawledDataService {
   }
 
   @Override
-  public void exportContacts(String email, String city, Integer noOfPosts, Boolean onlyNewData, int year, int month) throws IOException {
+  public void exportContacts(String email, String city, Integer noOfPosts, int year, int month) throws IOException {
 
     Customer customer = this.crawledDataDao.getCustomerByEmail(email);
     Set<Long> contactIdList = new HashSet<>();
@@ -665,7 +665,182 @@ public class CrawledDataService implements ICrawledDataService {
 
     int total = 0;
     for (LocationPresenter location : locations) {
-      List<ContactPresenter> list = this.crawledDataDao.getOwnerContactsByLocation(location.getId(), noOfPosts, year, month);
+      List<ContactPresenter> list = this.crawledDataDao.getOwnerContactsByLocationAndNoOfPostsAndTime(location.getId(), noOfPosts, year, month);
+      if (list.size() == 0) {
+        continue;
+      }
+
+      XSSFSheet sheet = workbook.createSheet(location.getDistrict() + " (" + list.size() + ")");
+      int sheetIndex = workbook.getSheetIndex(sheet);
+
+      sheet.autoSizeColumn(0);
+      sheet.setColumnWidth(1, 5000);
+      sheet.setColumnWidth(2, 3000);
+      sheet.setColumnWidth(3, 7000);
+      sheet.setColumnWidth(4, 4000);
+      sheet.setColumnWidth(5, 5000);
+      sheet.setColumnWidth(6, 4000);
+      sheet.setColumnWidth(7, 4000);
+      sheet.setColumnWidth(8, 4000);
+      sheet.setColumnWidth(9, 4000);
+      sheet.createFreezePane(0, 1);
+//    sheet.setDefaultColumnWidth(20);
+
+      CellStyle headerStyle = workbook.createCellStyle();
+      XSSFFont font = workbook.createFont();
+      font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
+      font.setFontHeight(18);
+
+      headerStyle.setBorderBottom(HSSFCellStyle.BORDER_MEDIUM);
+      headerStyle.setBorderTop(HSSFCellStyle.BORDER_MEDIUM);
+      headerStyle.setBorderRight(HSSFCellStyle.BORDER_MEDIUM);
+      headerStyle.setBorderLeft(HSSFCellStyle.BORDER_MEDIUM);
+      headerStyle.setFillForegroundColor((short) 200);
+      headerStyle.setFillPattern(XSSFCellStyle.SOLID_FOREGROUND);
+      headerStyle.setFont(font);
+
+      CreationHelper createHelper = workbook.getCreationHelper();
+      XSSFCellStyle hlinkstyle = workbook.createCellStyle();
+      XSSFFont hlinkfont = workbook.createFont();
+      hlinkfont.setUnderline(XSSFFont.U_SINGLE);
+      hlinkfont.setColor(HSSFColor.BLUE.index);
+      hlinkstyle.setFont(hlinkfont);
+
+      int rowCount = 0;
+      int columnCount = 0;
+
+      Row row = sheet.createRow(rowCount);
+      Cell cell = row.createCell(++columnCount);
+      cell.setCellValue("Tên");
+      cell.setCellStyle(headerStyle);
+
+      cell = row.createCell(++columnCount);
+      cell.setCellValue("SDT");
+      cell.setCellStyle(headerStyle);
+
+      cell = row.createCell(++columnCount);
+      cell.setCellValue("Email");
+      cell.setCellStyle(headerStyle);
+
+      cell = row.createCell(++columnCount);
+      cell.setCellValue("Giá");
+      cell.setCellStyle(headerStyle);
+
+      cell = row.createCell(++columnCount);
+      cell.setCellValue("Số lượng tin");
+      cell.setCellStyle(headerStyle);
+
+      cell = row.createCell(++columnCount);
+      cell.setCellValue("Link");
+      cell.setCellStyle(headerStyle);
+
+      for (ContactPresenter contact : list) {
+
+        contactIdList.add(contact.getId());
+
+        row = sheet.createRow(++rowCount);
+
+        if (this.businessService.isSale(contact.getName(), contact.getEmail())) {
+          continue;
+        }
+        columnCount = 0;
+        cell = row.createCell(columnCount);
+        cell.setCellValue(rowCount);
+        cell = row.createCell(++columnCount);
+        cell.setCellValue(contact.getName());
+        cell = row.createCell(++columnCount);
+        cell.setCellValue(contact.getPhone());
+        cell = row.createCell(++columnCount);
+        cell.setCellValue(contact.getEmail());
+        cell = row.createCell(++columnCount);
+        cell.setCellValue(contact.getPrice() != null ? contact.getPrice().toString() : null);
+        cell = row.createCell(++columnCount);
+        cell.setCellValue(contact.getCount());
+        cell = row.createCell(++columnCount);
+        XSSFHyperlink link = (XSSFHyperlink)createHelper.createHyperlink(Hyperlink.LINK_URL);
+        link.setAddress(contact.getPostUrl() != null ? contact.getPostUrl() : "");
+        cell.setCellValue(contact.getPostUrl());
+        cell.setHyperlink((XSSFHyperlink) link);
+        cell.setCellStyle(hlinkstyle);
+      }
+      if (sheet.getLastRowNum() == 0) {
+        workbook.removeSheetAt(sheetIndex);
+      } else {
+        workbook.setSheetName(sheetIndex, location.getDistrict() + " (" + rowCount + ")");
+        summary.put(location.getDistrict(), rowCount);
+        total += rowCount;
+
+      }
+    }
+
+    XSSFSheet sheet = workbook.createSheet("Tổng kết");
+    sheet.setColumnWidth(0, 5000);
+    sheet.setColumnWidth(2, 3000);
+
+    Set<String> keys = summary.keySet();
+    Iterator<String> it = keys.iterator();
+    int rowCount = 0;
+
+    while (it.hasNext()) {
+      int columnCount = 0;
+      String key = it.next();
+      int value = summary.get(key);
+      Row row = sheet.createRow(rowCount++);
+      Cell cell = row.createCell(columnCount++);
+      cell.setCellValue(key);
+      cell = row.createCell(columnCount++);
+      cell.setCellValue(value);
+    }
+    Row row = sheet.createRow(rowCount++);
+    row = sheet.createRow(rowCount++);
+    Cell cell = row.createCell(0);
+    cell.setCellValue("Tổng");
+    cell = row.createCell(1);
+    cell.setCellValue(total);
+
+
+    File dir = new File ("exports");
+    if (!dir.exists() || !dir.isDirectory()) {
+      dir.mkdir();
+    }
+    SimpleDateFormat spd = new SimpleDateFormat("yyyyMMdd_HHmmss");
+    String date = spd.format(new Date());
+    String fileName = String.format("%s/%s_%s_%s%s_%s_%s_%s.xlsx",
+        dir.getName(),
+        customer.getName(),
+        city.replace(" ", "_"),
+        year,
+        month < 10 ? "0" + month : month,
+        date,
+        noOfPosts,
+        total);
+
+    try (FileOutputStream outputStream = new FileOutputStream(fileName)) {
+      workbook.write(outputStream);
+    }
+
+    for(Long id : contactIdList) {
+      this.crawledDataDao.trackExport(customer.getId(), id, fileName);
+    }
+  }
+
+  @Override
+  public void exportContacts(String email, String city, Integer noOfPosts, Boolean onlyNewData) throws IOException {
+    Customer customer = this.crawledDataDao.getCustomerByEmail(email);
+    Set<Long> contactIdList = new HashSet<>();
+
+    if (customer == null) {
+      return;
+    }
+
+    List<LocationPresenter> locations = this.crawledDataDao.getAllLocationsByCity(city);
+    XSSFWorkbook workbook = new XSSFWorkbook();
+
+    Map<String, Integer> summary = new HashMap<>();
+
+    int total = 0;
+    for (LocationPresenter location : locations) {
+      List<ContactPresenter> list = this.crawledDataDao.getOwnerContactsByLocationAndNoOfPosts(location.getId(), noOfPosts);
       if (list.size() == 0) {
         continue;
       }
@@ -809,13 +984,11 @@ public class CrawledDataService implements ICrawledDataService {
     }
     SimpleDateFormat spd = new SimpleDateFormat("yyyyMMdd_HHmmss");
     String date = spd.format(new Date());
-    String fileName = String.format("%s/%s_%s_%s_%s%s_%s_%s_%s.xlsx",
+    String fileName = String.format("%s/%s_%s_%s_%s_%s_%s.xlsx",
         dir.getName(),
         customer.getName(),
         city.replace(" ", "_"),
         onlyNewData ? "New" : "ALL",
-        year,
-        month < 10 ? "0" + month : month,
         date,
         noOfPosts,
         total);

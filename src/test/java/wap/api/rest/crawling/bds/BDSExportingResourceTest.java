@@ -23,15 +23,15 @@ public class BDSExportingResourceTest extends TestBase {
   }
 
   @Test
-  public void testExportContacts() throws Exception {
+  public void testExportContactsToFiles() throws Exception {
     mockMvc
-        .perform(get("/svc/bds/crawler/exportContacts")
+        .perform(get("/svc/bds/crawler/exportContactsToFiles")
             .contentType(MediaType.APPLICATION_JSON)
             .param("email", "hongphuc.vumai@gmail.com")
             .param("city", "Ho Chi Minh")
-            .param("noOfPosts", "2")
+            .param("noOfPosts", "5")
             .param("year", "2018")
-            .param("month", "1")
+            .param("month", "2")
             .param("onlyNewData", "true")
         )
         .andExpect(status().is(200))
@@ -39,16 +39,14 @@ public class BDSExportingResourceTest extends TestBase {
   }
 
   @Test
-  public void testExportContactsToFiles() throws Exception {
+  public void testExportAllContactsToFiles() throws Exception {
     mockMvc
-        .perform(get("/svc/bds/crawler/exportContactsToFiles")
+        .perform(get("/svc/bds/crawler/exportAllContactsToFiles")
             .contentType(MediaType.APPLICATION_JSON)
             .param("email", "hongphuc.vumai@gmail.com")
             .param("city", "Ho Chi Minh")
-            .param("noOfPosts", "10")
-            .param("year", "2018")
-            .param("month", "2")
-            .param("onlyNewData", "true")
+            .param("noOfPosts", "5")
+            .param("onlyNewData", "false")
         )
         .andExpect(status().is(200))
     ;

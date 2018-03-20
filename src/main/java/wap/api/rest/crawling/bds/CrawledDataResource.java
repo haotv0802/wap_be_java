@@ -66,29 +66,28 @@ public class CrawledDataResource {
     this.crawledDataService.exportOwnerContacts();
   }
 
-  @GetMapping("/crawler/exportContacts")
-  public void exportContacts(
-      @RequestParam(value = "email", required = false) String email,
-      @RequestParam(value = "city", required = false) String city,
-      @RequestParam(value = "noOfPosts", required = false) Integer noOfPosts,
-      @RequestParam(value = "year", required = false) Integer year,
-      @RequestParam(value = "month", required = false) Integer month,
-      @RequestParam(value = "onlyNewData", required = false) Boolean onlyNewData
-  ) throws IOException {
-    this.crawledDataService.exportContacts(email, city, noOfPosts, onlyNewData, year, month);
-  }
-
   @GetMapping("/crawler/exportContactsToFiles")
   public void exportContactsToFiles(
       @RequestParam(value = "email", required = false) String email,
       @RequestParam(value = "city", required = false) String city,
       @RequestParam(value = "noOfPosts", required = false) Integer noOfPosts,
       @RequestParam(value = "year", required = false) Integer year,
-      @RequestParam(value = "month", required = false) Integer month,
+      @RequestParam(value = "month", required = false) Integer month
+  ) throws IOException {
+    for(int i = 1; i <= noOfPosts; i++) {
+      this.crawledDataService.exportContacts(email, city, i, year, month);
+    }
+  }
+
+  @GetMapping("/crawler/exportAllContactsToFiles")
+  public void exportAllContactsToFiles(
+      @RequestParam(value = "email", required = false) String email,
+      @RequestParam(value = "city", required = false) String city,
+      @RequestParam(value = "noOfPosts", required = false) Integer noOfPosts,
       @RequestParam(value = "onlyNewData", required = false) Boolean onlyNewData
   ) throws IOException {
     for(int i = 1; i <= noOfPosts; i++) {
-      this.crawledDataService.exportContacts(email, city, i, onlyNewData, year, month);
+      this.crawledDataService.exportContacts(email, city, i, onlyNewData);
     }
   }
 

@@ -24,7 +24,9 @@ public interface ICrawledDataDao {
 
   List<LocationPresenter> getAllLocationsByCity(String city);
 
-  List<ContactPresenter> getOwnerContactsByLocation(int locationId, int noOfPosts, int year, int month);
+  List<ContactPresenter> getOwnerContactsByLocationAndNoOfPosts(int locationId, int noOfPosts);
+
+  List<ContactPresenter> getOwnerContactsByLocationAndNoOfPostsAndTime(int locationId, int noOfPosts, int year, int month);
 
   List<ContactPresenter> getOwnerContactsByLocation(int locationId);
 

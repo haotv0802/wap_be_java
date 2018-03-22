@@ -55,8 +55,12 @@ public class CrawlingResource {
 //      pages.add("https://batdongsan.com.vn/nha-dat-ban-tp-hcm/p2900");
 
 
-      pages.add("https://batdongsan.com.vn/nha-dat-ban-tp-hcm");
-      pages.add("https://batdongsan.com.vn/nha-dat-ban-dong-nai");
+//      pages.add("https://batdongsan.com.vn/nha-dat-ban-tp-hcm");
+//      pages.add("https://batdongsan.com.vn/nha-dat-ban-dong-nai");
+      pages.add("https://batdongsan.com.vn/nha-dat-ban-ba-ria-vung-tau");
+      pages.add("https://batdongsan.com.vn/nha-dat-ban-binh-duong");
+      pages.add("https://batdongsan.com.vn/nha-dat-ban-long-an");
+
 //      pages.add("https://batdongsan.com.vn/nha-dat-ban-kien-giang");
 //      pages.add("https://batdongsan.com.vn/nha-dat-ban-quang-ninh");
 

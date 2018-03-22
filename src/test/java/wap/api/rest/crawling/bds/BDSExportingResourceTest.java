@@ -46,7 +46,7 @@ public class BDSExportingResourceTest extends TestBase {
             .param("email", "hongphuc.vumai@gmail.com")
             .param("city", "Ho Chi Minh")
             .param("noOfPosts", "5")
-            .param("onlyNewData", "false")
+            .param("onlyNewData", "true")
         )
         .andExpect(status().is(200))
     ;

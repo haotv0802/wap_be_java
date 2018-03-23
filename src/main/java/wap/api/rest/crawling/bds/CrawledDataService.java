@@ -1003,6 +1003,132 @@ public class CrawledDataService implements ICrawledDataService {
   }
 
   @Override
+  public void exportPhonesAndEmails(String email, String city, Integer noOfPosts, Boolean onlyNewData) throws IOException {
+    Customer customer = this.crawledDataDao.getCustomerByEmail(email);
+    Set<Long> contactIdList = new HashSet<>();
+
+    if (customer == null) {
+      return;
+    }
+
+    List<LocationPresenter> locations = this.crawledDataDao.getAllLocationsByCity(city);
+    XSSFWorkbook workbook = new XSSFWorkbook();
+
+    Map<String, Integer> summary = new HashMap<>();
+
+    XSSFSheet sheet = workbook.createSheet("Data");
+
+    sheet.autoSizeColumn(0);
+    sheet.setColumnWidth(1, 5000);
+    sheet.setColumnWidth(2, 3000);
+    sheet.setColumnWidth(3, 7000);
+    sheet.setColumnWidth(4, 4000);
+    sheet.setColumnWidth(5, 5000);
+    sheet.setColumnWidth(6, 4000);
+    sheet.createFreezePane(0, 1);
+//    sheet.setDefaultColumnWidth(20);
+
+    CellStyle headerStyle = workbook.createCellStyle();
+    XSSFFont font = workbook.createFont();
+    font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
+    font.setFontHeight(18);
+
+    headerStyle.setBorderBottom(HSSFCellStyle.BORDER_MEDIUM);
+    headerStyle.setBorderTop(HSSFCellStyle.BORDER_MEDIUM);
+    headerStyle.setBorderRight(HSSFCellStyle.BORDER_MEDIUM);
+    headerStyle.setBorderLeft(HSSFCellStyle.BORDER_MEDIUM);
+    headerStyle.setFillForegroundColor((short) 200);
+    headerStyle.setFillPattern(XSSFCellStyle.SOLID_FOREGROUND);
+    headerStyle.setFont(font);
+
+    CreationHelper createHelper = workbook.getCreationHelper();
+    XSSFCellStyle hlinkstyle = workbook.createCellStyle();
+    XSSFFont hlinkfont = workbook.createFont();
+    hlinkfont.setUnderline(XSSFFont.U_SINGLE);
+    hlinkfont.setColor(HSSFColor.BLUE.index);
+    hlinkstyle.setFont(hlinkfont);
+
+    int rowCount = 0;
+    int columnCount = 0;
+
+    Row row = sheet.createRow(rowCount);
+    Cell cell = row.createCell(++columnCount);
+    cell.setCellValue("Tên");
+    cell.setCellStyle(headerStyle);
+
+    cell = row.createCell(++columnCount);
+    cell.setCellValue("SDT");
+    cell.setCellStyle(headerStyle);
+
+    cell = row.createCell(++columnCount);
+    cell.setCellValue("Email");
+    cell.setCellStyle(headerStyle);
+
+    cell = row.createCell(++columnCount);
+    cell.setCellValue("Quận");
+    cell.setCellStyle(headerStyle);
+
+    for (LocationPresenter location : locations) {
+      List<ContactPresenter> list = this.crawledDataDao.getOwnerContactsByLocationAndNoOfPosts(location.getId(), noOfPosts);
+      if (list.size() == 0) {
+        continue;
+      }
+      for (ContactPresenter contact : list) {
+
+        if (onlyNewData && this.crawledDataDao.isContactExported(customer.getId(), contact.getId())) {
+          continue;
+        }
+
+        contactIdList.add(contact.getId());
+
+        row = sheet.createRow(++rowCount);
+
+        if (this.businessService.isSale(contact.getName(), contact.getEmail())) {
+          continue;
+        }
+        columnCount = 0;
+        cell = row.createCell(columnCount);
+        cell.setCellValue(rowCount);
+        cell = row.createCell(++columnCount);
+        cell.setCellValue(contact.getName());
+        cell = row.createCell(++columnCount);
+        cell.setCellValue(contact.getPhone());
+        cell = row.createCell(++columnCount);
+        cell.setCellValue(contact.getEmail());
+        cell = row.createCell(++columnCount);
+        cell.setCellValue(location.getDistrict());
+      }
+    }
+
+    if (rowCount == 0) {
+      return;
+    }
+
+    File dir = new File ("exports");
+    if (!dir.exists() || !dir.isDirectory()) {
+      dir.mkdir();
+    }
+    SimpleDateFormat spd = new SimpleDateFormat("yyyyMMdd_HHmmss");
+    String date = spd.format(new Date());
+    String fileName = String.format("%s/%s_%s_%s_%s_%s_%s.xlsx",
+        dir.getName(),
+        customer.getName(),
+        city.replace(" ", "_"),
+        onlyNewData ? "New" : "ALL",
+        date,
+        noOfPosts,
+        rowCount);
+
+    try (FileOutputStream outputStream = new FileOutputStream(fileName)) {
+      workbook.write(outputStream);
+    }
+
+    for(Long id : contactIdList) {
+      this.crawledDataDao.trackExport(customer.getId(), id, fileName);
+    }
+  }
+
+  @Override
   public void testEmail() throws MessagingException, InterruptedException {
     List<String> emails = this.crawledDataDao.getAllEmailsNotCheckedYet();
     List<String> temps = new ArrayList<>();

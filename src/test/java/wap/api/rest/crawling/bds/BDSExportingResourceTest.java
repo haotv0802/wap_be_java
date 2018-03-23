@@ -53,6 +53,20 @@ public class BDSExportingResourceTest extends TestBase {
   }
 
   @Test
+  public void testExportPhonesAndEmailsToFiles() throws Exception {
+    mockMvc
+        .perform(get("/svc/bds/crawler/exportAllPhonesAndEmailsToFiles")
+            .contentType(MediaType.APPLICATION_JSON)
+            .param("email", "hongphuc.vumai@gmail.com")
+            .param("city", "Ho Chi Minh")
+            .param("noOfPosts", "5")
+            .param("onlyNewData", "true")
+        )
+        .andExpect(status().is(200))
+    ;
+  }
+
+  @Test
   public void testEmail() throws Exception {
     mockMvc
         .perform(get("/svc/bds/crawler/testEmail")

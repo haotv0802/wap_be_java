@@ -91,6 +91,18 @@ public class CrawledDataResource {
     }
   }
 
+  @GetMapping("/crawler/exportAllPhonesAndEmailsToFiles")
+  public void exportAllPhonesAndEmailsToFiles(
+      @RequestParam(value = "email", required = false) String email,
+      @RequestParam(value = "city", required = false) String city,
+      @RequestParam(value = "noOfPosts", required = false) Integer noOfPosts,
+      @RequestParam(value = "onlyNewData", required = false) Boolean onlyNewData
+  ) throws IOException {
+    for(int i = 1; i <= noOfPosts; i++) {
+      this.crawledDataService.exportPhonesAndEmails(email, city, i, onlyNewData);
+    }
+  }
+
   @GetMapping("/crawler/testEmail")
   public void testEmail() throws IOException, MessagingException, InterruptedException {
     this.crawledDataService.testEmail();

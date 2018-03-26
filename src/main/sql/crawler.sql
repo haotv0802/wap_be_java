@@ -134,7 +134,8 @@ CREATE TABLE `crwlr_sent_emails_tracking` (
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 
 INSERT INTO crwlr_customers (`name`, `phone`, `email`, `latest_export_at`)

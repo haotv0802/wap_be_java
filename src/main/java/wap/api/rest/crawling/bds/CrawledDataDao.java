@@ -407,7 +407,7 @@ public class CrawledDataDao implements ICrawledDataDao {
     + "    ,(SELECT price FROM crwlr_posts WHERE contact_id = c.id  order by id desc  LIMIT 0,1) price                                           "
     + "FROM crwlr_contacts c                                                                                                                     "
     + "WHERE c.email <> '' AND manual_check IS NULL AND TYPE = 'OWNER'                                                                           "
-//    + "AND c.email LIKE '%gmail.com'                                                                                                           "
+    + "AND c.email LIKE '%gmail.com'                                                                                                           "
     + "    AND (email_existing IS NULL OR email_existing = TRUE)                                                                                 "
     + "    AND (SELECT count(*) FROM crwlr_posts WHERE contact_id = c.id AND property_type = 'HOUSE' AND location_id = :locationId) = 1          "
     + "        ORDER BY posts_count desc                                                                                                         "

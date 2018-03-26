@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 import wap.api.rest.crawling.bds.beans.*;
 import wap.api.rest.crawling.bds.interfaces.ICrawledDataDao;
+import wap.common.WapStringUtils;
 import wap.common.JdbcUtils;
 import wap.common.dao.DaoUtils;
 
@@ -39,6 +41,33 @@ public class CrawledDataDao implements ICrawledDataDao {
     this.namedTemplate = namedTemplate;
   }
 
+  private String buildSQLWithPaging(String sql, Pageable pageable) {
+    final DaoUtils.PagingIndex pi = DaoUtils.pagingIdxForSlice(pageable);
+    String fooSql = String.format(
+        "SELECT foo.* FROM   "
+            + "(                   "
+            + " %s                 "
+            + "ORDER BY %s         "
+            + ") foo               "
+            + "                    "
+            + "LIMIT %d, %d        ",
+        sql,
+        getPostsSearchOrder(pageable.getSort()),
+        pi.getStartIdx(),
+        pi.getPageSize()
+    );
+
+    return fooSql;
+  }
+
+  private String getPostsSearchOrder(Sort sort) {
+
+    String validOrders = "name";
+    String defaultOrderClause = " name ASC";
+
+    return WapStringUtils.populateOrderBy(sort, validOrders, defaultOrderClause);
+  }
+
   @Override
   public List<ItemPresenter> getAllItems(Pageable pageable) {
     final String sql =
@@ -63,13 +92,15 @@ public class CrawledDataDao implements ICrawledDataDao {
             + "    INNER JOIN crwlr_locations l ON p.location_id = l.id) "
             + "        INNER JOIN                                        "
             + "    crwlr_contacts c ON c.id = p.contact_id               "
-            + "  WHERE c.email <> '' AND c.name <> ''   LIMIT 50         "
+            + "  WHERE c.email <> '' AND c.name <> ''                    "
                       ;
+    String fooSQL = buildSQLWithPaging(sql, pageable);
+
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
 
-    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+    DaoUtils.debugQuery(LOGGER, fooSQL, paramsMap.getValues());
 
-    return namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
+    return namedTemplate.query(fooSQL, paramsMap, (rs, rowNum) -> {
       ItemPresenter presenter = new ItemPresenter();
       presenter.setTitle(rs.getString("name"));
       presenter.setAddress(rs.getString("address"));

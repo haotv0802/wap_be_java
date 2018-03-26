@@ -128,7 +128,8 @@ CREATE TABLE `crwlr_sent_emails_tracking` (
   `from_email` VARCHAR(100),
   `title`      VARCHAR(200),
   `to_email`   VARCHAR(100),
-  `content`    TEXT,
+  `content`    LONGTEXT CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci NULL,
   `created_at` DATETIME DEFAULT now(),
   PRIMARY KEY (`id`)
 )

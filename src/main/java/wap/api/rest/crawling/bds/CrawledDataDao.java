@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -39,7 +40,7 @@ public class CrawledDataDao implements ICrawledDataDao {
   }
 
   @Override
-  public List<ItemPresenter> getAllItems() {
+  public List<ItemPresenter> getAllItems(Pageable pageable) {
     final String sql =
               "SELECT                                                    "
             + "    p.name,                                               "
@@ -62,7 +63,7 @@ public class CrawledDataDao implements ICrawledDataDao {
             + "    INNER JOIN crwlr_locations l ON p.location_id = l.id) "
             + "        INNER JOIN                                        "
             + "    crwlr_contacts c ON c.id = p.contact_id               "
-            + "  WHERE c.email <> '' AND c.name <> ''   LIMIT 500        "
+            + "  WHERE c.email <> '' AND c.name <> ''   LIMIT 50         "
                       ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
 

@@ -9,6 +9,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 import wap.api.rest.crawling.bds.beans.*;
@@ -56,8 +57,8 @@ public class CrawledDataService implements ICrawledDataService {
   }
 
   @Override
-  public List<ItemPresenter> getAllItems() {
-    return this.crawledDataDao.getAllItems();
+  public List<ItemPresenter> getAllItems(Pageable pageable) {
+    return this.crawledDataDao.getAllItems(pageable);
   }
 
   @Override

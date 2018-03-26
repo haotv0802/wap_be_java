@@ -1,5 +1,6 @@
 package wap.api.rest.crawling.bds.interfaces;
 
+import org.springframework.data.domain.Pageable;
 import wap.api.rest.crawling.bds.beans.*;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * @author haho
  */
 public interface ICrawledDataDao {
-  List<ItemPresenter> getAllItems();
+  List<ItemPresenter> getAllItems(Pageable pageable);
 
   List<ItemPresenter> getAllItemsByCriterion(Criterion criterion);
 

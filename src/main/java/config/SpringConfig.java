@@ -14,6 +14,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.data.web.SortHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -25,6 +28,8 @@ import org.springframework.session.web.http.HeaderHttpSessionStrategy;
 import org.springframework.session.web.http.HttpSessionStrategy;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.*;
 
 import javax.sql.DataSource;
@@ -100,6 +105,26 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
     super.addInterceptors(registry);
+  }
+
+  /**
+   * RestControllers argument injections
+   * 1) Paging and Sorting arguments
+   * 2) HTLang arguments
+   *
+   * @param argumentResolvers list af argumentResolvers
+   */
+  @Override
+  public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+    PageableHandlerMethodArgumentResolver resolver = new PageableHandlerMethodArgumentResolver();
+    resolver.setOneIndexedParameters(true);
+    resolver.setFallbackPageable(new PageRequest(0, 25));
+    argumentResolvers.add(resolver);
+
+    argumentResolvers.add(new SortHandlerMethodArgumentResolver());
+    argumentResolvers.add(new PageableHandlerMethodArgumentResolver());
+
+    super.addArgumentResolvers(argumentResolvers);
   }
 
   @Configuration

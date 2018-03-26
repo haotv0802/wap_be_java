@@ -3,6 +3,7 @@ package wap.api.rest.crawling.bds;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Pageable;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import wap.api.rest.crawling.bds.beans.*;
@@ -36,8 +37,9 @@ public class CrawledDataResource {
 
   @GetMapping("/crawler/crawledData")
   public List<ItemPresenter> getCrawledData(
+      Pageable pageable
   ) {
-    return crawledDataService.getAllItems();
+    return crawledDataService.getAllItems(pageable);
   }
 
   @PostMapping("/crawler/crawledData")

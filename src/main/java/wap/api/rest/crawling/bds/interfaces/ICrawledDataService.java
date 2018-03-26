@@ -1,6 +1,6 @@
 package wap.api.rest.crawling.bds.interfaces;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
+import org.springframework.data.domain.Pageable;
 import wap.api.rest.crawling.bds.beans.*;
 
 import javax.mail.MessagingException;
@@ -13,7 +13,7 @@ import java.util.List;
  * @author haho
  */
 public interface ICrawledDataService {
-  List<ItemPresenter> getAllItems();
+  List<ItemPresenter> getAllItems(Pageable pageable);
 
   List<ItemPresenter> getAllItemsByCriterion(Criterion criterion);
 

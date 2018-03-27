@@ -25,7 +25,7 @@ public class BDSCrawledResourceTest extends TestBase {
     mockMvc
         .perform(get("/svc/bds/crawler/crawledData")
             .param("page", "5")
-            .param("size", "5")
+            .param("size", "10")
         )
         .andExpect(status().is(200))
     ;

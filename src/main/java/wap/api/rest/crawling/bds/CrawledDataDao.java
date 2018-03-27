@@ -69,7 +69,7 @@ public class CrawledDataDao implements ICrawledDataDao {
   }
 
   @Override
-  public List<ItemPresenter> getAllItems(Pageable pageable) {
+  public List<ItemPresenter> getAllPosts(Pageable pageable) {
     final String sql =
               "SELECT                                                    "
             + "    p.name,                                               "

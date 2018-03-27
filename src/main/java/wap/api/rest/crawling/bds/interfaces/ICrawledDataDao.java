@@ -11,7 +11,7 @@ import java.util.List;
  * @author haho
  */
 public interface ICrawledDataDao {
-  List<ItemPresenter> getAllItems(Pageable pageable);
+  List<ItemPresenter> getAllPosts(Pageable pageable);
 
   List<ItemPresenter> getAllItemsByCriterion(Criterion criterion);
 

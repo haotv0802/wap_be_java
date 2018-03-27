@@ -58,7 +58,7 @@ public class CrawledDataService implements ICrawledDataService {
 
   @Override
   public List<ItemPresenter> getAllItems(Pageable pageable) {
-    return this.crawledDataDao.getAllItems(pageable);
+    return this.crawledDataDao.getAllPosts(pageable);
   }
 
   @Override

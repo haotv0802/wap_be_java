@@ -13,8 +13,6 @@ import java.util.List;
 public interface ICrawledDataDao {
   List<ItemPresenter> getAllItems(Pageable pageable);
 
-  Integer getPostsCount();
-
   List<ItemPresenter> getAllItemsByCriterion(Criterion criterion);
 
   List<ContactPresenter> getPostsManually();

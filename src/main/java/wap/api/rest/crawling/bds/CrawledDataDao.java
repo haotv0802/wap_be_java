@@ -123,16 +123,6 @@ public class CrawledDataDao implements ICrawledDataDao {
   }
 
   @Override
-  public Integer getPostsCount() {
-    final String sql =
-        "SELECT COUNT(*) FROM crwlr_posts";
-    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-
-    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
-    return namedTemplate.queryForObject(sql, paramsMap, Integer.class);
-  }
-
-  @Override
   public List<ItemPresenter> getAllItemsByCriterion(Criterion criterion) {
     String sql =
               "SELECT                                         "

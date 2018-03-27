@@ -42,11 +42,6 @@ public class CrawledDataResource {
     return crawledDataService.getAllItems(pageable);
   }
 
-  @GetMapping("/crawler/postsCount")
-  public Integer getPostsCount() {
-    return null;
-  }
-
   @PostMapping("/crawler/crawledData")
   public List<ItemPresenter> getCrawledDataByCriterion(
       @RequestBody Criterion criterion

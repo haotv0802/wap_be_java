@@ -12,6 +12,7 @@ import wap.api.rest.crawling.mailing.JavaMailService;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -86,6 +87,19 @@ public class CrawledDataResource {
       @RequestParam(value = "email", required = false) String email,
       @RequestParam(value = "city", required = false) String city,
       @RequestParam(value = "noOfPosts", required = false) Integer noOfPosts,
+      @RequestParam(value = "onlyNewData", required = false) Boolean onlyNewData
+  ) throws IOException {
+    for(int i = 1; i <= noOfPosts; i++) {
+      this.crawledDataService.exportContacts(email, city, i, onlyNewData);
+    }
+  }
+
+  @GetMapping("/crawler/exportAllContactsToFilesWithPrice")
+  public void exportAllContactsToFilesWithPrice(
+      @RequestParam(value = "email", required = false) String email,
+      @RequestParam(value = "city", required = false) String city,
+      @RequestParam(value = "noOfPosts", required = false) Integer noOfPosts,
+      @RequestParam(value = "priceFrom", required = false) BigDecimal priceFrom,
       @RequestParam(value = "onlyNewData", required = false) Boolean onlyNewData
   ) throws IOException {
     for(int i = 1; i <= noOfPosts; i++) {

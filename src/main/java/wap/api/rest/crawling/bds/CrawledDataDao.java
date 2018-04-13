@@ -369,7 +369,8 @@ public class CrawledDataDao implements ICrawledDataDao {
 //            + "AND c.email NOT LIKE '%gmail.com'                                                                                                             "
             + "    AND (email_existing IS NULL OR email_existing = TRUE)                                                                                 "
             + "    AND (SELECT count(*) FROM crwlr_posts WHERE contact_id = c.id AND property_type = 'HOUSE' AND location_id = :locationId) = :noOfPosts "
-            + "        ORDER BY posts_count desc                                                                                                         "
+            + "    AND (SELECT price FROM crwlr_posts WHERE contact_id = c.id  order by id desc  LIMIT 0,1)  > 4000                                      "
+            + "        ORDER BY price desc                                                                                                               "
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("locationId", locationId);
@@ -406,6 +407,7 @@ public class CrawledDataDao implements ICrawledDataDao {
       + "    AND (email_existing IS NULL OR email_existing = TRUE)                                                                                 "
       + "    AND (SELECT count(*) FROM crwlr_posts WHERE contact_id = c.id AND property_type = 'HOUSE' AND location_id = :locationId               "
       + "           AND year(publish_date) = :year AND month(publish_date) = :month) = :noOfPosts                                                  "
+//      + "    AND (SELECT price FROM crwlr_posts WHERE contact_id = c.id  order by id desc  LIMIT 0,1)  > 4000                                      "
       + "        ORDER BY posts_count desc                                                                                                         "
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();

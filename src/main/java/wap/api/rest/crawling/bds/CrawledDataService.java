@@ -915,6 +915,17 @@ public class CrawledDataService implements ICrawledDataService {
         if (onlyNewData && this.crawledDataDao.isContactExported(customer.getId(), contact.getId())) {
           continue;
         }
+        if (!(contact.getPhone().startsWith("090")
+            || contact.getPhone().startsWith("093")
+            || contact.getPhone().startsWith("0120")
+            || contact.getPhone().startsWith("0121")
+            || contact.getPhone().startsWith("0122")
+            || contact.getPhone().startsWith("0126")
+            || contact.getPhone().startsWith("0128")
+            || contact.getPhone().startsWith("089"))
+            ) {
+          continue;
+        }
 
         contactIdList.add(contact.getId());
 

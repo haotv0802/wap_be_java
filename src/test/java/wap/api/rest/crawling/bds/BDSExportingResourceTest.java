@@ -43,10 +43,10 @@ public class BDSExportingResourceTest extends TestBase {
     mockMvc
         .perform(get("/svc/bds/crawler/exportAllContactsToFiles")
             .contentType(MediaType.APPLICATION_JSON)
-            .param("email", "hongphuc.vumai@gmail.com")
+            .param("email", "yennhi.gamudaland@gmail.com")
             .param("city", "Ho Chi Minh")
-            .param("noOfPosts", "5")
-            .param("onlyNewData", "true")
+            .param("noOfPosts", "2")
+            .param("onlyNewData", "false")
         )
         .andExpect(status().is(200))
     ;

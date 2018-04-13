@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -33,7 +34,8 @@ public class CrawledDataDao implements ICrawledDataDao {
   private static final Logger LOGGER = LogManager.getLogger(CrawledDataDao.class);
 
   private final NamedParameterJdbcTemplate namedTemplate;
-
+  @Autowired
+  private JdbcTemplate jdbcTemplate;
   @Autowired
   public CrawledDataDao(NamedParameterJdbcTemplate namedTemplate) {
     Assert.notNull(namedTemplate);

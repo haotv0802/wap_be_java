@@ -1,31 +1,19 @@
-package wap.api.rest.crawling.bds;
+package wap.api.rest.crawling.bds.email;
 
 import com.sun.mail.smtp.SMTPSendFailedException;
 import com.vdurmont.emoji.EmojiParser;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
-import wap.api.rest.crawling.bds.beans.*;
+import wap.api.rest.crawling.bds.BusinessService;
+import wap.api.rest.crawling.bds.beans.ContactPresenter;
 import wap.api.rest.crawling.bds.interfaces.ICrawledDataDao;
-import wap.api.rest.crawling.bds.interfaces.ICrawledDataService;
-import wap.api.rest.crawling.bds.interfaces.IEmailAccountService;
-import wap.api.rest.crawling.bds.interfaces.IEmailsService;
 import wap.api.rest.crawling.mailing.JavaMailService;
 
 import javax.mail.MessagingException;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**

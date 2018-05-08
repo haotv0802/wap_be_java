@@ -11,11 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import wap.api.rest.crawling.bds.beans.*;
 import wap.api.rest.crawling.bds.interfaces.ICrawledDataDao;
 import wap.api.rest.crawling.bds.interfaces.ICrawledDataService;
-import wap.api.rest.crawling.bds.interfaces.IEmailAccountService;
+import wap.api.rest.crawling.bds.email.IEmailAccountService;
 import wap.api.rest.crawling.mailing.JavaMailService;
 
 import javax.mail.MessagingException;
@@ -31,7 +32,7 @@ import java.util.*;
  *
  * @author haho
  */
-@Repository("bdsCrawledDataService")
+@Service("bdsCrawledDataService")
 public class CrawledDataService implements ICrawledDataService {
   private final ICrawledDataDao crawledDataDao;
 

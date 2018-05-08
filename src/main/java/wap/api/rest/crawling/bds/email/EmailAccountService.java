@@ -1,7 +1,6 @@
-package wap.api.rest.crawling.bds;
+package wap.api.rest.crawling.bds.email;
 
 import org.springframework.stereotype.Service;
-import wap.api.rest.crawling.bds.interfaces.IEmailAccountService;
 
 import java.util.HashMap;
 import java.util.Map;

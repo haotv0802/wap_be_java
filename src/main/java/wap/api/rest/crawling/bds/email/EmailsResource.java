@@ -1,4 +1,4 @@
-package wap.api.rest.crawling.bds;
+package wap.api.rest.crawling.bds.email;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -7,7 +7,6 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import wap.api.rest.crawling.bds.interfaces.IEmailsService;
 
 import javax.mail.MessagingException;
 
@@ -16,7 +15,7 @@ import javax.mail.MessagingException;
  *
  * @author haho
  */
-@RestController("bdsEmailsResource")
+@RestController("bdsEmailResource")
 @RequestMapping(path = "/svc/bds/emails")
 public class EmailsResource {
 

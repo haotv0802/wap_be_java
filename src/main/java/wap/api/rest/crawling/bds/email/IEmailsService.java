@@ -1,4 +1,4 @@
-package wap.api.rest.crawling.bds.interfaces;
+package wap.api.rest.crawling.bds.email;
 
 import javax.mail.MessagingException;
 

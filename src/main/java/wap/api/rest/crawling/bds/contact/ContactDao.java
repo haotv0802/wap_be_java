@@ -3,11 +3,14 @@ package wap.api.rest.crawling.bds.contact;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import wap.api.rest.crawling.bds.CrawledDataDao;
 import wap.api.rest.crawling.bds.contact.beans.ContactPresenter;
+import wap.common.WapStringUtils;
 import wap.common.dao.DaoUtils;
 
 import java.util.List;
@@ -28,7 +31,7 @@ public class ContactDao implements IContactDao {
   }
 
   @Override
-  public List<ContactPresenter> getContacts() {
+  public List<ContactPresenter> getContacts(Pageable pageable) {
     String sql =
         "SELECT                    "
       + "    id,                   "
@@ -43,12 +46,15 @@ public class ContactDao implements IContactDao {
       + "    updated_at            "
       + "FROM                      "
       + "    crwlr_contacts        "
+            + "WHERE email <> '' and manual_check is not null"
       + "    LIMIT 100             "
         ;
 
+    String fooSQL = buildSQLWithPaging(sql, pageable);
+
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
 
-    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+    DaoUtils.debugQuery(LOGGER, fooSQL, paramsMap.getValues());
     return namedTemplate.query(sql, paramsMap, (rs, i) -> {
       ContactPresenter contactPresenter = new ContactPresenter();
       contactPresenter.setId(rs.getLong("id"));
@@ -66,4 +72,32 @@ public class ContactDao implements IContactDao {
     });
 
   }
+
+  private String buildSQLWithPaging(String sql, Pageable pageable) {
+    final DaoUtils.PagingIndex pi = DaoUtils.pagingIdxForSlice(pageable);
+    String fooSql = String.format(
+        "SELECT foo.* FROM   "
+            + "(                   "
+            + " %s                 "
+            + "ORDER BY %s         "
+            + ") foo               "
+            + "                    "
+            + "LIMIT %d, %d        ",
+        sql,
+        getItemsSearchOrder(pageable.getSort()),
+        pi.getStartIdx(),
+        pi.getPageSize()
+    );
+
+    return fooSql;
+  }
+
+  private String getItemsSearchOrder(Sort sort) {
+
+    String validOrders = "name";
+    String defaultOrderClause = " name ASC";
+
+    return WapStringUtils.populateOrderBy(sort, validOrders, defaultOrderClause);
+  }
+
 }

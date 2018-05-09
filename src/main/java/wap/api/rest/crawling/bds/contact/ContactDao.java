@@ -4,6 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -31,7 +33,7 @@ public class ContactDao implements IContactDao {
   }
 
   @Override
-  public List<ContactPresenter> getContacts(Pageable pageable) {
+  public Slice<ContactPresenter> getContacts(Pageable pageable) {
     String sql =
         "SELECT                    "
       + "    id,                   "
@@ -46,8 +48,7 @@ public class ContactDao implements IContactDao {
       + "    updated_at            "
       + "FROM                      "
       + "    crwlr_contacts        "
-            + "WHERE email <> '' and manual_check is not null"
-      + "    LIMIT 100             "
+//            + "WHERE email <> '' and manual_check is not null"
         ;
 
     String fooSQL = buildSQLWithPaging(sql, pageable);
@@ -55,7 +56,7 @@ public class ContactDao implements IContactDao {
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
 
     DaoUtils.debugQuery(LOGGER, fooSQL, paramsMap.getValues());
-    return namedTemplate.query(sql, paramsMap, (rs, i) -> {
+    List<ContactPresenter> list = namedTemplate.query(fooSQL, paramsMap, (rs, i) -> {
       ContactPresenter contactPresenter = new ContactPresenter();
       contactPresenter.setId(rs.getLong("id"));
       contactPresenter.setName(rs.getString("name"));
@@ -71,6 +72,14 @@ public class ContactDao implements IContactDao {
       return contactPresenter;
     });
 
+    boolean hasNext = list.size() > pageable.getPageSize();
+
+    if (hasNext) {
+      list.remove(pageable.getPageSize());
+    }
+
+    Slice<ContactPresenter> contactPresenters = new SliceImpl<>(list, pageable, hasNext);
+    return contactPresenters;
   }
 
   private String buildSQLWithPaging(String sql, Pageable pageable) {

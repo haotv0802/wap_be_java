@@ -61,10 +61,9 @@ public final class DaoUtils {
     PagingIndex pi = new PagingIndex();
 //    pi.setStartIdx(base + 1);
 //    pi.setEndIdx(base + pageSize + 1);
-    pi.setPageSize(pageSize);
+    pi.setPageSize(pageSize + 1);
     pi.setStartIdx(base);
     pi.setEndIdx(base + pageSize);
-//    pi.setPageSize(pageSize);
 
     return pi;
   }

@@ -29,7 +29,6 @@ import org.springframework.session.web.http.HttpSessionStrategy;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.*;
 
 import javax.sql.DataSource;
@@ -118,7 +117,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
   public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
     PageableHandlerMethodArgumentResolver resolver = new PageableHandlerMethodArgumentResolver();
     resolver.setOneIndexedParameters(true);
-    resolver.setFallbackPageable(new PageRequest(0, 25));
+    resolver.setFallbackPageable(new PageRequest(0, 2500));
     argumentResolvers.add(resolver);
 
     argumentResolvers.add(new SortHandlerMethodArgumentResolver());

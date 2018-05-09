@@ -4,12 +4,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import wap.api.rest.auth.ISlice;
+import wap.api.rest.auth.Slice;
 import wap.api.rest.crawling.bds.CrawledDataDao;
 import wap.api.rest.crawling.bds.contact.beans.ContactPresenter;
 import wap.common.WapStringUtils;
@@ -32,8 +32,18 @@ public class ContactDao implements IContactDao {
     this.namedTemplate = namedTemplate;
   }
 
+  private int getContactsCount() {
+    final String sql = "SELECT COUNT(*) FROM crwlr_contacts";
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return namedTemplate.queryForObject(sql, paramsMap, Integer.class);
+  }
+
   @Override
-  public Slice<ContactPresenter> getContacts(Pageable pageable) {
+  public ISlice<ContactPresenter> getContacts(Pageable pageable) {
     String sql =
         "SELECT                    "
       + "    id,                   "
@@ -78,7 +88,7 @@ public class ContactDao implements IContactDao {
       list.remove(pageable.getPageSize());
     }
 
-    Slice<ContactPresenter> contactPresenters = new SliceImpl<>(list, pageable, hasNext);
+    ISlice<ContactPresenter> contactPresenters = new Slice<>(list, pageable, hasNext, this.getContactsCount());
     return contactPresenters;
   }
 

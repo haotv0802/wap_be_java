@@ -3,9 +3,9 @@ package wap.api.rest.crawling.bds.contact;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import wap.api.rest.auth.ISlice;
 import wap.api.rest.crawling.bds.contact.beans.ContactPresenter;
 
 /**
@@ -24,7 +24,7 @@ public class ContactService implements IContactService {
   }
 
   @Override
-  public Slice<ContactPresenter> getContacts(Pageable pageable) {
+  public ISlice<ContactPresenter> getContacts(Pageable pageable) {
     return this.contactDao.getContacts(pageable);
   }
 }

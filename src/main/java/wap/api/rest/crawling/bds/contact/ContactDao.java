@@ -96,12 +96,12 @@ public class ContactDao implements IContactDao {
     final DaoUtils.PagingIndex pi = DaoUtils.pagingIdxForSlice(pageable);
     String fooSql = String.format(
         "SELECT foo.* FROM   "
-            + "(                   "
-            + " %s                 "
-            + "ORDER BY %s         "
-            + ") foo               "
-            + "                    "
-            + "LIMIT %d, %d        ",
+      + "(                   "
+      + " %s                 "
+      + "ORDER BY %s         "
+      + ") foo               "
+      + "                    "
+      + "LIMIT %d, %d        ",
         sql,
         getItemsSearchOrder(pageable.getSort()),
         pi.getStartIdx(),

@@ -117,7 +117,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
   public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
     PageableHandlerMethodArgumentResolver resolver = new PageableHandlerMethodArgumentResolver();
     resolver.setOneIndexedParameters(true);
-    resolver.setFallbackPageable(new PageRequest(0, 2500));
+    resolver.setFallbackPageable(new PageRequest(0, 25));
     argumentResolvers.add(resolver);
 
     argumentResolvers.add(new SortHandlerMethodArgumentResolver());

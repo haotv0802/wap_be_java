@@ -15,6 +15,8 @@ public class BDSContactsResourceTest extends TestBase {
   public void testGetContacts() throws Exception {
     mockMvc
         .perform(get("/svc/bds/contact/list")
+            .param("page", "1")
+            .param("name", "h")
         )
         .andExpect(status().is(200))
     ;

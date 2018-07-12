@@ -8,5 +8,5 @@ import wap.api.rest.crawling.bds.contact.beans.ContactPresenter;
  * Created by haoho on 5/8/18 09:55.
  */
 public interface IContactDao {
-  ISlice<ContactPresenter> getContacts(Pageable pageable);
+  ISlice<ContactPresenter> getContacts(Pageable pageable, String name);
 }

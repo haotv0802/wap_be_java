@@ -1,5 +1,6 @@
 package wap.api.rest.crawling.bds.contact;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +44,18 @@ public class ContactDao implements IContactDao {
   }
 
   @Override
-  public ISlice<ContactPresenter> getContacts(Pageable pageable) {
-    String sql =
+  public ISlice<ContactPresenter> getContacts(Pageable pageable, String name) {
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    String whereClause = "";
+
+    if (null != name) {
+      if (!StringUtils.isEmpty(name)) {
+        whereClause += "AND name like :name";
+        paramsMap.addValue("name", "%" + name + "%");
+      }
+    }
+
+    String sql = String.format(
         "SELECT                    "
       + "    id,                   "
       + "    name,                 "
@@ -56,14 +67,15 @@ public class ContactDao implements IContactDao {
       + "    latest_item_posted_on,"
       + "    created_at,           "
       + "    updated_at            "
-      + "FROM                      "
+      + " FROM                     "
       + "    crwlr_contacts        "
+      + " WHERE 1 = 1   %s         ", whereClause)
 //            + "WHERE email <> '' and manual_check is not null"
         ;
 
     String fooSQL = buildSQLWithPaging(sql, pageable);
 
-    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+
 
     DaoUtils.debugQuery(LOGGER, fooSQL, paramsMap.getValues());
     List<ContactPresenter> list = namedTemplate.query(fooSQL, paramsMap, (rs, i) -> {

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import wap.api.rest.auth.ISlice;
 import wap.api.rest.crawling.bds.contact.beans.ContactPresenter;
@@ -31,7 +32,10 @@ public class ContactResource {
   }
 
   @GetMapping("/list")
-  public ISlice<ContactPresenter> getContacts(Pageable pageable){
-    return this.contactService.getContacts(pageable);
+  public ISlice<ContactPresenter> getContacts(
+      Pageable pageable,
+      @RequestParam(value = "name", required = false) String name
+      ){
+    return this.contactService.getContacts(pageable, name);
   }
 }

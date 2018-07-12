@@ -24,7 +24,7 @@ public class ContactService implements IContactService {
   }
 
   @Override
-  public ISlice<ContactPresenter> getContacts(Pageable pageable) {
-    return this.contactDao.getContacts(pageable);
+  public ISlice<ContactPresenter> getContacts(Pageable pageable, String name) {
+    return this.contactDao.getContacts(pageable, name);
   }
 }

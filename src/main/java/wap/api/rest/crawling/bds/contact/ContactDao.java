@@ -44,16 +44,35 @@ public class ContactDao implements IContactDao {
   }
 
   @Override
-  public ISlice<ContactPresenter> getContacts(Pageable pageable, String name) {
+  public ISlice<ContactPresenter> getContacts(Pageable pageable, String name, String phone, String email, String type, String manualCheck, Boolean emailExisting) {
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     String whereClause = "";
 
-    if (null != name) {
-      if (!StringUtils.isEmpty(name)) {
-        whereClause += "AND name like :name";
-        paramsMap.addValue("name", "%" + name + "%");
-      }
+    if (!StringUtils.isEmpty(name)) {
+      whereClause += "AND name like :name";
+      paramsMap.addValue("name", "%" + name + "%");
     }
+    if (!StringUtils.isEmpty(phone)) {
+      whereClause += "AND phone like :phone";
+      paramsMap.addValue("phone", "%" + phone + "%");
+    }
+    if (!StringUtils.isEmpty(email)) {
+      whereClause += "AND email like :email";
+      paramsMap.addValue("email", "%" + email + "%");
+    }
+    if (!StringUtils.isEmpty(type)) {
+      whereClause += "AND type = :type";
+      paramsMap.addValue("type", type);
+    }
+    if (!StringUtils.isEmpty(manualCheck)) {
+      whereClause += "AND manual_check = :manualCheck";
+      paramsMap.addValue("manualCheck", manualCheck);
+    }
+    if (null != emailExisting) {
+      whereClause += "AND email_existing = :emailExisting";
+      paramsMap.addValue("emailExisting", emailExisting);
+    }
+
 
     String sql = String.format(
         "SELECT                    "

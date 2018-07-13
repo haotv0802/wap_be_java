@@ -8,5 +8,5 @@ import wap.api.rest.crawling.bds.contact.beans.ContactPresenter;
  * Created by haoho on 5/8/18 09:38.
  */
 public interface IContactService {
-  ISlice<ContactPresenter> getContacts(Pageable pageable, String name);
+  ISlice<ContactPresenter> getContacts(Pageable pageable, String name, String phone, String email, String type, String manualCheck, Boolean emailExisting);
 }

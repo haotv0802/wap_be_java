@@ -34,8 +34,13 @@ public class ContactResource {
   @GetMapping("/list")
   public ISlice<ContactPresenter> getContacts(
       Pageable pageable,
-      @RequestParam(value = "name", required = false) String name
+      @RequestParam(value = "name", required = false) String name,
+      @RequestParam(value = "phone", required = false) String phone,
+      @RequestParam(value = "email", required = false) String email,
+      @RequestParam(value = "type", required = false) String type,
+      @RequestParam(value = "manualCheck", required = false) String manualCheck,
+      @RequestParam(value = "emailExisting", required = false) Boolean emailExisting
       ){
-    return this.contactService.getContacts(pageable, name);
+    return this.contactService.getContacts(pageable, name, phone, email, type, manualCheck, emailExisting);
   }
 }

@@ -37,6 +37,8 @@ public interface ICrawledDataService {
 
   void exportPhonesAndEmails(String email, String city, Integer noOfPosts, Boolean onlyNewData) throws IOException;
 
+  void exportPhonesAndEmailsToCSVFiles(String email, String city, Integer noOfPosts, Boolean onlyNewData) throws IOException;
+
   void testEmail() throws MessagingException, InterruptedException;
 
   List<CityPresenter> getCitiesAndDistricts();

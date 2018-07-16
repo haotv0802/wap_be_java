@@ -41,7 +41,7 @@ public class BDSExportingResourceTest extends TestBase {
   @Test
   public void testExportAllContactsToFiles() throws Exception {
     mockMvc
-        .perform(get("/svc/bds/crawler/exportAllContactsToFiles")
+        .perform(get("/svc/bds/crawler/exportAllContactsToExcelFiles")
             .contentType(MediaType.APPLICATION_JSON)
             .param("email", "hongphuc.vumai@gmail.com")
             .param("city", "Ho Chi Minh")
@@ -55,9 +55,23 @@ public class BDSExportingResourceTest extends TestBase {
   @Test
   public void testExportPhonesAndEmailsToFiles() throws Exception {
     mockMvc
-        .perform(get("/svc/bds/crawler/exportAllPhonesAndEmailsToFiles")
+        .perform(get("/svc/bds/crawler/exportAllPhonesAndEmailsToExcelFiles")
             .contentType(MediaType.APPLICATION_JSON)
             .param("email", "hongphuc.vumai@gmail.com")
+            .param("city", "Ho Chi Minh")
+            .param("noOfPosts", "2")
+            .param("onlyNewData", "true")
+        )
+        .andExpect(status().is(200))
+    ;
+  }
+
+  @Test
+  public void testExportPhonesAndEmailsToCSVFiles() throws Exception {
+    mockMvc
+        .perform(get("/svc/bds/crawler/exportAllPhonesAndEmailsToCSVFiles")
+            .contentType(MediaType.APPLICATION_JSON)
+            .param("email", "yennhi.gamudaland@gmail.com")
             .param("city", "Ho Chi Minh")
             .param("noOfPosts", "5")
             .param("onlyNewData", "true")

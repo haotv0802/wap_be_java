@@ -10,18 +10,19 @@ import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import wap.api.rest.crawling.bds.beans.*;
+import wap.api.rest.crawling.bds.email.IEmailAccountService;
 import wap.api.rest.crawling.bds.interfaces.ICrawledDataDao;
 import wap.api.rest.crawling.bds.interfaces.ICrawledDataService;
-import wap.api.rest.crawling.bds.email.IEmailAccountService;
 import wap.api.rest.crawling.mailing.JavaMailService;
+import wap.common.CSVUtils;
 
 import javax.mail.MessagingException;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -1002,6 +1003,65 @@ public class CrawledDataService implements ICrawledDataService {
     for(Long id : contactIdList) {
       this.crawledDataDao.trackExport(customer.getId(), id, fileName);
     }
+  }
+
+  public void exportPhonesAndEmailsToCSVFiles(String email, String city, Integer noOfPosts, Boolean onlyNewData) throws IOException {
+    Customer customer = this.crawledDataDao.getCustomerByEmail(email);
+
+    if (customer == null) {
+      return;
+    }
+    int rowCount = 0;
+
+    List<LocationPresenter> locations = this.crawledDataDao.getAllLocationsByCity(city);
+
+    File dir = new File ("exports");
+    if (!dir.exists() || !dir.isDirectory()) {
+      dir.mkdir();
+    }
+
+    SimpleDateFormat spd = new SimpleDateFormat("yyyyMMdd_HHmmss");
+    String date = spd.format(new Date());
+//    String fileName = String.format("%s/%s", dir, "contacts.csv");
+    String fileName = String.format("%s/%s_%s_%s_%s_%s.csv",
+        dir.getName(),
+        customer.getName(),
+        city.replace(" ", "_"),
+        onlyNewData ? "New" : "ALL",
+        date,
+        noOfPosts
+        );
+    FileWriter writer = new FileWriter(fileName);
+
+    int i = 0;
+    for (LocationPresenter location : locations) {
+      i++;
+      List<ContactPresenter> list = this.crawledDataDao.getOwnerContactsByLocationAndNoOfPosts(location.getId(), noOfPosts);
+      if (list.size() == 0) {
+        continue;
+      }
+      for (ContactPresenter contact : list) {
+
+        if (onlyNewData && this.crawledDataDao.isContactExported(customer.getId(), contact.getId())) {
+          continue;
+        }
+
+        CSVUtils.writeLine(writer, Arrays.asList(contact.getEmail(), contact.getPhone(), contact.getName()), ',', ' ');
+
+        rowCount++;
+
+        if (this.businessService.isSale(contact.getName(), contact.getEmail())) {
+          continue;
+        }
+      }
+      if (i == 1) {
+        break;
+      }
+    }
+
+    writer.flush();
+    writer.close();
+
   }
 
   @Override

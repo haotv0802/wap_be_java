@@ -81,8 +81,8 @@ public class CrawledDataResource {
     }
   }
 
-  @GetMapping("/crawler/exportAllContactsToFiles")
-  public void exportAllContactsToFiles(
+  @GetMapping("/crawler/exportAllContactsToExcelFiles")
+  public void exportAllContactsToExcelFiles(
       @RequestParam(value = "email", required = false) String email,
       @RequestParam(value = "city", required = false) String city,
       @RequestParam(value = "noOfPosts", required = false) Integer noOfPosts,
@@ -93,8 +93,8 @@ public class CrawledDataResource {
     }
   }
 
-  @GetMapping("/crawler/exportAllPhonesAndEmailsToFiles")
-  public void exportAllPhonesAndEmailsToFiles(
+  @GetMapping("/crawler/exportAllPhonesAndEmailsToExcelFiles")
+  public void exportAllPhonesAndEmailsToExcelFiles(
       @RequestParam(value = "email", required = false) String email,
       @RequestParam(value = "city", required = false) String city,
       @RequestParam(value = "noOfPosts", required = false) Integer noOfPosts,
@@ -102,6 +102,18 @@ public class CrawledDataResource {
   ) throws IOException {
     for(int i = 1; i <= noOfPosts; i++) {
       this.crawledDataService.exportPhonesAndEmails(email, city, i, onlyNewData);
+    }
+  }
+
+  @GetMapping("/crawler/exportAllPhonesAndEmailsToCSVFiles")
+  public void exportAllPhonesAndEmailsToCSVFiles(
+      @RequestParam(value = "email", required = false) String email,
+      @RequestParam(value = "city", required = false) String city,
+      @RequestParam(value = "noOfPosts", required = false) Integer noOfPosts,
+      @RequestParam(value = "onlyNewData", required = false) Boolean onlyNewData
+  ) throws IOException {
+    for(int i = 1; i <= noOfPosts; i++) {
+      this.crawledDataService.exportPhonesAndEmailsToCSVFiles(email, city, i, onlyNewData);
     }
   }
 

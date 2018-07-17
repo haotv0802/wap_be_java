@@ -50,7 +50,9 @@ CREATE TABLE `crwlr_contacts` (
   `type`                  VARCHAR(20)  NOT NULL, #SALE or OWNER
   `manual_check`          VARCHAR(20)  NULL, #SALE or OWNER
   `email_existing`        BOOLEAN      NULL, #Exiting or not
-  `latest_item_posted_on` DATE         NOT NULL, # User will be notified if this contact is in the list again just in short period of time.
+  `latest_item_posted_on` DATE         NULL, #User will be notified if this contact is in the list again just in short period of time.
+  `subscribed`            BOOLEAN  DEFAULT FALSE,
+  `description`           LONGTEXT CHARACTER SET utf8mb4,
   `created_at`            DATETIME DEFAULT now(),
   `updated_at`            DATETIME     NULL,
   PRIMARY KEY (`id`),

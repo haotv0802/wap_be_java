@@ -1007,11 +1007,10 @@ public class CrawledDataService implements ICrawledDataService {
 
   public void exportPhonesAndEmailsToCSVFiles(String email, String city, Integer noOfPosts, Boolean onlyNewData) throws IOException {
     Customer customer = this.crawledDataDao.getCustomerByEmail(email);
-
+    Set<Long> contactIdList = new HashSet<>();
     if (customer == null) {
       return;
     }
-    int rowCount = 0;
 
     List<LocationPresenter> locations = this.crawledDataDao.getAllLocationsByCity(city);
 
@@ -1033,9 +1032,8 @@ public class CrawledDataService implements ICrawledDataService {
         );
     FileWriter writer = new FileWriter(fileName);
 
-    int i = 0;
+    int rowCount = 0;
     for (LocationPresenter location : locations) {
-      i++;
       List<ContactPresenter> list = this.crawledDataDao.getOwnerContactsByLocationAndNoOfPosts(location.getId(), noOfPosts);
       if (list.size() == 0) {
         continue;
@@ -1045,23 +1043,23 @@ public class CrawledDataService implements ICrawledDataService {
         if (onlyNewData && this.crawledDataDao.isContactExported(customer.getId(), contact.getId())) {
           continue;
         }
+        contactIdList.add(contact.getId());
 
-        CSVUtils.writeLine(writer, Arrays.asList(contact.getEmail(), contact.getPhone(), contact.getName()), ',', ' ');
-
-        rowCount++;
+        CSVUtils.writeLine(writer, Arrays.asList(contact.getEmail(), contact.getPhone(), contact.getName(), location.getDistrict(), String.valueOf(++rowCount)), ',', ' ');
 
         if (this.businessService.isSale(contact.getName(), contact.getEmail())) {
           continue;
         }
-      }
-      if (i == 1) {
-        break;
       }
     }
 
     writer.flush();
     writer.close();
 
+
+    for(Long id : contactIdList) {
+      this.crawledDataDao.trackExport(customer.getId(), id, fileName);
+    }
   }
 
   @Override

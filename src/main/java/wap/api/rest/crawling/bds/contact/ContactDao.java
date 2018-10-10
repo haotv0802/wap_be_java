@@ -33,10 +33,36 @@ public class ContactDao implements IContactDao {
     this.namedTemplate = namedTemplate;
   }
 
-  private int getContactsCount() {
-    final String sql = "SELECT COUNT(*) FROM crwlr_contacts";
-
+  private int getContactsCount(String name, String phone, String email, String type, String manualCheck, Boolean emailExisting) {
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    String whereClause = "";
+
+    if (!StringUtils.isEmpty(name)) {
+      whereClause += "AND name like :name ";
+      paramsMap.addValue("name", "%" + name + "%");
+    }
+    if (!StringUtils.isEmpty(phone)) {
+      whereClause += "AND phone like :phone ";
+      paramsMap.addValue("phone", "%" + phone + "%");
+    }
+    if (!StringUtils.isEmpty(email)) {
+      whereClause += "AND email like :email ";
+      paramsMap.addValue("email", "%" + email + "%");
+    }
+    if (!StringUtils.isEmpty(type)) {
+      whereClause += "AND type = :type ";
+      paramsMap.addValue("type", type);
+    }
+    if (!StringUtils.isEmpty(manualCheck)) {
+      whereClause += "AND manual_check = :manualCheck ";
+      paramsMap.addValue("manualCheck", manualCheck);
+    }
+    if (null != emailExisting) {
+      whereClause += "AND email_existing = :emailExisting ";
+      paramsMap.addValue("emailExisting", emailExisting);
+    }
+
+    final String sql = String.format("SELECT COUNT(*) FROM crwlr_contacts WHERE 1 = 1  %s", whereClause);
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
@@ -121,7 +147,8 @@ public class ContactDao implements IContactDao {
       list.remove(pageable.getPageSize());
     }
 
-    ISlice<ContactPresenter> contactPresenters = new Slice<>(list, pageable, hasNext, this.getContactsCount());
+    ISlice<ContactPresenter> contactPresenters = new Slice<>(list, pageable, hasNext,
+        this.getContactsCount(name, phone, email, type, manualCheck, emailExisting));
     return contactPresenters;
   }
 

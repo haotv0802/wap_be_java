@@ -5,13 +5,15 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import wap.api.rest.auth.ISlice;
 import wap.api.rest.crawling.bds.contact.beans.ContactPresenter;
+
+import java.util.List;
 
 /**
  * Created by haoho on 5/8/18 09:04.
@@ -42,5 +44,15 @@ public class ContactResource {
       @RequestParam(value = "emailExisting", required = false) Boolean emailExisting
       ){
     return this.contactService.getContacts(pageable, name, phone, email, type, manualCheck, emailExisting);
+  }
+
+  @PostMapping("/update")
+  public ResponseEntity updateContacts(
+      @RequestBody List<ContactPresenter> contacts
+      ){
+
+    contactService.updateContacts(contacts);
+
+    return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 }

@@ -149,6 +149,11 @@ public class CrawlingService implements ICrawlingService {
 
       do {
         LOGGER.info(">>> Get links on page: " + currentPage);
+        try {
+          Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+          ex.printStackTrace();
+        }
         document = Jsoup.connect(currentPage).get();
         Elements hrefTagsPager = document.select("div.background-pager-right-controls").get(0).children();
 
@@ -189,6 +194,11 @@ public class CrawlingService implements ICrawlingService {
       while (iterator.hasNext()) {
         String link = iterator.next();
         LOGGER.info("post " + ++i + " / " + urls.size() + ", " + link);
+        try {
+          Thread.sleep(1500);
+        } catch (InterruptedException ex) {
+          ex.printStackTrace();
+        }
         getItemDetails(link, crawlingTracking);
       }
 

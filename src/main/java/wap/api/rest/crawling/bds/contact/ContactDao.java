@@ -85,7 +85,8 @@ public class ContactDao implements IContactDao {
       + "    email_existing,       "
       + "    latest_item_posted_on,"
       + "    created_at,           "
-      + "    updated_at            "
+      + "    updated_at,           "
+      + "    description           "
       + " FROM                     "
       + "    crwlr_contacts        "
       + " WHERE 1 = 1   %s         ", whereClause)
@@ -109,6 +110,7 @@ public class ContactDao implements IContactDao {
       contactPresenter.setLatestItemPostedAt(rs.getDate("latest_item_posted_on"));
       contactPresenter.setCreatedAt(rs.getDate("created_at"));
       contactPresenter.setUpdatedAt(rs.getDate("updated_at"));
+      contactPresenter.setDescription(rs.getString("description"));
 
       return contactPresenter;
     });
@@ -121,6 +123,30 @@ public class ContactDao implements IContactDao {
 
     ISlice<ContactPresenter> contactPresenters = new Slice<>(list, pageable, hasNext, this.getContactsCount());
     return contactPresenters;
+  }
+
+  @Override
+  public void updateContact(ContactPresenter contact) {
+    final String sql =
+              "UPDATE crwlr_contacts            "
+            + "SET                              "
+            + "    name = :name,                "
+            + "    phone = :phone,              "
+            + "    email = :email,              "
+            + "    description = :description   "
+            + "WHERE                            "
+            + "    id = :id                     "
+        ;
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("name", contact.getName());
+    paramsMap.addValue("phone", contact.getPhone());
+    paramsMap.addValue("email", contact.getEmail());
+    paramsMap.addValue("description", contact.getDescription());
+    paramsMap.addValue("id", contact.getId());
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    namedTemplate.update(sql, paramsMap);
   }
 
   private String buildSQLWithPaging(String sql, Pageable pageable) {

@@ -8,6 +8,8 @@ import org.springframework.util.Assert;
 import wap.api.rest.auth.ISlice;
 import wap.api.rest.crawling.bds.contact.beans.ContactPresenter;
 
+import java.util.List;
+
 /**
  * Created by haoho on 5/8/18 09:53.
  */
@@ -26,5 +28,14 @@ public class ContactService implements IContactService {
   @Override
   public ISlice<ContactPresenter> getContacts(Pageable pageable, String name, String phone, String email, String type, String manualCheck, Boolean emailExisting) {
     return this.contactDao.getContacts(pageable, name, phone, email, type, manualCheck, emailExisting);
+  }
+
+  @Override
+  public void updateContacts(List<ContactPresenter> contacts) {
+    for(ContactPresenter contact : contacts) {
+      if (contact.getUpdated()) {
+        contactDao.updateContact(contact);
+      }
+    }
   }
 }

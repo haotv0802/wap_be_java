@@ -16,6 +16,8 @@ public class ContactPresenter {
   private Date latestItemPostedAt;
   private Date createdAt;
   private Date updatedAt;
+  private String description;
+  private Boolean updated = false;
 
   public Long getId() {
     return id;
@@ -95,5 +97,21 @@ public class ContactPresenter {
 
   public void setUpdatedAt(Date updatedAt) {
     this.updatedAt = updatedAt;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public Boolean getUpdated() {
+    return updated;
+  }
+
+  public void setUpdated(Boolean updated) {
+    this.updated = updated;
   }
 }

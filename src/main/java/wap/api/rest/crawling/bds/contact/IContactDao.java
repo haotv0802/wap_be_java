@@ -9,4 +9,6 @@ import wap.api.rest.crawling.bds.contact.beans.ContactPresenter;
  */
 public interface IContactDao {
   ISlice<ContactPresenter> getContacts(Pageable pageable, String name, String phone, String email, String type, String manualCheck, Boolean emailExisting);
+
+  void updateContact(ContactPresenter contact);
 }

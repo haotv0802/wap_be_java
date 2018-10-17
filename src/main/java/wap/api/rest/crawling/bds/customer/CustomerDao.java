@@ -1,16 +1,20 @@
 package wap.api.rest.crawling.bds.customer;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import wap.api.rest.auth.ISlice;
 import wap.api.rest.auth.Slice;
 import wap.api.rest.crawling.bds.customer.beans.CustomerPresenter;
+import wap.common.WapStringUtils;
+import wap.common.dao.DaoUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,33 +32,114 @@ public class CustomerDao implements ICustomerDao {
     this.namedTemplate = namedTemplate;
   }
 
+  private int getCustomersCount(String name, String phone, String email) {
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    String whereClause = "";
+
+    if (!StringUtils.isEmpty(name)) {
+      whereClause += "AND name like :name ";
+      paramsMap.addValue("name", "%" + name + "%");
+    }
+    if (!StringUtils.isEmpty(phone)) {
+      whereClause += "AND phone like :phone ";
+      paramsMap.addValue("phone", "%" + phone + "%");
+    }
+    if (!StringUtils.isEmpty(email)) {
+      whereClause += "AND email like :email ";
+      paramsMap.addValue("email", "%" + email + "%");
+    }
+
+    final String sql = String.format("SELECT COUNT(*) FROM crwlr_customers WHERE 1 = 1  %s", whereClause);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return namedTemplate.queryForObject(sql, paramsMap, Integer.class);
+  }
+
 
   @Override
   public ISlice<CustomerPresenter> getCusomters(Pageable pageable, String name, String phone, String email) {
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    String whereClause = "";
 
-    List list = new ArrayList();
-    CustomerPresenter presenter = new CustomerPresenter();
-    presenter.setId(new Long(1));
-    presenter.setName("name 1");
-    presenter.setEmail("email 1");
-    presenter.setPhone("phone 1");
-    list.add(presenter);
+    if (!StringUtils.isEmpty(name)) {
+      whereClause += "AND name like :name ";
+      paramsMap.addValue("name", "%" + name + "%");
+    }
+    if (!StringUtils.isEmpty(phone)) {
+      whereClause += "AND phone like :phone ";
+      paramsMap.addValue("phone", "%" + phone + "%");
+    }
+    if (!StringUtils.isEmpty(email)) {
+      whereClause += "AND email like :email ";
+      paramsMap.addValue("email", "%" + email + "%");
+    }
 
-    presenter = new CustomerPresenter();
-    presenter.setId(new Long(2));
-    presenter.setName("name 2");
-    presenter.setEmail("email 2");
-    presenter.setPhone("phone 2");
-    list.add(presenter);
+    String sql = String.format(
+              "SELECT                    "
+            + "    id,                   "
+            + "    name,                 "
+            + "    phone,                "
+            + "    email,                "
+            + "    latest_export_at,     "
+            + "    created_at,           "
+            + "    updated_at            "
+            + " FROM                     "
+            + "    crwlr_customers       "
+            + " WHERE 1 = 1   %s         ", whereClause)
+        ;
 
-    presenter = new CustomerPresenter();
-    presenter.setId(new Long(3));
-    presenter.setName("name 3");
-    presenter.setEmail("email 3");
-    presenter.setPhone("phone 3");
-    list.add(presenter);
+    String fooSQL = buildSQLWithPaging(sql, pageable);
 
-    ISlice slice = new Slice(list, pageable, true, 10);
-    return slice;
+    DaoUtils.debugQuery(LOGGER, fooSQL, paramsMap.getValues());
+    List<CustomerPresenter> list = namedTemplate.query(fooSQL, paramsMap, (rs, i) -> {
+      CustomerPresenter customer = new CustomerPresenter();
+      customer.setId(rs.getLong("id"));
+      customer.setName(rs.getString("name"));
+      customer.setPhone(rs.getString("phone"));
+      customer.setEmail(rs.getString("email"));
+      customer.setLatestExportAt(rs.getDate("latest_export_at"));
+      customer.setCreatedAt(rs.getDate("created_at"));
+      customer.setUpdatedAt(rs.getDate("updated_at"));
+
+      return customer;
+    });
+
+    boolean hasNext = list.size() > pageable.getPageSize();
+
+    if (hasNext) {
+      list.remove(pageable.getPageSize());
+    }
+
+    ISlice<CustomerPresenter> customers = new Slice<>(list, pageable, hasNext,
+        this.getCustomersCount(name, phone, email));
+    return customers;
+  }
+
+  private String buildSQLWithPaging(String sql, Pageable pageable) {
+    final DaoUtils.PagingIndex pi = DaoUtils.pagingIdxForSlice(pageable);
+    String fooSql = String.format(
+        "SELECT foo.* FROM   "
+            + "(                   "
+            + " %s                 "
+            + "ORDER BY %s         "
+            + ") foo               "
+            + "                    "
+            + "LIMIT %d, %d        ",
+        sql,
+        getItemsSearchOrder(pageable.getSort()),
+        pi.getStartIdx(),
+        pi.getPageSize()
+    );
+
+    return fooSql;
+  }
+
+  private String getItemsSearchOrder(Sort sort) {
+
+    String validOrders = "name";
+    String defaultOrderClause = " name ASC";
+
+    return WapStringUtils.populateOrderBy(sort, validOrders, defaultOrderClause);
   }
 }

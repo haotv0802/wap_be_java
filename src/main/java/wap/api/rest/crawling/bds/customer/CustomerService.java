@@ -39,4 +39,9 @@ public class CustomerService implements ICustomerService {
       }
     }
   }
+
+  @Override
+  public Long addCustomer(CustomerPresenter customer) {
+    return customerDao.addCustomer(customer);
+  }
 }

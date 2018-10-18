@@ -11,4 +11,6 @@ public interface ICustomerDao {
   ISlice<CustomerPresenter> getCusomters(Pageable pageable, String name, String phone, String email);
 
   void updateCustomer(CustomerPresenter customer);
+
+  Long addCustomer(CustomerPresenter customer);
 }

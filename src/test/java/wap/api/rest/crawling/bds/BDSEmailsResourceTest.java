@@ -1,13 +1,10 @@
 package wap.api.rest.crawling.bds;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;
 import org.testng.annotations.Test;
 import wap.api.rest.TestBase;
-import wap.api.rest.crawling.bds.beans.Criterion;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**

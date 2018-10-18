@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import wap.api.rest.auth.ISlice;
 import wap.api.rest.auth.Slice;
@@ -138,16 +140,32 @@ public class CustomerDao implements ICustomerDao {
     namedTemplate.update(sql, paramsMap);
   }
 
+  @Override
+  public Long addCustomer(CustomerPresenter customer) {
+    final String sql = "INSERT INTO crwlr_customers (name, phone, email) values (:name, :phone, :email)";
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("name", customer.getName());
+    paramsMap.addValue("phone", customer.getPhone());
+    paramsMap.addValue("email", customer.getEmail());
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    KeyHolder keyHolder = new GeneratedKeyHolder();
+    namedTemplate.update(sql, paramsMap, keyHolder);
+    return keyHolder.getKey().longValue();
+  }
+
   private String buildSQLWithPaging(String sql, Pageable pageable) {
     final DaoUtils.PagingIndex pi = DaoUtils.pagingIdxForSlice(pageable);
     String fooSql = String.format(
         "SELECT foo.* FROM   "
-            + "(                   "
-            + " %s                 "
-            + "ORDER BY %s         "
-            + ") foo               "
-            + "                    "
-            + "LIMIT %d, %d        ",
+      + "(                   "
+      + " %s                 "
+      + "ORDER BY %s         "
+      + ") foo               "
+      + "                    "
+      + "LIMIT %d, %d        ",
         sql,
         getItemsSearchOrder(pageable.getSort()),
         pi.getStartIdx(),

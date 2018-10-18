@@ -13,4 +13,6 @@ public interface ICustomerService {
   ISlice<CustomerPresenter> getCustomers(Pageable pageable, String name, String phone, String email);
 
   void updateCustomers(List<CustomerPresenter> customers);
+
+  Long addCustomer(CustomerPresenter customer);
 }

@@ -5,13 +5,15 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import wap.api.rest.auth.ISlice;
+import wap.api.rest.crawling.bds.contact.beans.ContactPresenter;
 import wap.api.rest.crawling.bds.customer.beans.CustomerPresenter;
+
+import java.util.List;
 
 /**
  * Created by haoho on 10/17/18 16:27.
@@ -40,5 +42,16 @@ public class CustomerResource {
   ){
 
     return this.customerService.getCustomers(pageable, name, phone, email);
+  }
+
+
+  @PostMapping("/update")
+  public ResponseEntity updateCustomers(
+      @RequestBody List<CustomerPresenter> customers
+  ){
+
+    customerService.updateCustomers(customers);
+
+    return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 }

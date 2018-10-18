@@ -13,6 +13,7 @@ public class CustomerPresenter {
   private Date latestExportAt;
   private Date createdAt;
   private Date updatedAt;
+  private Boolean updated = false;
 
   public Long getId() {
     return id;
@@ -68,5 +69,13 @@ public class CustomerPresenter {
 
   public void setUpdatedAt(Date updatedAt) {
     this.updatedAt = updatedAt;
+  }
+
+  public Boolean getUpdated() {
+    return updated;
+  }
+
+  public void setUpdated(Boolean updated) {
+    this.updated = updated;
   }
 }

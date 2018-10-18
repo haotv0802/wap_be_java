@@ -116,6 +116,28 @@ public class CustomerDao implements ICustomerDao {
     return customers;
   }
 
+  @Override
+  public void updateCustomer(CustomerPresenter customer) {
+    final String sql =
+              "UPDATE crwlr_customers           "
+            + "SET                              "
+            + "    name = :name,                "
+            + "    phone = :phone,              "
+            + "    email = :email               "
+            + "WHERE                            "
+            + "    id = :id                     "
+        ;
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("name", customer.getName());
+    paramsMap.addValue("phone", customer.getPhone());
+    paramsMap.addValue("email", customer.getEmail());
+    paramsMap.addValue("id", customer.getId());
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    namedTemplate.update(sql, paramsMap);
+  }
+
   private String buildSQLWithPaging(String sql, Pageable pageable) {
     final DaoUtils.PagingIndex pi = DaoUtils.pagingIdxForSlice(pageable);
     String fooSql = String.format(

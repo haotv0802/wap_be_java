@@ -8,6 +8,8 @@ import org.springframework.util.Assert;
 import wap.api.rest.auth.ISlice;
 import wap.api.rest.crawling.bds.customer.beans.CustomerPresenter;
 
+import java.util.List;
+
 /**
  * Created by haoho on 10/17/18 16:38.
  */
@@ -27,5 +29,14 @@ public class CustomerService implements ICustomerService {
   public ISlice<CustomerPresenter> getCustomers(Pageable pageable, String name, String phone, String email) {
 
     return this.customerDao.getCusomters(pageable, name, phone, email);
+  }
+
+  @Override
+  public void updateCustomers(List<CustomerPresenter> customers) {
+    for(CustomerPresenter customer : customers) {
+      if (customer.getUpdated()) {
+        customerDao.updateCustomer(customer);
+      }
+    }
   }
 }

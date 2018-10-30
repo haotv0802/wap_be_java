@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import wap.api.rest.auth.ISlice;
+import wap.api.rest.crawling.bds.customer.beans.CustomerAdd;
 import wap.api.rest.crawling.bds.customer.beans.CustomerPresenter;
 
 import java.util.List;
@@ -54,9 +55,9 @@ public class CustomerResource {
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
-  @PutMapping("/add")
+  @PostMapping("/add")
   public ResponseEntity addCustomer(
-      @RequestBody CustomerPresenter customer
+      @RequestBody CustomerAdd customer
   ) {
 
     Long id = customerService.addCustomer(customer);

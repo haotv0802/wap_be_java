@@ -2,6 +2,7 @@ package wap.api.rest.crawling.bds.customer;
 
 import org.springframework.data.domain.Pageable;
 import wap.api.rest.auth.ISlice;
+import wap.api.rest.crawling.bds.customer.beans.CustomerAdd;
 import wap.api.rest.crawling.bds.customer.beans.CustomerPresenter;
 
 import java.util.List;
@@ -14,5 +15,5 @@ public interface ICustomerService {
 
   void updateCustomers(List<CustomerPresenter> customers);
 
-  Long addCustomer(CustomerPresenter customer);
+  Long addCustomer(CustomerAdd customer);
 }

@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import wap.api.rest.auth.ISlice;
+import wap.api.rest.crawling.bds.customer.beans.CustomerAdd;
 import wap.api.rest.crawling.bds.customer.beans.CustomerPresenter;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public class CustomerService implements ICustomerService {
   }
 
   @Override
-  public Long addCustomer(CustomerPresenter customer) {
+  public Long addCustomer(CustomerAdd customer) {
     return customerDao.addCustomer(customer);
   }
 }

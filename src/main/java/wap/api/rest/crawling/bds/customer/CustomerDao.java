@@ -13,6 +13,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import wap.api.rest.auth.ISlice;
 import wap.api.rest.auth.Slice;
+import wap.api.rest.crawling.bds.customer.beans.CustomerAdd;
 import wap.api.rest.crawling.bds.customer.beans.CustomerPresenter;
 import wap.common.WapStringUtils;
 import wap.common.dao.DaoUtils;
@@ -141,7 +142,7 @@ public class CustomerDao implements ICustomerDao {
   }
 
   @Override
-  public Long addCustomer(CustomerPresenter customer) {
+  public Long addCustomer(CustomerAdd customer) {
     final String sql = "INSERT INTO crwlr_customers (name, phone, email) values (:name, :phone, :email)";
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();

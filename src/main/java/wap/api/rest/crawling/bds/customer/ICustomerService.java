@@ -16,4 +16,6 @@ public interface ICustomerService {
   void updateCustomers(List<CustomerPresenter> customers);
 
   Long addCustomer(CustomerAdd customer);
+
+  void deleteCustomers(List<String> customers);
 }

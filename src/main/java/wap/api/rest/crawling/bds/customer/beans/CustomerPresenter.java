@@ -14,6 +14,7 @@ public class CustomerPresenter {
   private Date createdAt;
   private Date updatedAt;
   private Boolean updated = false;
+  private Boolean isDeleted = false;
 
   public Long getId() {
     return id;
@@ -77,5 +78,13 @@ public class CustomerPresenter {
 
   public void setUpdated(Boolean updated) {
     this.updated = updated;
+  }
+
+  public Boolean getDeleted() {
+    return isDeleted;
+  }
+
+  public void setDeleted(Boolean deleted) {
+    isDeleted = deleted;
   }
 }

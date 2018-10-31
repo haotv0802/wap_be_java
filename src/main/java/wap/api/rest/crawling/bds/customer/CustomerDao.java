@@ -157,6 +157,16 @@ public class CustomerDao implements ICustomerDao {
     return keyHolder.getKey().longValue();
   }
 
+  @Override
+  public void deleteCustomer(int customerId) {
+    final String sql = "DELETE FROM crwlr_customers where id = :id";
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("id", customerId);
+
+    namedTemplate.update(sql, paramsMap);
+  }
+
   private String buildSQLWithPaging(String sql, Pageable pageable) {
     final DaoUtils.PagingIndex pi = DaoUtils.pagingIdxForSlice(pageable);
     String fooSql = String.format(

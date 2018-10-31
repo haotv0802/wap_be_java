@@ -64,4 +64,13 @@ public class CustomerResource {
 
     return new ResponseEntity<>(id, HttpStatus.CREATED);
   }
+
+  @PostMapping("/delete")
+  public ResponseEntity deleteCustomers(
+      @RequestBody List<String> customers
+  ) {
+    customerService.deleteCustomers(customers);
+
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+  }
 }

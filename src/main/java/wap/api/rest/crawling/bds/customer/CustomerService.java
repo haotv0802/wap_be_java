@@ -45,4 +45,18 @@ public class CustomerService implements ICustomerService {
   public Long addCustomer(CustomerAdd customer) {
     return customerDao.addCustomer(customer);
   }
+
+  @Override
+  public void deleteCustomers(List<String> customers) {
+    for(String id : customers) {
+      int customerId = -1;
+      try {
+        customerId = Integer.parseInt(id);
+      } catch (NumberFormatException ex) {
+        ex.printStackTrace();
+      }
+      if (customerId != -1)
+        customerDao.deleteCustomer(customerId);
+    }
+  }
 }

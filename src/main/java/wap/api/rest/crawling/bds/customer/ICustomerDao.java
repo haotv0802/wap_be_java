@@ -14,4 +14,6 @@ public interface ICustomerDao {
   void updateCustomer(CustomerPresenter customer);
 
   Long addCustomer(CustomerAdd customer);
+
+  void deleteCustomer(int customerId);
 }

@@ -33,7 +33,7 @@ public class ContactDao implements IContactDao {
     this.namedTemplate = namedTemplate;
   }
 
-  private int getContactsCount(String name, String phone, String email, String type, String manualCheck, Boolean emailExisting) {
+  private int getContactsCount(String name, String phone, String email, String type, String manualCheck, String emailExisting) {
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     String whereClause = "";
 
@@ -57,9 +57,14 @@ public class ContactDao implements IContactDao {
       whereClause += "AND manual_check = :manualCheck ";
       paramsMap.addValue("manualCheck", manualCheck);
     }
-    if (null != emailExisting) {
-      whereClause += "AND email_existing = :emailExisting ";
-      paramsMap.addValue("emailExisting", emailExisting);
+    if (null != emailExisting && !StringUtils.isEmpty(emailExisting)) {
+      if (emailExisting.equals("NA")) {
+        whereClause += "AND email_existing IS NULL";
+      } else {
+        whereClause += "AND email_existing = :emailExisting ";
+        paramsMap.addValue("emailExisting", emailExisting.equals("YES"));
+      }
+
     }
 
     final String sql = String.format("SELECT COUNT(*) FROM crwlr_contacts WHERE 1 = 1  %s", whereClause);
@@ -70,7 +75,7 @@ public class ContactDao implements IContactDao {
   }
 
   @Override
-  public ISlice<ContactPresenter> getContacts(Pageable pageable, String name, String phone, String email, String type, String manualCheck, Boolean emailExisting) {
+  public ISlice<ContactPresenter> getContacts(Pageable pageable, String name, String phone, String email, String type, String manualCheck, String emailExisting) {
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     String whereClause = "";
 
@@ -94,9 +99,13 @@ public class ContactDao implements IContactDao {
       whereClause += "AND manual_check = :manualCheck ";
       paramsMap.addValue("manualCheck", manualCheck);
     }
-    if (null != emailExisting) {
-      whereClause += "AND email_existing = :emailExisting ";
-      paramsMap.addValue("emailExisting", emailExisting);
+    if (null != emailExisting && !StringUtils.isEmpty(emailExisting)) {
+      if (emailExisting.equals("NA")) {
+        whereClause += "AND email_existing IS NULL";
+      } else {
+        whereClause += "AND email_existing = :emailExisting ";
+        paramsMap.addValue("emailExisting", emailExisting.equals("YES"));
+      }
     }
 
 
@@ -132,7 +141,16 @@ public class ContactDao implements IContactDao {
       contactPresenter.setEmail(rs.getString("email"));
       contactPresenter.setType(rs.getString("type"));
       contactPresenter.setManualCheck(rs.getString("manual_check"));
-      contactPresenter.setEmailExisting(rs.getBoolean("email_existing"));
+      String emailExistingAsString;
+      LOGGER.info(rs.getString("email_existing"));
+      if (rs.getString("email_existing") == null) {
+        emailExistingAsString = "NA";
+      } else if (rs.getString("email_existing").equals("0")) {
+        emailExistingAsString = "NO";
+      } else {
+        emailExistingAsString = "YES";
+      }
+      contactPresenter.setEmailExisting(emailExistingAsString);
       contactPresenter.setLatestItemPostedAt(rs.getDate("latest_item_posted_on"));
       contactPresenter.setCreatedAt(rs.getDate("created_at"));
       contactPresenter.setUpdatedAt(rs.getDate("updated_at"));
@@ -160,6 +178,7 @@ public class ContactDao implements IContactDao {
             + "    name = :name,                "
             + "    phone = :phone,              "
             + "    email = :email,              "
+            + "    description = :description,  "
             + "    description = :description   "
             + "WHERE                            "
             + "    id = :id                     "

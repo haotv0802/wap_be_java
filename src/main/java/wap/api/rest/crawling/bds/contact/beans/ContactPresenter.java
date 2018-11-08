@@ -12,7 +12,7 @@ public class ContactPresenter {
   private String email;
   private String type;
   private String manualCheck;
-  private Boolean emailExisting;
+  private String emailExisting;
   private Date latestItemPostedAt;
   private Date createdAt;
   private Date updatedAt;
@@ -67,11 +67,11 @@ public class ContactPresenter {
     this.manualCheck = manualCheck;
   }
 
-  public Boolean getEmailExisting() {
+  public String getEmailExisting() {
     return emailExisting;
   }
 
-  public void setEmailExisting(Boolean emailExisting) {
+  public void setEmailExisting(String emailExisting) {
     this.emailExisting = emailExisting;
   }
 

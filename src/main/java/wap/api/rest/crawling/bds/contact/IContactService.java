@@ -10,6 +10,6 @@ import java.util.List;
  * Created by haoho on 5/8/18 09:38.
  */
 public interface IContactService {
-  ISlice<ContactPresenter> getContacts(Pageable pageable, String name, String phone, String email, String type, String manualCheck, Boolean emailExisting);
+  ISlice<ContactPresenter> getContacts(Pageable pageable, String name, String phone, String email, String type, String manualCheck, String emailExisting);
   void updateContacts(List<ContactPresenter> contacts);
 }

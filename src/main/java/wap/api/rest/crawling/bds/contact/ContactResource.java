@@ -41,7 +41,7 @@ public class ContactResource {
       @RequestParam(value = "email", required = false) String email,
       @RequestParam(value = "type", required = false) String type,
       @RequestParam(value = "manualCheck", required = false) String manualCheck,
-      @RequestParam(value = "emailExisting", required = false) Boolean emailExisting
+      @RequestParam(value = "emailExisting", required = false) String emailExisting
       ){
     return this.contactService.getContacts(pageable, name, phone, email, type, manualCheck, emailExisting);
   }

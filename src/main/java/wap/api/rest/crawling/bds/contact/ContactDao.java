@@ -187,15 +187,17 @@ public class ContactDao implements IContactDao {
   @Override
   public void updateContact(ContactPresenter contact) {
     final String sql =
-              "UPDATE crwlr_contacts            "
-            + "SET                              "
-            + "    name = :name,                "
-            + "    phone = :phone,              "
-            + "    email = :email,              "
-            + "    description = :description,  "
-            + "    description = :description   "
-            + "WHERE                            "
-            + "    id = :id                     "
+              "UPDATE crwlr_contacts                "
+            + "SET                                  "
+            + "    name = :name,                    "
+            + "    phone = :phone,                  "
+            + "    email = :email,                  "
+            + "    description = :description,      "
+            + "    type = :type,                    "
+            + "    manual_check = :manual_check,    "
+            + "    email_existing = :email_existing "
+            + "WHERE                                "
+            + "    id = :id                         "
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("name", contact.getName());
@@ -203,6 +205,28 @@ public class ContactDao implements IContactDao {
     paramsMap.addValue("email", contact.getEmail());
     paramsMap.addValue("description", contact.getDescription());
     paramsMap.addValue("id", contact.getId());
+
+    if (null != contact.getType() && !StringUtils.isEmpty(contact.getType())) {
+      paramsMap.addValue("type", contact.getType());
+    } else {
+      paramsMap.addValue("type", null);
+    }
+
+    if (null != contact.getManualCheck() && !StringUtils.isEmpty(contact.getManualCheck())) {
+      paramsMap.addValue("manual_check", contact.getManualCheck());
+    } else {
+      paramsMap.addValue("manual_check", null);
+    }
+
+    if (null != contact.getEmailExisting() && !StringUtils.isEmpty(contact.getEmailExisting()) && !contact.getEmailExisting().equals("NA")) {
+      if (contact.getEmailExisting().equals("YES"))
+        paramsMap.addValue("email_existing", true);
+      else if (contact.getEmailExisting().equals("NO")) {
+        paramsMap.addValue("email_existing", false);
+      }
+    } else {
+      paramsMap.addValue("email_existing", null);
+    }
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 

@@ -54,8 +54,12 @@ public class ContactDao implements IContactDao {
       paramsMap.addValue("type", type);
     }
     if (!StringUtils.isEmpty(manualCheck)) {
-      whereClause += "AND manual_check = :manualCheck ";
-      paramsMap.addValue("manualCheck", manualCheck);
+      if (manualCheck.equals("NA")) {
+        whereClause += "AND manual_check IS NULL ";
+      } else {
+        whereClause += "AND manual_check = :manualCheck ";
+        paramsMap.addValue("manualCheck", manualCheck);
+      }
     }
     if (null != emailExisting && !StringUtils.isEmpty(emailExisting)) {
       if (emailExisting.equals("NA")) {
@@ -96,8 +100,12 @@ public class ContactDao implements IContactDao {
       paramsMap.addValue("type", type);
     }
     if (!StringUtils.isEmpty(manualCheck)) {
-      whereClause += "AND manual_check = :manualCheck ";
-      paramsMap.addValue("manualCheck", manualCheck);
+      if (manualCheck.equals("NA")) {
+        whereClause += "AND manual_check IS NULL ";
+      } else {
+        whereClause += "AND manual_check = :manualCheck ";
+        paramsMap.addValue("manualCheck", manualCheck);
+      }
     }
     if (null != emailExisting && !StringUtils.isEmpty(emailExisting)) {
       if (emailExisting.equals("NA")) {
@@ -140,9 +148,15 @@ public class ContactDao implements IContactDao {
       contactPresenter.setPhone(rs.getString("phone"));
       contactPresenter.setEmail(rs.getString("email"));
       contactPresenter.setType(rs.getString("type"));
-      contactPresenter.setManualCheck(rs.getString("manual_check"));
+
+      if (rs.getString("manual_check") == null) {
+        contactPresenter.setManualCheck("NA");
+      } else {
+        contactPresenter.setManualCheck(rs.getString("manual_check"));
+      }
+
+
       String emailExistingAsString;
-      LOGGER.info(rs.getString("email_existing"));
       if (rs.getString("email_existing") == null) {
         emailExistingAsString = "NA";
       } else if (rs.getString("email_existing").equals("0")) {

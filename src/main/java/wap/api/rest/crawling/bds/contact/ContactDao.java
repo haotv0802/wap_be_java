@@ -138,8 +138,6 @@ public class ContactDao implements IContactDao {
 
     String fooSQL = buildSQLWithPaging(sql, pageable);
 
-
-
     DaoUtils.debugQuery(LOGGER, fooSQL, paramsMap.getValues());
     List<ContactPresenter> list = namedTemplate.query(fooSQL, paramsMap, (rs, i) -> {
       ContactPresenter contactPresenter = new ContactPresenter();

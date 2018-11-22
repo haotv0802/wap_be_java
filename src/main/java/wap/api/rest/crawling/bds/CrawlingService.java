@@ -150,7 +150,7 @@ public class CrawlingService implements ICrawlingService {
       do {
         LOGGER.info(">>> Get links on page: " + currentPage);
         try {
-          Thread.sleep(2500);
+          Thread.sleep(1800);
         } catch (InterruptedException ex) {
           ex.printStackTrace();
         }

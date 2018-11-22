@@ -42,6 +42,23 @@ public class CrawledDataResource {
     return crawledDataService.getAllItems(pageable);
   }
 
+  @GetMapping("/crawler/crawledData/{isSale}")
+  public List<ItemPresenter> getCrawledDataAsSale(
+      @PathVariable ("isSale") boolean isSale,
+      Pageable pageable
+  ) {
+    return crawledDataService.getAllItems(pageable, isSale);
+  }
+
+
+  @GetMapping("/crawler/crawledData/{isSale}/count")
+  public Integer getCrawledDataAsSaleAndCount(
+      @PathVariable ("isSale") boolean isSale,
+      Pageable pageable
+  ) {
+    return crawledDataService.getAllItems(pageable, isSale).size();
+  }
+
   @PostMapping("/crawler/crawledData")
   public List<ItemPresenter> getCrawledDataByCriterion(
       @RequestBody Criterion criterion

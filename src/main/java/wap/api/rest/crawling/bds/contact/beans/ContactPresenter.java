@@ -11,6 +11,7 @@ public class ContactPresenter {
   private String phone;
   private String email;
   private String type;
+  private Integer postsCount;
   private String manualCheck;
   private String emailExisting;
   private Date latestItemPostedAt;
@@ -113,5 +114,13 @@ public class ContactPresenter {
 
   public void setUpdated(Boolean updated) {
     this.updated = updated;
+  }
+
+  public Integer getPostsCount() {
+    return postsCount;
+  }
+
+  public void setPostsCount(Integer postsCount) {
+    this.postsCount = postsCount;
   }
 }

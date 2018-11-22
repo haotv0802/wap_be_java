@@ -30,4 +30,15 @@ public class BDSCrawledResourceTest extends TestBase {
         .andExpect(status().is(200))
     ;
   }
+
+  @Test
+  public void testGetCrawledDataAsSale() throws Exception {
+    mockMvc
+        .perform(get("/svc/bds/crawler/crawledData/true")
+            .param("page", "1")
+            .param("size", "1000")
+        )
+        .andExpect(status().is(200))
+    ;
+  }
 }

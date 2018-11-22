@@ -118,20 +118,21 @@ public class ContactDao implements IContactDao {
 
 
     String sql = String.format(
-        "SELECT                    "
-      + "    id,                   "
-      + "    name,                 "
-      + "    phone,                "
-      + "    email,                "
-      + "    type,                 "
-      + "    manual_check,         "
-      + "    email_existing,       "
-      + "    latest_item_posted_on,"
-      + "    created_at,           "
-      + "    updated_at,           "
-      + "    description           "
-      + " FROM                     "
-      + "    crwlr_contacts        "
+        "SELECT                                                                     "
+      + "    id,                                                                    "
+      + " (SELECT COUNT(*) FROM crwlr_posts p WHERE contact_id = c.id) posts_count, "
+      + "    name,                                                                  "
+      + "    phone,                                                                 "
+      + "    email,                                                                 "
+      + "    type,                                                                  "
+      + "    manual_check,                                                          "
+      + "    email_existing,                                                        "
+      + "    latest_item_posted_on,                                                 "
+      + "    created_at,                                                            "
+      + "    updated_at,                                                            "
+      + "    description                                                            "
+      + " FROM                                                                      "
+      + "    crwlr_contacts c                                                       "
       + " WHERE 1 = 1   %s         ", whereClause)
 //            + "WHERE email <> '' and manual_check is not null"
         ;
@@ -146,6 +147,7 @@ public class ContactDao implements IContactDao {
       contactPresenter.setPhone(rs.getString("phone"));
       contactPresenter.setEmail(rs.getString("email"));
       contactPresenter.setType(rs.getString("type"));
+      contactPresenter.setPostsCount(rs.getInt("posts_count"));
 
       if (rs.getString("manual_check") == null) {
         contactPresenter.setManualCheck("NA");

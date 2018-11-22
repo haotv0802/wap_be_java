@@ -15,6 +15,8 @@ import java.util.List;
 public interface ICrawledDataService {
   List<ItemPresenter> getAllItems(Pageable pageable);
 
+  List<ItemPresenter> getAllItems(Pageable pageable, boolean isSale);
+
   List<ItemPresenter> getAllItemsByCriterion(Criterion criterion);
 
   List<ItemPresenter> exportCrawledData(Criterion criterion) throws IOException;

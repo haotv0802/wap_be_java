@@ -4,6 +4,29 @@ import org.springframework.stereotype.Service;
 
 @Service("bdsBusinessService")
 public class BusinessService {
+
+  public boolean isSale(String title) {
+    title = title.toLowerCase();
+    if (title.contains("can ban")
+        || title.contains("can ho")
+        || title.contains("chung cu")
+        || title.contains("sang nhuong")
+        || title.contains("suat noi bo")
+        || title.contains("chuyen nhuong")
+        || title.contains("gio hang")
+        || title.contains("sang lai can")
+        || title.contains("ki gui")
+        || title.contains("dau tu")
+        || title.contains("ban ch ")
+        || title.contains("vinhomes")
+        || title.contains("richstar")
+        || title.contains("chu dau tu")
+    ) {
+     return true;
+    }
+    return false;
+  }
+
   public boolean isSale(String name, String email) {
     name = name.toLowerCase();
     email = email.toLowerCase();

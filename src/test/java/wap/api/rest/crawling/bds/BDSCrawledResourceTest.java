@@ -34,7 +34,7 @@ public class BDSCrawledResourceTest extends TestBase {
   @Test
   public void testGetCrawledDataAsSale() throws Exception {
     mockMvc
-        .perform(get("/svc/bds/crawler/crawledData/true")
+        .perform(get("/svc/bds/crawler/crawledData/SALE")
             .param("page", "1")
             .param("size", "1000")
         )

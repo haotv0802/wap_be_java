@@ -64,11 +64,13 @@ public class CrawledDataService implements ICrawledDataService {
   }
 
   @Override
-  public List<ItemPresenter> getAllItems(Pageable pageable, boolean isSale) {
+  public List<ItemPresenter> getAllItems(Pageable pageable, String type) {
     List<ItemPresenter> crawledData = new ArrayList<>();
     List<ItemPresenter> list = this.crawledDataDao.getAllPosts(pageable);
     for (ItemPresenter item : list) {
-      if (businessService.isSale(item.getTitle()) == isSale) {
+      if (businessService.isSale(item.getTitle()) && type.equals("SALE")) {
+        crawledData.add(item);
+      } else if (!businessService.isSale(item.getTitle()) && type.equals("OWNER")) {
         crawledData.add(item);
       }
     }

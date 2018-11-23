@@ -1,5 +1,6 @@
 package wap.api.rest.crawling.bds;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 @Service("bdsBusinessService")
@@ -7,20 +8,11 @@ public class BusinessService {
 
   public boolean isSale(String title) {
     title = title.toLowerCase();
-    if (title.contains("can ban")
-        || title.contains("can ho")
-        || title.contains("chung cu")
-        || title.contains("sang nhuong")
-        || title.contains("suat noi bo")
+    title = StringUtils.stripAccents(title);
+    if (   title.contains("suat noi bo")
         || title.contains("chuyen nhuong")
         || title.contains("gio hang")
         || title.contains("sang lai can")
-        || title.contains("ki gui")
-        || title.contains("dau tu")
-        || title.contains("ban ch ")
-        || title.contains("vinhomes")
-        || title.contains("richstar")
-        || title.contains("chu dau tu")
     ) {
      return true;
     }
@@ -29,7 +21,10 @@ public class BusinessService {
 
   public boolean isSale(String name, String email) {
     name = name.toLowerCase();
+    name = StringUtils.stripAccents(name);
+
     email = email.toLowerCase();
+    email = StringUtils.stripAccents(email);
     if (name.contains("real")
         || name.contains("land")
         || name.contains("moi gioi")
@@ -95,13 +90,14 @@ public class BusinessService {
   }
 
   public String getBusinessType(String businessType) {
-    if (businessType.equalsIgnoreCase("ban")) {
+    String type = StringUtils.stripAccents(businessType.toLowerCase());
+    if (type.equalsIgnoreCase("ban")) {
       return "SELLING";
-    } else if (businessType.equalsIgnoreCase("cho thue")) {
+    } else if (type.equalsIgnoreCase("cho thue")) {
       return "FOR RENT";
-    } else if (businessType.equalsIgnoreCase("can thue")) {
+    } else if (type.equalsIgnoreCase("can thue")) {
       return "RENT";
-    } else if (businessType.equalsIgnoreCase("mua")) {
+    } else if (type.equalsIgnoreCase("mua")) {
       return "BUYING";
     } else {
       return null;
@@ -109,23 +105,24 @@ public class BusinessService {
   }
 
   public String getPropertyType(String propertyType) {
-    if (propertyType.equalsIgnoreCase("nha rieng")) {
+    String type = StringUtils.stripAccents(propertyType.toLowerCase());
+    if (type.equalsIgnoreCase("nha rieng")) {
       return "HOUSE";
-    } else if (propertyType.equalsIgnoreCase("can ho chung cu")) {
+    } else if (type.equalsIgnoreCase("can ho chung cu")) {
       return "APARTMENT";
-    } else if (propertyType.equalsIgnoreCase("nha mat pho")) {
+    } else if (type.equalsIgnoreCase("nha mat pho")) {
       return "BIG HOUSE";
-    } else if (propertyType.equalsIgnoreCase("nha biet thu, lien ke")) {
+    } else if (type.equalsIgnoreCase("nha biet thu, lien ke")) {
       return "VILLA";
-    } else if (propertyType.equalsIgnoreCase("dat nen du an") || propertyType.equalsIgnoreCase("đat nen du an")) {
+    } else if (type.equalsIgnoreCase("dat nen du an") || type.equalsIgnoreCase("đat nen du an")) {
       return "PROJECT LAND";
-    } else if (propertyType.equalsIgnoreCase("dat") || propertyType.equalsIgnoreCase("đat")) {
+    } else if (type.equalsIgnoreCase("dat") || type.equalsIgnoreCase("đat")) {
       return "LAND";
-    } else if (propertyType.equalsIgnoreCase("trang trai, khu nghi duong")) {
+    } else if (type.equalsIgnoreCase("trang trai, khu nghi duong")) {
       return "FARM, RESORT";
-    } else if (propertyType.equalsIgnoreCase("kho, nha xuong")) {
+    } else if (type.equalsIgnoreCase("kho, nha xuong")) {
       return "WAREHOUSE";
-    } else if (propertyType.equalsIgnoreCase("loai bat dong san khac") || propertyType.equalsIgnoreCase("loai bat đong san khac")) {
+    } else if (type.equalsIgnoreCase("loai bat dong san khac") || type.equalsIgnoreCase("loai bat đong san khac")) {
       return "OTHER";
     } else {
       return null;

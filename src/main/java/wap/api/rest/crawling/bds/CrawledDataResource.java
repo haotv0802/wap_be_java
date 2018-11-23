@@ -42,21 +42,23 @@ public class CrawledDataResource {
     return crawledDataService.getAllItems(pageable);
   }
 
-  @GetMapping("/crawler/crawledData/{isSale}")
+  @GetMapping("/crawler/crawledData/{type}")
   public List<ItemPresenter> getCrawledDataAsSale(
-      @PathVariable ("isSale") boolean isSale,
+      @PathVariable ("type") String type,
       Pageable pageable
   ) {
-    return crawledDataService.getAllItems(pageable, isSale);
+    LOGGER.info("{type} service");
+    return crawledDataService.getAllItems(pageable, type);
   }
 
 
-  @GetMapping("/crawler/crawledData/{isSale}/count")
+  @GetMapping("/crawler/crawledData/{type}/count")
   public Integer getCrawledDataAsSaleAndCount(
-      @PathVariable ("isSale") boolean isSale,
+      @PathVariable ("type") String type,
       Pageable pageable
   ) {
-    return crawledDataService.getAllItems(pageable, isSale).size();
+    LOGGER.info("{type} count service");
+    return crawledDataService.getAllItems(pageable, type).size();
   }
 
   @PostMapping("/crawler/crawledData")

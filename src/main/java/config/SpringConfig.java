@@ -29,6 +29,7 @@ import org.springframework.session.web.http.HttpSessionStrategy;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.*;
 
 import javax.sql.DataSource;
@@ -159,5 +160,11 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     return new NamedParameterJdbcTemplate(dataSource());
   }
 
+  @Bean(name = "multipartResolver")
+  public CommonsMultipartResolver createMultipartResolver() {
+    CommonsMultipartResolver resolver=new CommonsMultipartResolver();
+    resolver.setDefaultEncoding("utf-8");
+    return resolver;
+  }
 
 }

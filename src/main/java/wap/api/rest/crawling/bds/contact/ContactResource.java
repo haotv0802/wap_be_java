@@ -9,9 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import wap.api.rest.auth.ISlice;
 import wap.api.rest.crawling.bds.contact.beans.ContactPresenter;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -52,6 +54,16 @@ public class ContactResource {
 
     contactService.updateContacts(contacts);
 
+    return new ResponseEntity(HttpStatus.NO_CONTENT);
+  }
+
+  @PostMapping("/update/emailStatus/{status}/csv")
+  public ResponseEntity updateEmailStatusWithCSV(
+      @PathVariable("status") String status,
+      @RequestParam("csvFile")MultipartFile csvFile
+      ) throws IOException {
+
+    this.contactService.updateEmailStatusWithCSV(csvFile.getInputStream(), status);
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 }

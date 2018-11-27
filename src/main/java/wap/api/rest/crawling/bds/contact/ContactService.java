@@ -8,7 +8,9 @@ import org.springframework.util.Assert;
 import wap.api.rest.auth.ISlice;
 import wap.api.rest.crawling.bds.contact.beans.ContactPresenter;
 
+import java.io.InputStream;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Created by haoho on 5/8/18 09:53.
@@ -17,6 +19,7 @@ import java.util.List;
 public class ContactService implements IContactService {
 
   private final IContactDao contactDao;
+  private static final char DEFAULT_SEPARATOR = ',';
 
   @Autowired
   public ContactService(@Qualifier("bdsContactDao") IContactDao contactDao) {
@@ -32,10 +35,25 @@ public class ContactService implements IContactService {
 
   @Override
   public void updateContacts(List<ContactPresenter> contacts) {
-    for(ContactPresenter contact : contacts) {
+    for (ContactPresenter contact : contacts) {
       if (contact.getUpdated()) {
         contactDao.updateContact(contact);
       }
     }
   }
+
+  @Override
+  public void updateEmailStatusWithCSV(InputStream inputStream, String status) {
+    Scanner scanner = new Scanner(inputStream);
+    while (scanner.hasNext()) {
+      String[] line = scanner.nextLine().split(";");
+      if (line[0].equals("subscriber_id")) {
+        continue;
+      }
+      System.out.println("subid: " + line[0] + ", email: " + line[1] + " , phone:" + line[2]);
+      this.contactDao.updateEmailStatus(line[1].trim(), status);
+    }
+    scanner.close();
+  }
+
 }

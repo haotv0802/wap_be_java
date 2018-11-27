@@ -233,6 +233,20 @@ public class ContactDao implements IContactDao {
     namedTemplate.update(sql, paramsMap);
   }
 
+  @Override
+  public void updateEmailStatus(String email, String status) {
+    final String sql = "UPDATE crwlr_contacts SET email_existing = :status, updated_at = now() WHERE email = :email ";
+
+    LOGGER.info("status: " + status.equals("YES"));
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("status", status.equals("YES"));
+    paramsMap.addValue("email", email);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    namedTemplate.update(sql, paramsMap);
+  }
+
   private String buildSQLWithPaging(String sql, Pageable pageable) {
     final DaoUtils.PagingIndex pi = DaoUtils.pagingIdxForSlice(pageable);
     String fooSql = String.format(

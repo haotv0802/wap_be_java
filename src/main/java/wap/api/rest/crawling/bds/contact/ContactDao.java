@@ -139,6 +139,7 @@ public class ContactDao implements IContactDao {
 
     String fooSQL = buildSQLWithPaging(sql, pageable);
 
+
     DaoUtils.debugQuery(LOGGER, fooSQL, paramsMap.getValues());
     List<ContactPresenter> list = namedTemplate.query(fooSQL, paramsMap, (rs, i) -> {
       ContactPresenter contactPresenter = new ContactPresenter();
@@ -249,6 +250,7 @@ public class ContactDao implements IContactDao {
 
   private String buildSQLWithPaging(String sql, Pageable pageable) {
     final DaoUtils.PagingIndex pi = DaoUtils.pagingIdxForSlice(pageable);
+    LOGGER.info("Sorting: " + getItemsSearchOrder(pageable.getSort()));
     String fooSql = String.format(
         "SELECT foo.* FROM   "
       + "(                   "
@@ -268,7 +270,7 @@ public class ContactDao implements IContactDao {
 
   private String getItemsSearchOrder(Sort sort) {
 
-    String validOrders = "name";
+    String validOrders = "name,phone,posts_count";
     String defaultOrderClause = " name ASC";
 
     return WapStringUtils.populateOrderBy(sort, validOrders, defaultOrderClause);

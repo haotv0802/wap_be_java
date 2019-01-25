@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import wap.api.rest.auth.ISlice;
 import wap.api.rest.crawling.bds.post.beans.PostPresenter;
+import wap.api.rest.crawling.bds.post.beans.PostReportPresenter;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by haoho on 11/9/18 11:41.
@@ -41,4 +46,15 @@ public class PostResource {
     return this.postService.getPostsCountByContactId(contactId);
   }
 
+  @GetMapping("/report")
+  public PostReportPresenter getReport(
+    @RequestParam(value = "startDate") String startDate,
+    @RequestParam(value = "endDate") String endDate
+  ) throws ParseException {
+    SimpleDateFormat spdf = new SimpleDateFormat("dd/MM/yyyy");
+    Date start = spdf.parse(startDate);
+    Date end = spdf.parse(endDate);
+
+    return this.postService.getReport(start, end);
+  }
 }

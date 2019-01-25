@@ -19,4 +19,13 @@ public class BDSPostsResourceTest extends TestBase {
         .andExpect(status().is(200))
     ;
   }
+
+  @Test
+  public void testGetReport() throws Exception {
+    mockMvc
+        .perform(get("/svc/bds/post/report?startDate=01/01/2019&&endDate=25/01/2019")
+        )
+        .andExpect(status().is(200))
+    ;
+  }
 }

@@ -15,5 +15,7 @@ public interface IPostService {
 
   Integer getPostsCountByContactId(Long contactId);
 
-  PostReportPresenter getReport(Date startDate, Date endDate);
+  PostReportPresenter getReportByDate(Date startDate, Date endDate);
+
+  PostReportPresenter getReportByMonth(Integer startMonth, Integer startYear, Integer endMonth, Integer endYear);
 }

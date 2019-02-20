@@ -46,7 +46,7 @@ public class PostResource {
     return this.postService.getPostsCountByContactId(contactId);
   }
 
-  @GetMapping("/report")
+  @GetMapping("/reportbydate")
   public PostReportPresenter getReport(
     @RequestParam(value = "startDate") String startDate,
     @RequestParam(value = "endDate") String endDate
@@ -55,6 +55,17 @@ public class PostResource {
     Date start = spdf.parse(startDate);
     Date end = spdf.parse(endDate);
 
-    return this.postService.getReport(start, end);
+    return this.postService.getReportByDate(start, end);
+  }
+
+  @GetMapping("/reportbymonth")
+  public PostReportPresenter getReportByMonth(
+      @RequestParam(value = "startMonth") Integer startMonth,
+      @RequestParam(value = "startYear") Integer startYear,
+      @RequestParam(value = "endMonth") Integer endMonth,
+      @RequestParam(value = "endYear") Integer endYear
+  ) {
+
+    return this.postService.getReportByMonth(startMonth, startYear, endMonth, endYear);
   }
 }

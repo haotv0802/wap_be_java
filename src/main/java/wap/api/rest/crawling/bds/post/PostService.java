@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import wap.api.rest.auth.ISlice;
-import wap.api.rest.crawling.bds.CrawledDataDao;
 import wap.api.rest.crawling.bds.post.beans.PostPresenter;
 import wap.api.rest.crawling.bds.post.beans.PostReportPresenter;
 
@@ -45,7 +44,7 @@ public class PostService implements IPostService {
   }
 
   @Override
-  public PostReportPresenter getReport(Date startDate, Date endDate) {
+  public PostReportPresenter getReportByDate(Date startDate, Date endDate) {
 
     SimpleDateFormat spdf = new SimpleDateFormat("dd/MM/yyyy");
     SimpleDateFormat spdfQuery = new SimpleDateFormat("yyyy-MM-dd");
@@ -61,8 +60,41 @@ public class PostService implements IPostService {
       this.LOGGER.info(">>>>>>>>>>> " + date.toString());
       periods.add(spdf.format(date));
 
-      int numberOfPosts = postDao.getNumberOfReport(spdfQuery.format(date));
+      int numberOfPosts = postDao.getNumberOfPosts(spdfQuery.format(date));
       figures.add(numberOfPosts);
+    }
+
+    PostReportPresenter postReportPresenter = new PostReportPresenter();
+    postReportPresenter.setFigures(figures);
+    postReportPresenter.setPeriods(periods);
+
+    return postReportPresenter;
+  }
+
+  @Override
+  public PostReportPresenter getReportByMonth(Integer startMonth, Integer startYear, Integer endMonth, Integer endYear) {
+
+    List<String> periods = new ArrayList<>();
+    List<Integer> figures = new ArrayList<>();
+
+    for (int i = startYear; i <= endYear; i++) {
+      int end = 12;
+      int start;
+      if (i > startYear) {
+        start = 1;
+      } else {
+        start = startMonth;
+      }
+
+      if (i == endYear) {
+        end = endMonth;
+      }
+
+      for (int j = start; j <= end; j++) {
+        periods.add(String.format("%02d", j) + "/" + i);
+        int numOfPosts = postDao.getNumberOfPostsByMonth(j, i);
+        figures.add(numOfPosts);
+      }
     }
 
     PostReportPresenter postReportPresenter = new PostReportPresenter();

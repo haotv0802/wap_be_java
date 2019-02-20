@@ -13,7 +13,6 @@ import wap.api.rest.crawling.bds.post.beans.PostPresenter;
 import wap.common.WapStringUtils;
 import wap.common.dao.DaoUtils;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,11 +47,24 @@ public class PostDao implements IPostDao {
   }
 
   @Override
-  public Integer getNumberOfReport(String date) {
+  public Integer getNumberOfPosts(String date) {
     final String sql = "SELECT COUNT(*) FROM crwlr_posts WHERE publish_date = :date";
 
     final MapSqlParameterSource map = new MapSqlParameterSource();
     map.addValue("date", date);
+
+    DaoUtils.debugQuery(LOGGER, sql, map.getValues());
+
+    return namedTemplate.queryForObject(sql, map, Integer.class);
+  }
+
+  @Override
+  public Integer getNumberOfPostsByMonth(Integer month, Integer year) {
+    final String sql = "SELECT COUNT(*) FROM crwlr_posts WHERE MONTH(publish_date) = :month AND YEAR(publish_date) = :year";
+
+    final MapSqlParameterSource map = new MapSqlParameterSource();
+    map.addValue("month", month);
+    map.addValue("year", year);
 
     DaoUtils.debugQuery(LOGGER, sql, map.getValues());
 

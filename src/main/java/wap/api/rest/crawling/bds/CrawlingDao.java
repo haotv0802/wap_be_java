@@ -226,6 +226,24 @@ public class CrawlingDao implements ICrawlingDao {
   }
 
   @Override
+  public Long isItemExisting(String url, Date publishDate, Date endDate) {
+    final String sql =
+        "SELECT i.id FROM crwlr_posts i AND i.url = :url AND publish_date = :publishDate AND end_date = :endDate";
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("url", url);
+    paramsMap.addValue("publishDate", publishDate);
+    paramsMap.addValue("endDate", endDate);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+    try {
+      return namedTemplate.queryForObject(sql, paramsMap, Long.class);
+    } catch (EmptyResultDataAccessException ex) {
+      return new Long(-1);
+    }
+  }
+
+  @Override
   public Boolean isItemLinkedToCategory(Long id, Long categoryId) {
     final String sql =
           "SELECT                                           "

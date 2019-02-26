@@ -64,7 +64,7 @@ public class CrawlingService implements ICrawlingService {
       if (null != items && items.size() > 0) {
         for (Item item: items) {
           // Saving Product
-          Long itemId = crawlingDao.isItemExisting(item.getUrl());
+          Long itemId = crawlingDao.isItemExisting(item.getUrl(), item.getPublishDate(), item.getEndDate());
           //        location
           Long locationId = this.crawlingDao.isLocationExisting(item.getDistrict(), item.getCity());
           if (StringUtils.isEmpty(item.getCity()) && StringUtils.isEmpty(item.getDistrict())) {

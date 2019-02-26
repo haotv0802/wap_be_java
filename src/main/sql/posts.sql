@@ -51,3 +51,9 @@ WHERE
 GROUP BY newURL
 HAVING cnt > 1
 ;
+
+
+SELECT COUNT(*) FROM crwlr_posts WHERE MONTH(publish_date) = '01' AND YEAR(publish_date) = '2019';
+
+
+SELECT COUNT(*) FROM crwlr_posts WHERE MONTH(publish_date) = '01' AND YEAR(publish_date) = '2019';

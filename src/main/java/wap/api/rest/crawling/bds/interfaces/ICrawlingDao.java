@@ -4,6 +4,8 @@ import wap.api.rest.crawling.bds.beans.Contact;
 import wap.api.rest.crawling.bds.beans.CrawlingTracking;
 import wap.api.rest.crawling.bds.beans.Item;
 
+import java.util.Date;
+
 /**
  * Date: 10/19/2017 Time: 4:56 PM
  *
@@ -27,6 +29,8 @@ public interface ICrawlingDao {
   int contactEmailCount(String email);
 
   Long isItemExisting(String url);
+
+  Long isItemExisting(String url, Date publishDate, Date endDate);
 
   Boolean isItemLinkedToCategory(Long id, Long categoryId);
 

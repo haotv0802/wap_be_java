@@ -4,7 +4,7 @@ package wap.common;
  * Created by haho on  03/01/2019.
  * Interface for all validators
  */
-public interface Validator<T> {
+public interface WapValidator<T> {
   /**
    * @return the default exception code for any validator
    */

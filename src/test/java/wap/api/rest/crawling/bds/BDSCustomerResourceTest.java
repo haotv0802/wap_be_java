@@ -27,8 +27,8 @@ public class BDSCustomerResourceTest extends TestBase {
   @Test
   public void testAddCustomer() throws Exception {
     CustomerPresenter customer = new CustomerPresenter();
-    customer.setName("new name1");
-    customer.setEmail("");
+    customer.setName("dsdsfdsf");
+    customer.setEmail("hao@gmail.com");
     customer.setPhone("123");
 
     mockMvc

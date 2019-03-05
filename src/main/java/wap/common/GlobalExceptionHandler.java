@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import wap.common.error.IErrorService;
 
 import java.util.regex.Pattern;
 
@@ -30,14 +31,18 @@ public class GlobalExceptionHandler {
   private final ResourceBundleMessageSource messageSource;
 
   // TODO LOGGER error code into database
-//  private final IErrorService errorService;
+  private final IErrorService errorService;
 
   @Autowired
   public GlobalExceptionHandler(
-      @Qualifier("messageSource") ResourceBundleMessageSource messageSource
+      @Qualifier("messageSource") ResourceBundleMessageSource messageSource,
+      @Qualifier("errorService") IErrorService errorService
   ) {
     Assert.notNull(messageSource);
+    Assert.notNull(errorService);
+
     this.messageSource = messageSource;
+    this.errorService = errorService;
   }
 
 
@@ -50,8 +55,8 @@ public class GlobalExceptionHandler {
     Object[] context = e.getContext();
 
     ServiceFault fault = new ServiceFault(faultCode, messageSource.getMessage(faultCode, context, LocaleContextHolder.getLocale()));
-    return fault;
-//    return errorService.registerBackEndFault(fault, e.getStackTrace());
+//    return fault;
+    return errorService.registerBackEndFault(fault, e.getStackTrace());
   }
 
 

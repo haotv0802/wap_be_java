@@ -25,9 +25,17 @@ public class CustomerAddValidator implements Validator<CustomerAdd> {
   public void validate(CustomerAdd customer, String faultCode, Object... args) {
     Assert.notNull(customer);
     Assert.notNull(customer.getEmail());
+    Assert.notNull(customer.getPhone());
+    Assert.notNull(customer.getName());
 
+    if (customer.getName().isEmpty()) {
+      throw new ValidationException("customer.add.name.notnull");
+    }
+    if (customer.getPhone().isEmpty()) {
+      throw new ValidationException("customer.add.phone.notnull");
+    }
     if (customer.getEmail().isEmpty()) {
-      throw new ValidationException("expense.userId.invalid");
+      throw new ValidationException("customer.add.email.notnull");
     }
   }
 }

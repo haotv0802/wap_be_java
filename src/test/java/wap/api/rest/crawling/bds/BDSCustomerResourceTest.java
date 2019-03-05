@@ -6,7 +6,7 @@ import wap.api.rest.TestBase;
 import wap.api.rest.crawling.bds.customer.beans.CustomerPresenter;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -27,12 +27,12 @@ public class BDSCustomerResourceTest extends TestBase {
   @Test
   public void testAddCustomer() throws Exception {
     CustomerPresenter customer = new CustomerPresenter();
-    customer.setName("new name");
-    customer.setEmail("new email");
-    customer.setPhone("new phone");
+    customer.setName("new name1");
+    customer.setEmail("");
+    customer.setPhone("123");
 
     mockMvc
-        .perform(put("/svc/bds/customer/add")
+        .perform(post("/svc/bds/customer/add")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(customer))
         )

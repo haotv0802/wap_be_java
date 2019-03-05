@@ -77,6 +77,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
         "i18n.messages"
     );
     messageSource.setUseCodeAsDefaultMessage(true);
+    messageSource.setDefaultEncoding("UTF-8");
     return messageSource;
   }
 

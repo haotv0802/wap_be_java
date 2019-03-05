@@ -3,6 +3,7 @@ package wap.common;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.dao.CannotAcquireLockException;
@@ -21,19 +22,19 @@ import java.util.regex.Pattern;
  */
 @ControllerAdvice
 public class GlobalExceptionHandler {
-  private Logger log = LogManager.getLogger(getClass());
+  private final Logger LOGGER = LogManager.getLogger(getClass());
   private static final int PL_SQL_USER_DEFINED_ERR_CODE_RANGE_END = 20999;
   private static final int PL_SQL_USER_DEFINED_ERR_CODE_RANGE_START = 20000;
   private static final Pattern NEW_LINE = Pattern.compile("\\R");
 
   private final ResourceBundleMessageSource messageSource;
 
-  // TODO log error code into database
+  // TODO LOGGER error code into database
 //  private final IErrorService errorService;
 
   @Autowired
   public GlobalExceptionHandler(
-      ResourceBundleMessageSource messageSource
+      @Qualifier("messageSource") ResourceBundleMessageSource messageSource
   ) {
     Assert.notNull(messageSource);
     this.messageSource = messageSource;
@@ -44,7 +45,7 @@ public class GlobalExceptionHandler {
   @ResponseStatus(HttpStatus.BAD_REQUEST) //400
   @ResponseBody
   public ServiceFault handleConflict(ValidationException e) {
-    log.error(e.getMessage(), e);
+    LOGGER.error(e.getMessage(), e);
     String faultCode = e.getFaultCode();
     Object[] context = e.getContext();
 
@@ -57,7 +58,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(EmptyResultDataAccessException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND) // 404
   public ServiceFault handleConflict(EmptyResultDataAccessException e) {
-    log.info("Info: ", e);
+    LOGGER.info("Info: ", e);
     return new ServiceFault(HttpStatus.NOT_FOUND.toString(), e.getMessage());
 //    return errorService.registerBackEndFault(new ServiceFault(HttpStatus.NOT_FOUND.toString(), e.getMessage()), e.getStackTrace());
   }
@@ -65,7 +66,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(CannotAcquireLockException.class)
   @ResponseStatus(HttpStatus.LOCKED) // 423
   public ServiceFault handleConflict(CannotAcquireLockException e) {
-    log.info("Info:", e);
+    LOGGER.info("Info:", e);
     return new ServiceFault(HttpStatus.LOCKED.toString(), e.getMessage());
 //    return errorService.registerBackEndFault(new ServiceFault(HttpStatus.LOCKED.toString(), e.getMessage()), e.getStackTrace());
   }

@@ -270,7 +270,7 @@ public class ContactDao implements IContactDao {
 
   private String getItemsSearchOrder(Sort sort) {
 
-    String validOrders = "name,phone,posts_count";
+    String validOrders = "name,phone,posts_count,email";
     String defaultOrderClause = " name ASC";
 
     return WapStringUtils.populateOrderBy(sort, validOrders, defaultOrderClause);

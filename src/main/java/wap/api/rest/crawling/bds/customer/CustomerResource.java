@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import wap.api.rest.auth.ISlice;
 import wap.api.rest.crawling.bds.customer.beans.CustomerAdd;
 import wap.api.rest.crawling.bds.customer.beans.CustomerPresenter;
+import wap.common.Validator;
 
 import java.util.List;
 
@@ -26,11 +27,18 @@ public class CustomerResource {
 
   final private ICustomerService customerService;
 
+  final private Validator<CustomerAdd> customerAddValidator;
+
   @Autowired
-  public CustomerResource(@Qualifier("bdsCustomerService") ICustomerService customerService) {
+  public CustomerResource(
+      @Qualifier("bdsCustomerService") ICustomerService customerService,
+      @Qualifier("customerAddValidator") Validator<CustomerAdd> customerAddValidator
+  ) {
     Assert.notNull(customerService);
+    Assert.notNull(customerAddValidator);
 
     this.customerService = customerService;
+    this.customerAddValidator = customerAddValidator;
   }
 
   @GetMapping("/list")
@@ -59,6 +67,8 @@ public class CustomerResource {
   public ResponseEntity addCustomer(
       @RequestBody CustomerAdd customer
   ) {
+
+    this.customerAddValidator.validate(customer);
 
     Long id = customerService.addCustomer(customer);
 

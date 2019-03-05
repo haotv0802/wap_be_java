@@ -10,10 +10,12 @@ import com.hazelcast.core.HazelcastInstance;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.SortHandlerMethodArgumentResolver;
@@ -31,6 +33,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.*;
+import wap.common.GlobalExceptionHandler;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
@@ -65,6 +68,23 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     jsonConverter.setObjectMapper(objectMapper);
     return jsonConverter;
   }
+
+
+  @Bean(name = "messageSource")
+  public MessageSource messageSource() {
+    ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+    messageSource.setBasenames(
+        "i18n.messages"
+    );
+    messageSource.setUseCodeAsDefaultMessage(true);
+    return messageSource;
+  }
+
+
+//   @Bean
+//   public GlobalExceptionHandler createGlobalExceptionHandler() {
+//     return new GlobalExceptionHandler(message);
+//   }
 
   @Override
   public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {

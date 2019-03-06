@@ -49,15 +49,15 @@ public class CustomerAddWapValidator implements WapValidator<CustomerAdd> {
     }
 
 
-    if (customer.getName().isEmpty()) {
-      throw new ValidationException("customer.add.name.notnull");
-    }
-    if (customer.getPhone().isEmpty()) {
-      throw new ValidationException("customer.add.phone.notnull");
-    }
-    if (customer.getEmail().isEmpty()) {
-      throw new ValidationException("customer.add.email.notnull");
-    }
+//    if (customer.getName().isEmpty()) {
+//      throw new ValidationException("customer.add.name.notnull");
+//    }
+//    if (customer.getPhone().isEmpty()) {
+//      throw new ValidationException("customer.add.phone.notnull");
+//    }
+//    if (customer.getEmail().isEmpty()) {
+//      throw new ValidationException("customer.add.email.notnull");
+//    }
 
     String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
 

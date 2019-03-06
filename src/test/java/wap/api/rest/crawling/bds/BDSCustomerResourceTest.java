@@ -6,9 +6,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.testng.annotations.Test;
 import wap.api.rest.TestBase;
-import wap.api.rest.auth.ISlice;
-import wap.api.rest.auth.Slice;
-import wap.api.rest.crawling.bds.beans.Customer;
 import wap.api.rest.crawling.bds.customer.beans.CustomerPresenter;
 import wap.api.rest.crawling.bds.customer.beans.CustomerUpdate;
 
@@ -72,8 +69,8 @@ public class BDSCustomerResourceTest extends TestBase {
     List<CustomerUpdate> customerUpdateList = new ArrayList<>();
     CustomerUpdate customerUpdate = customerPresenters.get(0);
     customerUpdate.setUpdated(true);
-    customerUpdate.setName("HAO");
-//    customerUpdate.setEmail("");
+//    customerUpdate.setName("HAO");
+//    customerUpdate.setEmail("yennhi.gamudaland@gmail.com");
 
     customerUpdateList.add(customerUpdate);
 

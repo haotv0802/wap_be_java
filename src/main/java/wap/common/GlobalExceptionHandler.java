@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import wap.common.error.IErrorService;
 
+import java.util.Arrays;
 import java.util.regex.Pattern;
 
 /**
@@ -50,12 +51,15 @@ public class GlobalExceptionHandler {
   @ResponseStatus(HttpStatus.BAD_REQUEST) //400
   @ResponseBody
   public ServiceFault handleConflict(ValidationException e) {
-    LOGGER.error(e.getMessage(), e);
     String faultCode = e.getFaultCode();
     Object[] context = e.getContext();
+    LOGGER.error(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ERROR");
+    LOGGER.error(e.getMessage(), e);
+    LOGGER.error("Context: " + (e.getContext() == null ?
+        messageSource.getMessage(faultCode, context, LocaleContextHolder.getLocale()) : Arrays.toString(e.getContext())));
+    LOGGER.error("ERROR <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 
     ServiceFault fault = new ServiceFault(faultCode, messageSource.getMessage(faultCode, context, LocaleContextHolder.getLocale()));
-//    return fault;
     return errorService.registerBackEndFault(fault, e.getStackTrace());
   }
 
@@ -64,16 +68,14 @@ public class GlobalExceptionHandler {
   @ResponseStatus(HttpStatus.NOT_FOUND) // 404
   public ServiceFault handleConflict(EmptyResultDataAccessException e) {
     LOGGER.info("Info: ", e);
-    return new ServiceFault(HttpStatus.NOT_FOUND.toString(), e.getMessage());
-//    return errorService.registerBackEndFault(new ServiceFault(HttpStatus.NOT_FOUND.toString(), e.getMessage()), e.getStackTrace());
+    return errorService.registerBackEndFault(new ServiceFault(HttpStatus.NOT_FOUND.toString(), e.getMessage()), e.getStackTrace());
   }
 
   @ExceptionHandler(CannotAcquireLockException.class)
   @ResponseStatus(HttpStatus.LOCKED) // 423
   public ServiceFault handleConflict(CannotAcquireLockException e) {
     LOGGER.info("Info:", e);
-    return new ServiceFault(HttpStatus.LOCKED.toString(), e.getMessage());
-//    return errorService.registerBackEndFault(new ServiceFault(HttpStatus.LOCKED.toString(), e.getMessage()), e.getStackTrace());
+    return errorService.registerBackEndFault(new ServiceFault(HttpStatus.LOCKED.toString(), e.getMessage()), e.getStackTrace());
   }
 
 }

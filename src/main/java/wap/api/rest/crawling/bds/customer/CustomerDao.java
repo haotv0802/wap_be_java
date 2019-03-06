@@ -15,6 +15,7 @@ import wap.api.rest.auth.ISlice;
 import wap.api.rest.auth.Slice;
 import wap.api.rest.crawling.bds.customer.beans.CustomerAdd;
 import wap.api.rest.crawling.bds.customer.beans.CustomerPresenter;
+import wap.api.rest.crawling.bds.customer.beans.CustomerUpdate;
 import wap.common.WapStringUtils;
 import wap.common.dao.DaoUtils;
 
@@ -120,7 +121,7 @@ public class CustomerDao implements ICustomerDao {
   }
 
   @Override
-  public void updateCustomer(CustomerPresenter customer) {
+  public void updateCustomer(CustomerUpdate customer) {
     final String sql =
               "UPDATE crwlr_customers           "
             + "SET                              "

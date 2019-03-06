@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import wap.api.rest.auth.ISlice;
 import wap.api.rest.crawling.bds.customer.beans.CustomerAdd;
 import wap.api.rest.crawling.bds.customer.beans.CustomerPresenter;
+import wap.api.rest.crawling.bds.customer.beans.CustomerUpdate;
 import wap.common.WapValidator;
 
 import java.util.List;
@@ -29,16 +30,21 @@ public class CustomerResource {
 
   final private WapValidator<CustomerAdd> customerAddWapValidator;
 
+  final private WapValidator<List<CustomerUpdate>> customerUpdateWapValidator;
+
   @Autowired
   public CustomerResource(
       @Qualifier("bdsCustomerService") ICustomerService customerService,
-      @Qualifier("customerAddValidator") WapValidator<CustomerAdd> customerAddWapValidator
+      @Qualifier("customerAddValidator") WapValidator<CustomerAdd> customerAddWapValidator,
+      @Qualifier("customerUpdateValidator") WapValidator<List<CustomerUpdate>> customerUpdateWapValidator
   ) {
     Assert.notNull(customerService);
     Assert.notNull(customerAddWapValidator);
+    Assert.notNull(customerUpdateWapValidator);
 
     this.customerService = customerService;
     this.customerAddWapValidator = customerAddWapValidator;
+    this.customerUpdateWapValidator = customerUpdateWapValidator;
   }
 
   @GetMapping("/list")
@@ -55,8 +61,10 @@ public class CustomerResource {
 
   @PostMapping("/update")
   public ResponseEntity updateCustomers(
-      @RequestBody List<CustomerPresenter> customers
+      @RequestBody List<CustomerUpdate> customers
   ) {
+
+    this.customerUpdateWapValidator.validate(customers);
 
     customerService.updateCustomers(customers);
 

@@ -26,7 +26,7 @@ public class CustomerAddWapValidator implements WapValidator<CustomerAdd> {
 
   @Override
   public String defaultFaultCode() {
-    return "customerAddValidator";
+    return "customer.add.invalid";
   }
 
   @Override

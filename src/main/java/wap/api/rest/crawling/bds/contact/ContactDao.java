@@ -13,6 +13,7 @@ import wap.api.rest.auth.ISlice;
 import wap.api.rest.auth.Slice;
 import wap.api.rest.crawling.bds.CrawledDataDao;
 import wap.api.rest.crawling.bds.contact.beans.ContactPresenter;
+import wap.api.rest.crawling.bds.contact.beans.ContactUpdate;
 import wap.common.WapStringUtils;
 import wap.common.dao.DaoUtils;
 
@@ -186,7 +187,7 @@ public class ContactDao implements IContactDao {
   }
 
   @Override
-  public void updateContact(ContactPresenter contact) {
+  public void updateContact(ContactUpdate contact) {
     final String sql =
               "UPDATE crwlr_contacts                "
             + "SET                                  "

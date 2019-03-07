@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import wap.api.rest.auth.ISlice;
 import wap.api.rest.crawling.bds.contact.beans.ContactPresenter;
+import wap.api.rest.crawling.bds.contact.beans.ContactUpdate;
+import wap.common.WapValidator;
 
 import java.io.InputStream;
 import java.util.List;
@@ -22,7 +24,9 @@ public class ContactService implements IContactService {
   private static final char DEFAULT_SEPARATOR = ',';
 
   @Autowired
-  public ContactService(@Qualifier("bdsContactDao") IContactDao contactDao) {
+  public ContactService(
+      @Qualifier("bdsContactDao") IContactDao contactDao
+  ) {
     Assert.notNull(contactDao);
 
     this.contactDao = contactDao;
@@ -34,8 +38,8 @@ public class ContactService implements IContactService {
   }
 
   @Override
-  public void updateContacts(List<ContactPresenter> contacts) {
-    for (ContactPresenter contact : contacts) {
+  public void updateContacts(List<ContactUpdate> contacts) {
+    for (ContactUpdate contact : contacts) {
       if (contact.getUpdated()) {
         contactDao.updateContact(contact);
       }

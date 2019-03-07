@@ -74,7 +74,6 @@ public class BDSCustomerResourceTest extends TestBase {
 
     customerUpdateList.add(customerUpdate);
 
-
     mockMvc
         .perform(post("/svc/bds/customer/update")
             .contentType(MediaType.APPLICATION_JSON)

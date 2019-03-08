@@ -1,9 +1,12 @@
-package wap.api.rest.crawling.bds.customer;
+package wap.api.rest.crawling.bds.customer.validators;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import wap.api.rest.crawling.bds.customer.ICustomerDao;
 import wap.api.rest.crawling.bds.customer.beans.CustomerAdd;
 import wap.common.ValidationException;
 import wap.common.WapValidator;
@@ -23,6 +26,15 @@ import java.util.regex.Pattern;
 public class CustomerAddWapValidator implements WapValidator<CustomerAdd> {
 
   private final Logger LOGGER = LogManager.getLogger(getClass());
+
+  private final ICustomerDao customerDao;
+
+  @Autowired
+  public CustomerAddWapValidator(@Qualifier("bdsCustomerDao") ICustomerDao customerDao) {
+    Assert.notNull(customerDao);
+
+    this.customerDao = customerDao;
+  }
 
   @Override
   public String defaultFaultCode() {
@@ -67,6 +79,14 @@ public class CustomerAddWapValidator implements WapValidator<CustomerAdd> {
 
     if (!matcher.matches()) {
       throw new ValidationException("customer.add.email.invalid");
+    }
+
+    if (customerDao.checkEmailExisting(customer.getEmail())) {
+      throw new ValidationException("customer.add.email.existing");
+    }
+
+    if (customerDao.checkPhoneExisting(customer.getPhone())) {
+      throw new ValidationException("customer.add.phone.existing");
     }
   }
 }

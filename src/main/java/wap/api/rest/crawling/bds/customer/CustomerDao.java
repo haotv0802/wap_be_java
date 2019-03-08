@@ -15,7 +15,6 @@ import wap.api.rest.auth.ISlice;
 import wap.api.rest.auth.Slice;
 import wap.api.rest.crawling.bds.customer.beans.CustomerAdd;
 import wap.api.rest.crawling.bds.customer.beans.CustomerPresenter;
-import wap.api.rest.crawling.bds.customer.beans.CustomerUpdate;
 import wap.common.WapStringUtils;
 import wap.common.dao.DaoUtils;
 
@@ -62,7 +61,7 @@ public class CustomerDao implements ICustomerDao {
 
 
   @Override
-  public ISlice<CustomerPresenter> getCusomters(Pageable pageable, String name, String phone, String email) {
+  public ISlice<CustomerPresenter> getCustomers(Pageable pageable, String name, String phone, String email) {
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     String whereClause = "";
 
@@ -121,7 +120,7 @@ public class CustomerDao implements ICustomerDao {
   }
 
   @Override
-  public void updateCustomer(CustomerUpdate customer) {
+  public void updateCustomer(CustomerPresenter customer) {
     final String sql =
               "UPDATE crwlr_customers           "
             + "SET                              "
@@ -165,7 +164,58 @@ public class CustomerDao implements ICustomerDao {
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("id", customerId);
 
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
     namedTemplate.update(sql, paramsMap);
+  }
+
+  @Override
+  public Boolean checkPhoneExisting(String phone) {
+    final String sql = "SELECT COUNT(*) FROM crawler_db_180111.crwlr_customers WHERE phone = :phone";
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("phone", phone);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0;
+  }
+
+  @Override
+  public Boolean checkEmailExisting(String email) {
+    final String sql = "SELECT COUNT(*) FROM crawler_db_180111.crwlr_customers WHERE email = :email";
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("email", email);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0;
+  }
+
+  @Override
+  public Boolean checkPhoneExistingExceptId(String phone, Long id) {
+    final String sql = "SELECT COUNT(*) FROM crawler_db_180111.crwlr_customers WHERE phone = :phone AND id <> :id";
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("phone", phone);
+    paramsMap.addValue("id", id);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0;
+  }
+
+  @Override
+  public Boolean checkEmailExistingExceptId(String email, Long id) {
+    final String sql = "SELECT COUNT(*) FROM crawler_db_180111.crwlr_customers WHERE email = :email AND id <> :id";
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("email", email);
+    paramsMap.addValue("id", id);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0;
   }
 
   private String buildSQLWithPaging(String sql, Pageable pageable) {

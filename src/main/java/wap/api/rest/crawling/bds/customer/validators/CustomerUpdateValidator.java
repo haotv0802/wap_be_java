@@ -1,10 +1,13 @@
-package wap.api.rest.crawling.bds.customer;
+package wap.api.rest.crawling.bds.customer.validators;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import wap.api.rest.crawling.bds.customer.beans.CustomerUpdate;
+import wap.api.rest.crawling.bds.customer.ICustomerDao;
+import wap.api.rest.crawling.bds.customer.beans.CustomerPresenter;
 import wap.common.ValidationException;
 import wap.common.WapValidator;
 
@@ -21,9 +24,18 @@ import java.util.regex.Pattern;
  * Created by haoho on 3/5/19 16:54.
  */
 @Service("customerUpdateValidator")
-public class CustomerUpdateValidator implements WapValidator<List<CustomerUpdate>> {
+public class CustomerUpdateValidator implements WapValidator<List<CustomerPresenter>> {
 
   private final Logger LOGGER = LogManager.getLogger(getClass());
+
+  private final ICustomerDao customerDao;
+
+  @Autowired
+  public CustomerUpdateValidator(@Qualifier("bdsCustomerDao") ICustomerDao customerDao) {
+    Assert.notNull(customerDao);
+
+    this.customerDao = customerDao;
+  }
 
   @Override
   public String defaultFaultCode() {
@@ -31,10 +43,10 @@ public class CustomerUpdateValidator implements WapValidator<List<CustomerUpdate
   }
 
   @Override
-  public void validate(List<CustomerUpdate> customerUpdateList, String faultCode, Object... args) {
+  public void validate(List<CustomerPresenter> customerUpdateList, String faultCode, Object... args) {
     Assert.notNull(customerUpdateList);
 
-    for (CustomerUpdate customer: customerUpdateList) {
+    for (CustomerPresenter customer: customerUpdateList) {
       Assert.notNull(customer);
       if (!customer.getUpdated()) {
         continue;
@@ -42,10 +54,10 @@ public class CustomerUpdateValidator implements WapValidator<List<CustomerUpdate
 
       ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
       Validator validator = factory.getValidator();
-      Set<ConstraintViolation<CustomerUpdate>> violations = validator.validate(customer);
+      Set<ConstraintViolation<CustomerPresenter>> violations = validator.validate(customer);
 
       if (!violations.isEmpty()) {
-        for (ConstraintViolation<CustomerUpdate> violation : violations) {
+        for (ConstraintViolation<CustomerPresenter> violation : violations) {
           String propertyPath = violation.getPropertyPath().toString();
           String message = violation.getMessage();
           throw new ValidationException("customer.update.constraintviolation", new String[]{propertyPath, message});
@@ -60,6 +72,14 @@ public class CustomerUpdateValidator implements WapValidator<List<CustomerUpdate
 
       if (!matcher.matches()) {
         throw new ValidationException("customer.update.email.invalid");
+      }
+
+      if (customerDao.checkEmailExistingExceptId(customer.getEmail(), customer.getId())) {
+        throw new ValidationException("customer.add.email.existing");
+      }
+
+      if (customerDao.checkPhoneExistingExceptId(customer.getPhone(), customer.getId())) {
+        throw new ValidationException("customer.add.phone.existing");
       }
     }
   }

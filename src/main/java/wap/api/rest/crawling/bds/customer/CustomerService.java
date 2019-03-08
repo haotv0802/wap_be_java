@@ -8,7 +8,6 @@ import org.springframework.util.Assert;
 import wap.api.rest.auth.ISlice;
 import wap.api.rest.crawling.bds.customer.beans.CustomerAdd;
 import wap.api.rest.crawling.bds.customer.beans.CustomerPresenter;
-import wap.api.rest.crawling.bds.customer.beans.CustomerUpdate;
 
 import java.util.List;
 
@@ -30,12 +29,12 @@ public class CustomerService implements ICustomerService {
   @Override
   public ISlice<CustomerPresenter> getCustomers(Pageable pageable, String name, String phone, String email) {
 
-    return this.customerDao.getCusomters(pageable, name, phone, email);
+    return this.customerDao.getCustomers(pageable, name, phone, email);
   }
 
   @Override
-  public void updateCustomers(List<CustomerUpdate> customers) {
-    for(CustomerUpdate customer : customers) {
+  public void updateCustomers(List<CustomerPresenter> customers) {
+    for(CustomerPresenter customer : customers) {
       if (customer.getUpdated()) {
         customerDao.updateCustomer(customer);
       }

@@ -7,7 +7,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.testng.annotations.Test;
 import wap.api.rest.TestBase;
 import wap.api.rest.crawling.bds.customer.beans.CustomerPresenter;
-import wap.api.rest.crawling.bds.customer.beans.CustomerUpdate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +34,8 @@ public class BDSCustomerResourceTest extends TestBase {
   public void testAddCustomer() throws Exception {
     CustomerPresenter customer = new CustomerPresenter();
     customer.setName("dsdsfdsf");
-    customer.setEmail("hao@.com");
-    customer.setPhone("123");
+    customer.setEmail("hao@gmail.com");
+    customer.setPhone("0906996169");
 
     mockMvc
         .perform(post("/svc/bds/customer/add")
@@ -61,16 +60,17 @@ public class BDSCustomerResourceTest extends TestBase {
     JSONObject jsonObject = new JSONObject(result.getResponse().getContentAsString());
 
     String resultAsString = jsonObject.getJSONArray("content").toString();
-    List<CustomerUpdate> customerPresenters = this.objectMapper.readValue(
+    List<CustomerPresenter> customerPresenters = this.objectMapper.readValue(
         resultAsString,
-        TypeFactory.defaultInstance().constructCollectionType(List.class, CustomerUpdate.class)
+        TypeFactory.defaultInstance().constructCollectionType(List.class, CustomerPresenter.class)
     );
 
-    List<CustomerUpdate> customerUpdateList = new ArrayList<>();
-    CustomerUpdate customerUpdate = customerPresenters.get(0);
+    List<CustomerPresenter> customerUpdateList = new ArrayList<>();
+    CustomerPresenter customerUpdate = customerPresenters.get(0);
     customerUpdate.setUpdated(true);
-//    customerUpdate.setName("HAO");
+    customerUpdate.setName("HAO_TESTING");
 //    customerUpdate.setEmail("yennhi.gamudaland@gmail.com");
+//    customerUpdate.setPhone("01269679581");
 
     customerUpdateList.add(customerUpdate);
 

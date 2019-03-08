@@ -4,7 +4,6 @@ import org.springframework.data.domain.Pageable;
 import wap.api.rest.auth.ISlice;
 import wap.api.rest.crawling.bds.customer.beans.CustomerAdd;
 import wap.api.rest.crawling.bds.customer.beans.CustomerPresenter;
-import wap.api.rest.crawling.bds.customer.beans.CustomerUpdate;
 
 import java.util.List;
 
@@ -14,7 +13,7 @@ import java.util.List;
 public interface ICustomerService {
   ISlice<CustomerPresenter> getCustomers(Pageable pageable, String name, String phone, String email);
 
-  void updateCustomers(List<CustomerUpdate> customers);
+  void updateCustomers(List<CustomerPresenter> customers);
 
   Long addCustomer(CustomerAdd customer);
 

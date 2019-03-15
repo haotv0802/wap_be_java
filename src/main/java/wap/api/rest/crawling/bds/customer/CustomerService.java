@@ -35,9 +35,7 @@ public class CustomerService implements ICustomerService {
   @Override
   public void updateCustomers(List<CustomerPresenter> customers) {
     for(CustomerPresenter customer : customers) {
-      if (customer.getUpdated()) {
-        customerDao.updateCustomer(customer);
-      }
+      customerDao.updateCustomer(customer);
     }
   }
 

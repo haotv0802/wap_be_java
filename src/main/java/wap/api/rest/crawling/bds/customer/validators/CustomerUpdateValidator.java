@@ -48,9 +48,6 @@ public class CustomerUpdateValidator implements WapValidator<List<CustomerPresen
 
     for (CustomerPresenter customer: customerUpdateList) {
       Assert.notNull(customer);
-      if (!customer.getUpdated()) {
-        continue;
-      }
 
       ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
       Validator validator = factory.getValidator();

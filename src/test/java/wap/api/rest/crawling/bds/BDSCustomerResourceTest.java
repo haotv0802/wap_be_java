@@ -67,7 +67,6 @@ public class BDSCustomerResourceTest extends TestBase {
 
     List<CustomerPresenter> customerUpdateList = new ArrayList<>();
     CustomerPresenter customerUpdate = customerPresenters.get(0);
-    customerUpdate.setUpdated(true);
     customerUpdate.setName("HAO_TESTING");
 //    customerUpdate.setEmail("yennhi.gamudaland@gmail.com");
 //    customerUpdate.setPhone("01269679581");

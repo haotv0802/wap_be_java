@@ -30,9 +30,6 @@ public class CustomerPresenter {
   private Date updatedAt;
 
   @NotNull
-  private Boolean updated = false;
-
-  @NotNull
   private Boolean isDeleted = false;
 
   public Long getId() {
@@ -89,14 +86,6 @@ public class CustomerPresenter {
 
   public void setUpdatedAt(Date updatedAt) {
     this.updatedAt = updatedAt;
-  }
-
-  public Boolean getUpdated() {
-    return updated;
-  }
-
-  public void setUpdated(Boolean updated) {
-    this.updated = updated;
   }
 
   public Boolean getDeleted() {

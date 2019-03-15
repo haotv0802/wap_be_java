@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import wap.api.rest.auth.ISlice;
 import wap.api.rest.crawling.bds.contact.beans.ContactPresenter;
-import wap.api.rest.crawling.bds.contact.beans.ContactUpdate;
 import wap.common.WapValidator;
 
 import java.io.IOException;
@@ -29,12 +28,12 @@ public class ContactResource {
 
   private final IContactService contactService;
 
-  private final WapValidator<List<ContactUpdate>> contactUpdateValidator;
+  private final WapValidator<List<ContactPresenter>> contactUpdateValidator;
 
   @Autowired
   public ContactResource(
       @Qualifier("bdsContactService") IContactService contactService,
-      @Qualifier("contactUpdateValidator") WapValidator<List<ContactUpdate>> contactUpdateValidator
+      @Qualifier("contactUpdateValidator") WapValidator<List<ContactPresenter>> contactUpdateValidator
   ) {
     Assert.notNull(contactService);
     Assert.notNull(contactUpdateValidator);
@@ -58,7 +57,7 @@ public class ContactResource {
 
   @PostMapping("/update")
   public ResponseEntity updateContacts(
-      @RequestBody List<ContactUpdate> contacts
+      @RequestBody List<ContactPresenter> contacts
       ){
 
     this.contactUpdateValidator.validate(contacts);

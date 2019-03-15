@@ -170,7 +170,7 @@ public class CustomerDao implements ICustomerDao {
 
   @Override
   public Boolean checkPhoneExisting(String phone) {
-    final String sql = "SELECT COUNT(*) FROM crawler_db_180111.crwlr_customers WHERE phone = :phone";
+    final String sql = "SELECT COUNT(*) FROM crwlr_customers WHERE phone = :phone";
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("phone", phone);
@@ -182,7 +182,7 @@ public class CustomerDao implements ICustomerDao {
 
   @Override
   public Boolean checkEmailExisting(String email) {
-    final String sql = "SELECT COUNT(*) FROM crawler_db_180111.crwlr_customers WHERE email = :email";
+    final String sql = "SELECT COUNT(*) FROM crwlr_customers WHERE email = :email";
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("email", email);
@@ -194,7 +194,7 @@ public class CustomerDao implements ICustomerDao {
 
   @Override
   public Boolean checkPhoneExistingExceptId(String phone, Long id) {
-    final String sql = "SELECT COUNT(*) FROM crawler_db_180111.crwlr_customers WHERE phone = :phone AND id <> :id";
+    final String sql = "SELECT COUNT(*) FROM crwlr_customers WHERE phone = :phone AND id <> :id";
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("phone", phone);
@@ -207,7 +207,7 @@ public class CustomerDao implements ICustomerDao {
 
   @Override
   public Boolean checkEmailExistingExceptId(String email, Long id) {
-    final String sql = "SELECT COUNT(*) FROM crawler_db_180111.crwlr_customers WHERE email = :email AND id <> :id";
+    final String sql = "SELECT COUNT(*) FROM crwlr_customers WHERE email = :email AND id <> :id";
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("email", email);

@@ -3,7 +3,6 @@ package wap.api.rest.crawling.bds.contact;
 import org.springframework.data.domain.Pageable;
 import wap.api.rest.auth.ISlice;
 import wap.api.rest.crawling.bds.contact.beans.ContactPresenter;
-import wap.api.rest.crawling.bds.contact.beans.ContactUpdate;
 
 import java.io.InputStream;
 import java.util.List;
@@ -14,7 +13,7 @@ import java.util.List;
 public interface IContactService {
   ISlice<ContactPresenter> getContacts(Pageable pageable, String name, String phone, String email, String type, String manualCheck, String emailExisting);
 
-  void updateContacts(List<ContactUpdate> contacts);
+  void updateContacts(List<ContactPresenter> contacts);
 
   void updateEmailStatusWithCSV(InputStream inputStream, String status);
 }

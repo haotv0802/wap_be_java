@@ -13,7 +13,6 @@ import wap.api.rest.auth.ISlice;
 import wap.api.rest.auth.Slice;
 import wap.api.rest.crawling.bds.CrawledDataDao;
 import wap.api.rest.crawling.bds.contact.beans.ContactPresenter;
-import wap.api.rest.crawling.bds.contact.beans.ContactUpdate;
 import wap.common.WapStringUtils;
 import wap.common.dao.DaoUtils;
 
@@ -187,7 +186,7 @@ public class ContactDao implements IContactDao {
   }
 
   @Override
-  public void updateContact(ContactUpdate contact) {
+  public void updateContact(ContactPresenter contact) {
     final String sql =
               "UPDATE crwlr_contacts                "
             + "SET                                  "
@@ -247,6 +246,19 @@ public class ContactDao implements IContactDao {
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
     namedTemplate.update(sql, paramsMap);
+  }
+
+  @Override
+  public Boolean checkEmailExistingExceptId(String email, Long id) {
+    final String sql = "SELECT COUNT(*) FROM crwlr_contacts WHERE email = :email AND id <> :id";
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("email", email);
+    paramsMap.addValue("id", id);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0;
   }
 
   private String buildSQLWithPaging(String sql, Pageable pageable) {

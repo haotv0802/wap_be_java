@@ -72,11 +72,11 @@ public class CustomerUpdateValidator implements WapValidator<List<CustomerPresen
       }
 
       if (customerDao.checkEmailExistingExceptId(customer.getEmail(), customer.getId())) {
-        throw new ValidationException("customer.add.email.existing");
+        throw new ValidationException("customer.update.email.existing");
       }
 
       if (customerDao.checkPhoneExistingExceptId(customer.getPhone(), customer.getId())) {
-        throw new ValidationException("customer.add.phone.existing");
+        throw new ValidationException("customer.update.phone.existing");
       }
     }
   }

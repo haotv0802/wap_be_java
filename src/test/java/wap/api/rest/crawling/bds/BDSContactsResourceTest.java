@@ -7,7 +7,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.testng.annotations.Test;
 import wap.api.rest.TestBase;
 import wap.api.rest.crawling.bds.contact.beans.ContactPresenter;
-import wap.api.rest.crawling.bds.contact.beans.ContactUpdate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,10 +48,10 @@ public class BDSContactsResourceTest extends TestBase {
         TypeFactory.defaultInstance().
             constructCollectionType(List.class, ContactPresenter.class));
 
-    List<ContactUpdate> contactUpdateList = new ArrayList<>();
+    List<ContactPresenter> contactUpdateList = new ArrayList<>();
     if (contacts.size() > 0) {
       ContactPresenter contactPresenter = contacts.get(0);
-      ContactUpdate contactUpdate = new ContactUpdate();
+      ContactPresenter contactUpdate = new ContactPresenter();
       contactUpdate.setId(contactPresenter.getId());
       contactUpdate.setEmail(contactPresenter.getEmail());
       contactUpdate.setDescription(contactPresenter.getDescription());

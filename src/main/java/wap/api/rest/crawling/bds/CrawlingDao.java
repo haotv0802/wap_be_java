@@ -21,6 +21,7 @@ import wap.common.dao.DaoUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -212,7 +213,7 @@ public class CrawlingDao implements ICrawlingDao {
   @Override
   public Long isItemExisting(String url) {
     final String sql =
-    "SELECT i.id FROM crwlr_posts i where i.url = :url";
+    "SELECT i.id FROM crwlr_posts i WHERE i.url = :url";
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("url", url);
@@ -227,13 +228,18 @@ public class CrawlingDao implements ICrawlingDao {
 
   @Override
   public Long isItemExisting(String url, Date publishDate, Date endDate) {
+
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    String publishDateAsString = simpleDateFormat.format(publishDate);
+    String endDateAsString = simpleDateFormat.format(endDate);
+
     final String sql =
-        "SELECT i.id FROM crwlr_posts i AND i.url = :url AND publish_date = :publishDate AND end_date = :endDate";
+        "SELECT i.id FROM crwlr_posts i WHERE i.url = :url AND publish_date = :publishDate AND end_date = :endDate";
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("url", url);
-    paramsMap.addValue("publishDate", publishDate);
-    paramsMap.addValue("endDate", endDate);
+    paramsMap.addValue("publishDate", publishDateAsString);
+    paramsMap.addValue("endDate", endDateAsString);
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
     try {

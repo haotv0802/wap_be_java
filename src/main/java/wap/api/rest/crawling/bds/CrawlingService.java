@@ -64,7 +64,7 @@ public class CrawlingService implements ICrawlingService {
       if (null != items && items.size() > 0) {
         for (Item item: items) {
           // Saving Product
-          Long itemId = crawlingDao.isItemExisting(item.getUrl(), item.getPublishDate(), item.getEndDate());
+//          Long itemId = crawlingDao.isItemExisting(item.getUrl(), item.getPublishDate(), item.getEndDate());
           //        location
           Long locationId = this.crawlingDao.isLocationExisting(item.getDistrict(), item.getCity());
           if (StringUtils.isEmpty(item.getCity()) && StringUtils.isEmpty(item.getDistrict())) {
@@ -104,7 +104,7 @@ public class CrawlingService implements ICrawlingService {
           }
           item.setContactId(contact.getId());
 
-          if (itemId > 0) {
+          if (item.getId() > 0) {
             crawlingDao.updateItem(item);
           } else {
             crawlingDao.addItem(item);
@@ -147,7 +147,12 @@ public class CrawlingService implements ICrawlingService {
 
       Set<String> urls = new HashSet<>();
 
+      int ii = 0;
       do {
+        ii++;
+        if (ii > 100) {
+          break;
+        }
         LOGGER.info(">>> Get links on page: " + currentPage);
         try {
           Thread.sleep(1800);
@@ -179,15 +184,16 @@ public class CrawlingService implements ICrawlingService {
       } while (nextPage != null && nextPage.length() > 0);
 
       Iterator<String> iterator = null;
-      if (!recrawl) {
-        iterator = urls.iterator();
-        while (iterator.hasNext()) {
-          String link = iterator.next();
-          if (this.crawlingDao.isItemExisting(link) > 0) {
-            iterator.remove();
-          }
-        }
-      }
+
+//      if (!recrawl) {
+//        iterator = urls.iterator();
+//        while (iterator.hasNext()) {
+//          String link = iterator.next();
+//          if (this.crawlingDao.isItemExisting(link) > 0) {
+//            iterator.remove();
+//          }
+//        }
+//      }
 
       iterator = urls.iterator();
       int i = 0;
@@ -199,7 +205,7 @@ public class CrawlingService implements ICrawlingService {
         } catch (InterruptedException ex) {
           ex.printStackTrace();
         }
-        getItemDetails(link, crawlingTracking);
+        getItemDetails(link, crawlingTracking, recrawl);
       }
 
     } catch (HttpStatusException e) {
@@ -211,7 +217,7 @@ public class CrawlingService implements ICrawlingService {
     }
   }
 
-  private void getItemDetails(String itemLink, CrawlingTracking crawlingTracking) {
+  private void getItemDetails(String itemLink, CrawlingTracking crawlingTracking, boolean recrawl) {
     int itemCrawled = crawlingTracking.getItemsCrawled();
     Set<Item> items = crawlingTracking.getItems();
     if (null == items) {
@@ -311,10 +317,25 @@ public class CrawlingService implements ICrawlingService {
       String endDate = moreInfo.select("div").get(5).text();
       endDate = endDate.substring(endDate.lastIndexOf(": ") + 2);
 
+      SimpleDateFormat spd = new SimpleDateFormat("dd-MM-yyyy");
+
+      // Check item existing ----
+      long id = this.crawlingDao.isItemExisting(itemLink, spd.parse(publishDate), spd.parse(endDate));
+
+      // if user'd like NOT to recrawl, we should care about new published posts.
+      if (!recrawl) {
+        if(id > 0) {
+          return;
+        }
+      }
+      // Check item existing ----
+
       Date end = new Date();
 
-      SimpleDateFormat spd = new SimpleDateFormat("dd-MM-yyyy");
       Item item = new Item();
+
+      item.setId(id);
+
       item.setTitle(title);
       item.setDescription(description);
       item.setAddress(address);
@@ -336,7 +357,9 @@ public class CrawlingService implements ICrawlingService {
       item.setCrawlingStart(start);
       item.setCrawlingEnd(end);
       item.setCrawlingTime(start.getTime() - end.getTime());
+
       items.add(item);
+
 
       crawlingTracking.addItems(items);
       itemCrawled++;
